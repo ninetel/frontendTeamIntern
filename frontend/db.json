@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "prajwol",
+      "email": "prajwolsubedizzz@gmail.com",
+      "password": "prajwolsubedizz",
+      "phoneNumber": "+9779840716856"
+    },
+    {
+      "id": "9515",
+      "email": "prajwolsubedizzz@gmail.com",
+      "name": "prajwol",
+      "phoneNumber": "+9779840716856",
+      "password": "Prajwolsube80@"
+    },
+    {
+      "id": "943b",
+      "email": "random@gmail.com",
+      "name": "Random",
+      "phoneNumber": "9840716856",
+      "password": "pra@jadsdP9"
+    }
+  ],
+  "login": [
+    {
+      "id": 1,
+      "name": "random",
+      "password": "random123"
+    },
+    {
+      "id": "b0f0",
+      "email": "prajwolsubedizzz@gmail.com",
+      "password": "random",
+      "keepLoggedIn": false
+    },
+    {
+      "id": "5dad",
+      "email": "prajwol@gmail.com",
+      "password": "ojlasdlf"
+    }
+  ]
+}

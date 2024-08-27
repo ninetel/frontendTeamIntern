@@ -1,0 +1,1 @@
+http://localhost:3000/sikinchaa/create_prompt

@@ -1,0 +1,175 @@
+import { Formik, Form, ErrorMessage, useFormikContext } from "formik";
+import { useNavigate } from "react-router-dom";
+import {
+  setAuthenticationTokens,
+  toggleLoggedIn,
+} from "../../../../store/slices/authenticationSlice";
+import { Grid, Divider } from "@mui/material";
+import { Link } from "react-router-dom";
+import InputField from "../../atoms/InputField/InputField";
+import SubmitButton from "../../atoms/FormSubmitButton/SubmitButton";
+import FormFooterSection from "../../molecules/LoginFooterSection/LoginFooterSection";
+import {
+  SIGN_IN_INITIAL_FORM_STATE,
+  SIGN_IN_VALIDATION_SCHEMA,
+} from "../../../../hooks/Form/useFormValidation";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useAppDispatch, useAppSelector } from "../../../../store/store";
+import { AdminLoginRequest } from "../../../../api/WithoutAuthToken/BeforeLoginRequest";
+// import { getLoggedInUserInfo } from "../../../api/WithAuthToken/AfterLoginRequest";
+// import { setCurrentUser } from "../../../store/slices/currentLoggedInUserSlice";
+import { isAxiosError } from "axios";
+import { useEffect, useState } from "react";
+import { fetchLoggedInUserInfo } from "../../../../api/Query/FetchLoggedInUserInfo";
+import { setCurrentUser } from "../../../../store/slices/currentLoggedInUserSlice";
+
+const AdminLoginTemplate = () => {
+  const navigate = useNavigate();
+  const [signedIn, setSignedIn] = useState(false);
+  const [fetchAdminInfo, setFetchAdminInfo] = useState(false);
+  const [signInLoading, setSignInLoading] = useState(false);
+  // const [fetchUserInfo, setFetchUserInfo] = useState(false);
+  const dispatch = useAppDispatch();
+  const accessToken = useAppSelector(
+    (state) => state.authentication.accessToken
+  );
+
+  const { data, error, isSuccess, isLoading } = useQuery({
+    queryKey: ["getLoggedInUserInfo", accessToken],
+    queryFn: () => fetchLoggedInUserInfo(accessToken, "admin"),
+    enabled: fetchAdminInfo,
+  });
+  useEffect(() => {
+    if (isSuccess && data) {
+      // console.log("data inside of useEffect", data);
+      setSignedIn(true);
+      setSignInLoading(false);
+      const { _id, email, name, phoneNumber, role } = data.data; // Extract only needed data
+      // console.log("Dispatching setCurrentUser action");
+      dispatch(setCurrentUser({ _id, email, name, phoneNumber, role }));
+      dispatch(toggleLoggedIn(true));
+      navigate("/admin/dashboard");
+    }
+  }, [isSuccess, data, dispatch, navigate]);
+
+  const { mutate } = useMutation({
+    mutationFn: AdminLoginRequest,
+  });
+
+  const handleFormSubmit = async (values, setFieldError) => {
+    // console.log("values", values);
+    mutate(
+      { ...values },
+      {
+        onSuccess: (res) => {
+          // console.log("res.data.token", res.data);
+          dispatch(setAuthenticationTokens(res.data));
+          setFetchAdminInfo(true);
+        },
+        onError: (err) => {
+          if (isAxiosError(err)) {
+            if (err.response?.status === 400) {
+              // console.log(err.response.data.message);
+              setFieldError("password", err.response.data.message);
+            } else if (err.response?.status === 401) {
+              setFieldError("email", err.response.data.message);
+            }
+          }
+          // console.log(err);
+          setSignInLoading(false);
+          alert("Sing In Failed");
+        },
+      }
+    );
+  };
+
+  // console.log("accessToken", accessToken);
+
+  return (
+    <Formik
+      initialValues={{ ...SIGN_IN_INITIAL_FORM_STATE }}
+      validationSchema={SIGN_IN_VALIDATION_SCHEMA}
+      onSubmit={(values, { setFieldError }) => {
+        handleFormSubmit(values, setFieldError);
+        setSignInLoading(true);
+      }}
+    >
+      {(props) => {
+        const { handleChange, handleBlur, touched, errors } = props;
+        return (
+          <Form>
+            <Grid container sx={{ display: "flex", gap: "30px" }}>
+              <Grid item xs={12} sx={{ height: "52px" }}>
+                <InputField
+                  name="email"
+                  label="Email"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  touched={touched.email}
+                  errorMessage={errors.email}
+                  error={touched.email && errors.email ? true : false}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} sx={{ height: "52px" }}>
+                <InputField
+                  name="password"
+                  label="Password"
+                  type="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  touched={touched.password}
+                  errorMessage={errors.password}
+                  error={touched.password && errors.password ? true : false}
+                  fullWidth
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  height: "52px",
+                }}
+              >
+                <SubmitButton
+                  // isLoading={signInLoading}
+                  // isSuccess={signedIn}
+                  successText="Signed In"
+                  fullWidth
+                >
+                  Submit
+                </SubmitButton>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{
+                    height: "27px",
+                    display: "flex",
+                    flexDirection: "column",
+                    marginTop: "40px",
+                  }}
+                >
+                  <Divider />
+                  <FormFooterSection
+                    color="#0F6EFB"
+                    marginLeft="auto"
+                    marginRight="0"
+                  >
+                    <Link to="/forgotpassword" style={{ color: "inherit" }}>
+                      Forgot Password
+                    </Link>
+                  </FormFooterSection>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Form>
+        );
+      }}
+    </Formik>
+  );
+};
+
+export default AdminLoginTemplate;
