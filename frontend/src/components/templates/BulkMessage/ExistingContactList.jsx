@@ -50,46 +50,46 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const ExistingContactList = () => {
-  //const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState([]);
 
-//   useEffect(() => {
-//     const fetchContactTypes = async () => {
-//       try {
-//         const response = await axios.get("http://localhost:3000/api/contacts/types");
-//         const uniqueTypes = Array.from(new Set(response.data.map(item => item.contactType))); // Ensure unique types
-//         setOptions(uniqueTypes);
-//       } catch (err) {
-//         console.error("Error fetching contact types:", err);
-//       }
-//     };
+  useEffect(() => {
+    const fetchContactTypes = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/contacts/types");
+        const uniqueTypes = Array.from(new Set(response.data.map(item => item.contactType))); // Ensure unique types
+        setOptions(uniqueTypes);
+      } catch (err) {
+        console.error("Error fetching contact types:", err);
+      }
+    };
 
-//     fetchContactTypes();
-//   }, []);
- const option =[
-    {
-        contactType:"saas",
+    fetchContactTypes();
+  }, []);
+//  const option =[
+    
+//         "saas",
 
-    },
-    {
-        contactType:"personal",
+    
+    
+//         "personal"
 
-    },
-    {
-        contactType:"hello",
+//     ,
+    
+//         "hello"
 
-    },
-    {
-        contactType:"hello5",
+//     ,
+    
+//         "hello5"
 
-    },
-    {
-        contactType:"hello2",
+//     ,
+    
+//         "hello2"
 
-    },{
-        contactType:"hello3",
+//     ,
+//         "hello3"
 
-    },
- ]
+    
+//  ]
 
   return (
     <Card
@@ -107,7 +107,7 @@ const ExistingContactList = () => {
                 padding: '10px', // Added padding for the overall card
             }}
         >
-      {option.map((option, index) => (
+      {options.map((option, index) => (
         <Card
           key={index}
           style={{
@@ -121,7 +121,7 @@ const ExistingContactList = () => {
             textOverflow: 'ellipsis', // Add ellipsis for overflowed text
           }}
         >
-          <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>{option.contactType}</p>
+          <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>{option}</p>
         </Card>
       ))}
     </Card>

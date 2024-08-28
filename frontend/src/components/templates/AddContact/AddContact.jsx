@@ -6,7 +6,6 @@ import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
 import { IoChatbubbleEllipsesOutline, IoSettingsOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import CreateSignal2 from "../createSignal/CreateSignal2";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import CreateContact from "../CreateContact/CreateContact";

@@ -377,7 +377,7 @@ import { MdDeleteOutline } from "react-icons/md";
 
 const { Option } = Select;
 
-const CreateSignalForm = () => {
+const CreateSignal = () => {
   const signalPlans = ["All", "Diamound", "Gold", "Platinium", "Silver"];
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
@@ -711,4 +711,4 @@ const CreateSignalForm = () => {
   );
 };
 
-export default CreateSignalForm;
+export default CreateSignal;

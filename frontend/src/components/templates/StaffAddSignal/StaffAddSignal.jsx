@@ -6,9 +6,9 @@ import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import CreateSignal2 from "../createSignal/CreateSignal2";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
+import CreateSignal from "../createSignal/CreateSignal";
 const StaffAddSignal = () => {
   const navigate = useNavigate();
   const handleRouteHome = () => {
@@ -54,7 +54,7 @@ const StaffAddSignal = () => {
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
       >
-        <CreateSignal2 />
+        <CreateSignal />
       </Box>
     </Box>
   );
