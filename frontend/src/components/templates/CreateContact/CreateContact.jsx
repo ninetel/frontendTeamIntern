@@ -42,6 +42,20 @@ const CreateContact = () => {
          </Form.Item>
        </Col>
 
+       {/* Contact type */}
+       <Col span={12} style={{ padding: "0 10px 0 0" }}>
+              <Form.Item label="Contact type">
+                <Select
+                  name="ContactType"
+                >
+                  <Option value=""></Option>
+                  <Option value=""></Option>
+                  <Option value=""></Option>
+                </Select>
+              </Form.Item>
+            </Col>
+     
+
 <Col span={24} style={{ margin: "20px 0" }}>
              <Button
                 icon={<BiSolidCloudUpload size={30} />}

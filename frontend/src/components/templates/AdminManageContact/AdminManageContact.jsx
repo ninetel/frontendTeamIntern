@@ -27,6 +27,9 @@ const AdminManageContact = () => {
   const handleRouteManagePrompt = () => {
     navigate("/admin/dashboard/manageprompt");
   };
+  const handleRouteManagesignal = () => {
+    navigate("/admin/dashboard/managesignal");
+  };
   const handleRouteCreatePrompt = () => {
     navigate("/admin/dashboard/createprompt");
   };
@@ -41,16 +44,17 @@ const AdminManageContact = () => {
           <SidebarItem
             icon={<FaHome size={30} />}
             text="Home"
-            handleClick={() => handleRouteHome}
+            handleClick={handleRouteHome}
           />
           <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Signal"
-            handleClick={() => handleRouteAddSignal}
+            handleClick={handleRouteAddSignal}
           />
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Signal"
+            handleClick={handleRouteManagesignal}
           
           />
           <SidebarItem
