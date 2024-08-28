@@ -77,18 +77,38 @@
 
 // export default CreateContact
 
+// src/components/CreateContact.js
+ 
 
-import React, { useState } from "react";
-import { Form, Input, Select, Button, Modal, Row, Col, Checkbox } from "antd";
+// src/components/CreateContact.js
+import React, { useState, useEffect } from "react";
+import { Form, Input, Select, Button, Modal, Row, Col } from "antd";
 import { BiSolidCloudUpload } from "react-icons/bi";
 import { PlusOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 const { Option } = Select;
 
 const CreateContact = () => {
-  const [options, setOptions] = useState(["Personal", "Work", "Other"]);
+  const [options, setOptions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newOption, setNewOption] = useState("");
+  const [form] = Form.useForm();
+
+  // Fetch contact types when the component mounts
+  useEffect(() => {
+    const fetchContactTypes = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/contacts/types");
+        const uniqueTypes = Array.from(new Set(response.data)); // Ensure unique types
+        setOptions(uniqueTypes);
+      } catch (err) {
+        console.error("Error fetching contact types:", err);
+      }
+    };
+
+    fetchContactTypes();
+  }, []);
 
   const showAddOptionModal = () => {
     setIsModalVisible(true);
@@ -107,43 +127,51 @@ const CreateContact = () => {
     setNewOption("");
   };
 
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      await axios.post("http://localhost:3000/api/contacts", {
+        contactType: values.ContactType,
+        username: values.username,
+        phoneNumber: values.phoneNumber,
+        email: values.email,
+      });
+      
+      alert("Contact saved successfully!");
+      form.resetFields();
+    } catch (err) {
+      console.error("Error saving contact:", err);
+      alert("There was an issue saving the contact. Please try again.");
+    }
+  };
+
   return (
-    <Form layout="vertical">
-      <h2
-        style={{
-          margin: "80px 100px 20px 100px",
-          fontSize: "2rem",
-        }}
-      >
+    <Form form={form} layout="vertical" onFinish={handleSubmit}>
+      <h2 style={{ margin: "80px 100px 20px 100px", fontSize: "2rem" }}>
         Create New Contact
       </h2>
       <Row style={{ margin: "20px 100px" }}>
-        {/* Username */}
         <Col span={12} style={{ padding: "0 10px 0 0" }}>
-          <Form.Item label="Username">
-            <Input name="username" />
+          <Form.Item label="Username" name="username" rules={[{ required: true }]}>
+            <Input />
           </Form.Item>
         </Col>
 
-        {/* Phone Number */}
         <Col span={12} style={{ padding: "0 10px 0 0" }}>
-          <Form.Item label="Phone Number">
-            <Input name="phone number" />
+          <Form.Item label="Phone Number" name="phoneNumber" rules={[{ required: true }]}>
+            <Input />
           </Form.Item>
         </Col>
 
-        {/* Email */}
         <Col span={12} style={{ padding: "0 10px 0 0" }}>
-          <Form.Item label="Email">
-            <Input name="email" />
+          <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+            <Input />
           </Form.Item>
         </Col>
 
-        {/* Contact type with dynamic options */}
         <Col span={12} style={{ padding: "0 10px 0 0" }}>
-          <Form.Item label="Contact type">
+          <Form.Item label="Contact type" name="ContactType" rules={[{ required: true }]}>
             <Select
-              name="ContactType"
               dropdownRender={(menu) => (
                 <>
                   {menu}
@@ -171,24 +199,22 @@ const CreateContact = () => {
           </Form.Item>
         </Col>
 
-        
-
-        {/* Upload Contact Button */}
         <Col span={24} style={{ margin: "20px 0" }}>
           <Button
             icon={<BiSolidCloudUpload size={30} />}
             style={{
-              padding: "23px 425px 23px 415px",
+              width: "100%",
+              padding: "15px 0",
               fontWeight: "bold",
             }}
             type="primary"
+            htmlType="submit"
           >
             Upload Contact
           </Button>
         </Col>
       </Row>
 
-      {/* Modal to Add New Option */}
       <Modal
         title="Add New Contact Type"
         visible={isModalVisible}

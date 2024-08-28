@@ -7,6 +7,7 @@ const userRoutes = require("./routes/userRoutes");
 const staffRoutes = require("./routes/staffRoutes"); // Import staff routes
 const promptRoutes = require("./routes/promptRoutes");
 const signalRoutes = require("./routes/signalRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 const { authenticateJWT, requireRole } = require("./middleware/authMiddleWare");
 const cors = require("cors");
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 // console.log("JWT_SECRET: in indexx", process.env.JWT_SECRET);
 // Routes
+app.use("/api/contacts", contactRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/staff", staffRoutes); // Use staff routes
