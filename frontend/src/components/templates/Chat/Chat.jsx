@@ -11,6 +11,7 @@ import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import CreateContact from "../CreateContact/CreateContact";
 import CreateChat from "../CreateChat/CreateChat";
+import { LiaMailBulkSolid } from "react-icons/lia";
 const Chat = () => {
   const navigate = useNavigate(); 
   const handleRouteHome = () => {
@@ -37,6 +38,9 @@ const Chat = () => {
   };
   const handleRouteChat = () => {
     navigate("/admin/dashboard/Chat");
+  };
+  const handleRouteBulkMessage = () => {
+    navigate("/admin/dashboard/BulkMessage");
   };
   return (
     <Box sx={{ display: "flex" }}>
@@ -88,6 +92,11 @@ const Chat = () => {
             active
             alert
             handleClick={handleRouteChat}
+          />
+          <SidebarItem
+            icon={<LiaMailBulkSolid size={40} />}
+            text="Bulk Message"
+            handleClick={handleRouteBulkMessage}
           />
         </StaffSidebar>
       </Box>

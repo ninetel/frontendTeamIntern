@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import AddPrompt from "../../orgamisms/AddPrompt/AddPrompt";
+import { LiaMailBulkSolid } from "react-icons/lia";
 
 const AdminCreatePrompt = () => {
   const navigate = useNavigate();
@@ -34,6 +35,9 @@ const AdminCreatePrompt = () => {
    };
    const handleRouteChat = () => {
     navigate("/admin/dashboard/Chat");
+  };
+  const handleRouteBulkMessage = () => {
+    navigate("/admin/dashboard/BulkMessage");
   };
    return (
     <Box sx={{ display: "flex" }}>
@@ -81,6 +85,11 @@ const AdminCreatePrompt = () => {
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
+          />
+          <SidebarItem
+            icon={<LiaMailBulkSolid size={40} />}
+            text="Bulk Message"
+            handleClick={handleRouteBulkMessage}
           />
         </StaffSidebar>
       </Box>

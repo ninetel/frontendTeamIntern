@@ -11,6 +11,7 @@ import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import ManagePrompt from "../../orgamisms/ManagePrompt/ManagePrompt";
 import ManageContact from "../ManageContact/ManageContact";
+import { LiaMailBulkSolid } from "react-icons/lia";
 
 const AdminManageContact = () => {
   const navigate = useNavigate();
@@ -35,6 +36,9 @@ const AdminManageContact = () => {
   };
   const handleRouteChat = () => {
     navigate("/admin/dashboard/Chat");
+  };
+  const handleRouteBulkMessage = () => {
+    navigate("/admin/dashboard/BulkMessage");
   };
 
   return (
@@ -88,6 +92,11 @@ const AdminManageContact = () => {
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
+          />
+          <SidebarItem
+            icon={<LiaMailBulkSolid size={40} />}
+            text="Bulk Message"
+            handleClick={handleRouteBulkMessage}
           />
         </StaffSidebar>
       </Box>

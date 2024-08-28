@@ -177,6 +177,8 @@ import { IoChatbubbleEllipsesOutline, IoSettingsOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
+import { LiaMailBulkSolid } from "react-icons/lia";
+
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -259,6 +261,11 @@ const AdminDashboard = () => {
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={() => navigate("/admin/dashboard/Chat")}
+          />
+          <SidebarItem
+            icon={<LiaMailBulkSolid  size={40} />}
+            text="Bulk Message"
+            handleClick={()=> navigate("/admin/dashboard/bulkmessage")}
           />
         </StaffSidebar>
       </Box>

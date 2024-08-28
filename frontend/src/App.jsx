@@ -26,6 +26,7 @@ import AdminManageSignal from "./components/templates/AdminManageSignal/AdminMan
 import AddContact from "./components/templates/AddContact/AddContact.jsx";
 import AdminManageContact from "./components/templates/AdminManageContact/AdminManageContact.jsx";
 import Chat from "./components/templates/Chat/Chat.jsx";
+import AdminSendBulkMessage from "./components/templates/AdminSendBulkMessage/AdminSendBulkMessage.jsx";
 
 const theme = createTheme({
   palette: {
@@ -75,6 +76,7 @@ const App = () => {
         <Route path="/admin/dashboard/createprompt" element={<AdminCreatePrompt />} />
         <Route path="/admin/dashboard/manageprompt" element={<AdminManagePrompt />} />
         <Route path="/admin/dashboard/Chat" element={<Chat/>} />
+        <Route path="admin/dashboard/bulkmessage" element={<AdminSendBulkMessage/>} />
         
         {/* <Route path="/admin/dashboard/changepassword" element={<ChangePassword />} /> */}
       
