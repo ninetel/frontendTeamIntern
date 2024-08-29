@@ -39,4 +39,14 @@ router.get("/types", async (req, res) => {
       res.status(500).json({ error: "Failed to fetch contact types" });
     }
   });
+  router.get("/", async (req, res) => {
+    try {
+      const contacts = await Contact.find();
+      res.json(contacts);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ error: "Failed to fetch contacts" });
+    }
+  });
+  
 module.exports = router;
