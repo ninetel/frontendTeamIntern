@@ -96,7 +96,7 @@ const BulkMessage = () => {
         <div className={`w-3/4 h-3/4 flex flex-col justify-center items-center bg-white border-2 border-gray-300 shadow-lg rounded-xl p-8 m-10 ${isModalVisible ? 'backdrop-blur-sm' : ''}`}>
             <div className='w-full flex justify-between items-start space-x-8'>
                 <div className='w-1/2 flex flex-col space-y-6'>
-                    <Card className='shadow-sm'>
+                    {/* <Card className='shadow-sm'>
                         <div className="flex justify-center">
                             <Upload>
                                 <Button icon={<UploadOutlined />} className="w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-700">
@@ -104,7 +104,7 @@ const BulkMessage = () => {
                                 </Button>
                             </Upload>
                         </div>
-                    </Card>
+                    </Card> */}
                     <Card className='shadow-sm'>
                         <Button className='w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-700 border-dotted' onClick={showModal}>
                             Choose from existing contacts
