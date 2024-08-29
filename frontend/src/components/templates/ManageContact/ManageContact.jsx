@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Select, List, Card, Button } from 'antd';
 import axios from 'axios';
+import { FaEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 
 const { Option } = Select;
 
@@ -84,12 +86,14 @@ const ManageContact = () => {
                   <Button
                     type="primary"
                     onClick={() => handleEdit(contact.id)}
+                   icon={<FaEdit size={20}/>}
                   >
                     Edit
                   </Button>
                   <Button
-                    type="danger"
+                    danger
                     onClick={() => handleDelete(contact.id)}
+                    icon={<MdDeleteOutline  size={20}/>}
                   >
                     Delete
                   </Button>
