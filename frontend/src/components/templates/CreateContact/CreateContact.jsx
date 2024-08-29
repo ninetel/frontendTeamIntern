@@ -242,7 +242,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { RiFolderUploadLine } from "react-icons/ri";
 import { TbUpload } from "react-icons/tb";
-import {CreateBulkContact} from "../CreateBulkContact/CreateBulkContact";
+import CreateBulkContact from "../CreateBulkContact/CreateBulkContact";
 
 const { Option } = Select;
 
@@ -303,8 +303,9 @@ const CreateContact = () => {
   };
 
   return (<>
+  <div className="container">
     <Form form={form} layout="vertical" onFinish={handleSubmit} className="max-w-4xl mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6 text-center">Create New Contact</h2>
+    <h2 className="text-3xl font-bold mb-6 text-center">Create New Contact</h2>
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item label="Username" name="username" rules={[{ required: true }]}>
@@ -377,7 +378,10 @@ const CreateContact = () => {
         />
       </Modal>
     </Form>
-    <CreateBulkContact />
+    <div className="mt-6">
+      <CreateBulkContact />
+    </div>
+  </div>
     </>
   );
 };

@@ -8,9 +8,9 @@ const ContactSchema = new mongoose.Schema({
   },
   contacts: [
     {
-      username: String,
-      phoneNumber: String,
-      email: String,
+      username: { type: String, required: true },
+      phoneNumber: { type: String, required: true },
+      email: { type: String, required: true },
     },
   ],
 });
