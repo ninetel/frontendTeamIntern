@@ -8,17 +8,24 @@ const staffRoutes = require("./routes/staffRoutes"); // Import staff routes
 const promptRoutes = require("./routes/promptRoutes");
 const signalRoutes = require("./routes/signalRoutes");
 const contactRoutes = require("./routes/contactRoutes");
-const { authenticateJWT, requireRole } = require("./middleware/authMiddleWare");
 const cors = require("cors");
 
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
+
+// Configure CORS to allow specific origin
+app.use(cors({
+  origin: ['http://localhost:5173','http://localhost:5000'], // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Handle preflight requests
+app.options('*', cors());
 
 app.use(express.json());
 
-// console.log("JWT_SECRET: in indexx", process.env.JWT_SECRET);
 // Routes
 app.use("/api/contacts", contactRoutes);
 app.use("/api/auth", authRoutes);
@@ -30,7 +37,7 @@ app.use("/sikinchaa", promptRoutes);
 
 // Start server
 app.listen(3000, () => {
-  ("Server running on port 3000");
+  console.log("Server running on port 3000"); // Fixed logging message
 });
 
 // Connect to MongoDB

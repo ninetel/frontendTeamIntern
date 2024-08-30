@@ -48,7 +48,22 @@ router.get("/types", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch contact types" });
   }
 });
+router.get("/content/:type", async (req, res) => {
+  const { type } = req.params;
+  console.log("Fetching contacts for type:", type);
 
+  try {
+    const contact = await Contact.findOne({ contactType: type });
+    if (!contact) {
+      return res.status(404).json({ error: "Contact type not found" });
+    }
+    console.log("Fetched contacts for type:", type, contact);
+    res.json(contact.contacts); // Return only the contacts array
+  } catch (err) {
+    console.error("Error fetching contact content:", err.message);
+    res.status(500).json({ error: "Failed to fetch contact content" });
+  }
+});
 // Get all contacts
 router.get("/", async (req, res) => {
   console.log("Fetching all contacts...");
