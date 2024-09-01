@@ -56,17 +56,17 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Scrip Symbol" name="scripSymbol">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Scrip Company Name" name="scripCompanyName">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Holding Period" name="holdingPeriod">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
         </Row>
@@ -74,7 +74,7 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range From" name="buyRangeFrom">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
@@ -84,7 +84,7 @@ const TradeForm = ({ tradeData = {} }) => {
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range Conditions" name="buyRangeConditions">
-              <Input />
+              <Input disabled />
             </Form.Item>
           </Col>
         </Row>
@@ -92,17 +92,17 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range 2 From" name="buyRange2From">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range 2 To" name="buyRange2To">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range 2 Conditions" name="buyRange2Conditions">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
         </Row>
@@ -110,17 +110,17 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range 3 From" name="buyRange3From">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range 3 To" name="buyRange3To">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Buy Range 3 Conditions" name="buyRange3Conditions">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
         </Row>
@@ -128,12 +128,12 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Stop Loss Value" name="stopLossValue">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Stop Loss Conditions" name="stopLossConditions">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
         </Row>
@@ -141,17 +141,17 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 1 From" name="tpRange1From">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 1 To" name="tpRange1To">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 1 Conditions" name="tpRange1Conditions">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
         </Row>
@@ -159,17 +159,17 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 2 From" name="tpRange2From">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 2 To" name="tpRange2To">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 2 Conditions" name="tpRange2Conditions">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
         </Row>
@@ -177,17 +177,17 @@ const TradeForm = ({ tradeData = {} }) => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 3 From" name="tpRange3From">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 3 To" name="tpRange3To">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Form.Item label="Take Profit Range 3 Conditions" name="tpRange3Conditions">
-              <Input />
+              <Input disabled/>
             </Form.Item>
           </Col>
         </Row>
