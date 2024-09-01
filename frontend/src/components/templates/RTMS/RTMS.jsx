@@ -8,11 +8,16 @@ import { IoChatbubbleEllipsesOutline, IoSettingsOutline } from "react-icons/io5"
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
+import CreateContact from "../CreateContact/CreateContact";
 import { LiaMailBulkSolid } from "react-icons/lia";
 
 import { FaUserClock } from "react-icons/fa";
-import CreateSignal from "../createSignal/CreateSignal";
-const AdminAddSignal = () => {
+import BulkMessage from "../BulkMessage/BulkMessage";
+import RtmsContent from "./rtmsContent";
+
+
+
+const RTMS = () => {
   const navigate = useNavigate(); 
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
@@ -58,8 +63,6 @@ const handleRouteRTMS = () => {
           <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Signal"
-            active
-            alert
             handleClick={handleRouteAddSignal}
           />
           <SidebarItem
@@ -106,6 +109,8 @@ const handleRouteRTMS = () => {
             icon={<FaUserClock  size={40} />}
             text="RTMS"
             handleClick={handleRouteRTMS}
+            alert
+            active
           />
 
         </StaffSidebar>
@@ -113,10 +118,12 @@ const handleRouteRTMS = () => {
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
       >
-        <CreateSignal />
+       <RtmsContent/>
       </Box>
     </Box>
+    
   );
 };
 
-export default AdminAddSignal;
+export default RTMS;
+

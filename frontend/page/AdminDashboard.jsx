@@ -179,6 +179,8 @@ import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import { LiaMailBulkSolid } from "react-icons/lia";
 
+import { FaUserClock } from "react-icons/fa";
+
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -266,6 +268,12 @@ const AdminDashboard = () => {
             icon={<LiaMailBulkSolid  size={40} />}
             text="Bulk Message"
             handleClick={()=> navigate("/admin/dashboard/bulkmessage")}
+          />
+          <SidebarItem
+            icon={<FaUserClock  size={40} />}
+            text="RTMS"
+            handleClick={()=> navigate("/admin/dashboard/RTMS")}
+           
           />
         </StaffSidebar>
       </Box>

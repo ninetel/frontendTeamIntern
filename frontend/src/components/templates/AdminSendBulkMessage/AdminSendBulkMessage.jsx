@@ -9,6 +9,8 @@ import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import BulkMessage from "../BulkMessage/BulkMessage";
 import { LiaMailBulkSolid } from "react-icons/lia";
+
+import { FaUserClock } from "react-icons/fa";
 const AdminSendBulkMessage = () => {
   const navigate = useNavigate(); 
   const handleRouteHome = () => {
@@ -39,6 +41,11 @@ const AdminSendBulkMessage = () => {
   const handleRouteBulkMessage = () => {
     navigate("/admin/dashboard/BulkMessage");
   };
+const handleRouteRTMS = () => {
+    navigate("/admin/dashboard/RTMS");
+  };
+  
+//check
   return (
     <Box sx={{ display: "flex" }}>
       <Box sx={{ width: "250px" }}>
@@ -94,6 +101,12 @@ const AdminSendBulkMessage = () => {
             handleClick={handleRouteBulkMessage}
             active
             alert
+          />
+          <SidebarItem
+            icon={<FaUserClock  size={40} />}
+            text="RTMS"
+            handleClick={handleRouteRTMS}
+          
           />
         </StaffSidebar>
       </Box>

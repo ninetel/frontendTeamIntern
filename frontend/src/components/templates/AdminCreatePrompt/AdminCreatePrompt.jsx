@@ -10,6 +10,8 @@ import { PiChatsTeardropLight } from "react-icons/pi";
 import AddPrompt from "../../orgamisms/AddPrompt/AddPrompt";
 import { LiaMailBulkSolid } from "react-icons/lia";
 
+import { FaUserClock } from "react-icons/fa";
+
 const AdminCreatePrompt = () => {
   const navigate = useNavigate();
   const handleRouteHome = () => {
@@ -39,6 +41,10 @@ const AdminCreatePrompt = () => {
   const handleRouteBulkMessage = () => {
     navigate("/admin/dashboard/BulkMessage");
   };
+const handleRouteRTMS = () => {
+    navigate("/admin/dashboard/RTMS");
+  };
+//check
    return (
     <Box sx={{ display: "flex" }}>
       <Box sx={{ width: "250px" }}>
@@ -91,6 +97,12 @@ const AdminCreatePrompt = () => {
             text="Bulk Message"
             handleClick={handleRouteBulkMessage}
           />
+<SidebarItem
+            icon={<FaUserClock  size={40} />}
+            text="RTMS"
+            handleClick={handleRouteRTMS}
+          />
+
         </StaffSidebar>
       </Box>
       <Box

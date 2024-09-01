@@ -11,6 +11,8 @@ import { PiChatsTeardropLight } from "react-icons/pi";
 import CreateContact from "../CreateContact/CreateContact";
 import CreateChat from "../CreateChat/CreateChat";
 import { LiaMailBulkSolid } from "react-icons/lia";
+
+import { FaUserClock } from "react-icons/fa";
 const Chat = () => {
   const navigate = useNavigate(); 
   const handleRouteHome = () => {
@@ -41,6 +43,10 @@ const Chat = () => {
   const handleRouteBulkMessage = () => {
     navigate("/admin/dashboard/BulkMessage");
   };
+const handleRouteRTMS = () => {
+    navigate("/admin/dashboard/RTMS");
+  };
+//check
   return (
     <Box sx={{ display: "flex" }}>
       <Box sx={{ width: "250px" }}>
@@ -97,6 +103,12 @@ const Chat = () => {
             text="Bulk Message"
             handleClick={handleRouteBulkMessage}
           />
+<SidebarItem
+            icon={<FaUserClock  size={40} />}
+            text="RTMS"
+            handleClick={handleRouteRTMS}
+          />
+
         </StaffSidebar>
       </Box>
       <Box

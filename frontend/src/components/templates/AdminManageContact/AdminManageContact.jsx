@@ -13,6 +13,8 @@ import ManagePrompt from "../../orgamisms/ManagePrompt/ManagePrompt";
 import ManageContact from "../ManageContact/ManageContact";
 import { LiaMailBulkSolid } from "react-icons/lia";
 
+import { FaUserClock } from "react-icons/fa";
+
 const AdminManageContact = () => {
   const navigate = useNavigate();
   const handleRouteHome = () => {
@@ -40,6 +42,10 @@ const AdminManageContact = () => {
   const handleRouteBulkMessage = () => {
     navigate("/admin/dashboard/BulkMessage");
   };
+const handleRouteRTMS = () => {
+    navigate("/admin/dashboard/RTMS");
+  };
+//check
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -98,6 +104,12 @@ const AdminManageContact = () => {
             text="Bulk Message"
             handleClick={handleRouteBulkMessage}
           />
+<SidebarItem
+            icon={<FaUserClock  size={40} />}
+            text="RTMS"
+            handleClick={handleRouteRTMS}
+          />
+
         </StaffSidebar>
       </Box>
       <Box
