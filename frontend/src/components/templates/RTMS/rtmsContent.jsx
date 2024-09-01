@@ -98,21 +98,29 @@ const RtmsContent = () => {
   };
 
   return (
-    <div className={`w-auto h-auto flex flex-col justify-center items-center bg-white border-2 border-gray-300 shadow-lg rounded-xl p-8 m-10 ${isModalVisible ? 'backdrop-blur-sm' : ''}`}>
-      <div className='w-full flex flex-col md:flex-row md:justify-between md:items-start space-y-6 md:space-y-0 md:space-x-8'>
-        <div className='w-full md:w-1/2 flex flex-col space-y-6'>
-          <Card className='shadow-sm'>
-            <Button className='w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-700 border-dotted' onClick={showModal}>
-              Choose from existing contacts
-            </Button>
-          </Card>
-        </div>
+    <div className={`w-auto h-auto flex flex-col justify-center items-center bg-white border-2 border-gray-300 shadow-lg rounded-xl p-8 m- ${isModalVisible ? 'backdrop-blur-sm' : ''}`}>
+        
+        <div className='w-full flex flex-col md:flex-row md:justify-between md:items-start space-y-6 md:space-y-0 md:space-x-8'>
+  <div className='w-1/3 flex flex-col space-y-4'>
+    <Card className='shadow-sm'>
+    <Button
+  className='w-full h-16 text-center bg-gray-200 hover:bg-gray-300 text-gray-700 border-dotted '
+  style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
+  onClick={showModal}
+>
+  Choose from existing contacts
+</Button>
 
-        <div className='w-full md:w-1/2 flex flex-col space-y-4'>
-          {/* <h1 className='text-center font-semibold text-2xl text-gray-700'>Form</h1> */}
-          <TradeForm />
-        </div>
-      </div>
+    </Card>
+  </div>
+
+  <div className='w-full md:w-2/3 flex flex-col space-y-4'>
+    {/* <h1 className='text-center font-semibold text-2xl text-gray-700'>Form</h1> */}
+    <TradeForm />
+  </div>
+</div>
+
+
 
       <div className='flex justify-center space-x-20 mt-10'>
         <Button

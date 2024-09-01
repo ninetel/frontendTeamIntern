@@ -229,7 +229,7 @@ const TradeForm = ({ tradeData = {} }) => {
   } = tradeData;
 
   return (
-    <Card title="Trade Form" bordered={false} style={{ maxWidth: 800, margin: 'auto' }}>
+    <Card title="Trade Form" bordered={false} style={{ maxWidth: 900, margin: 'auto' }}>
       <Form
         layout="vertical"
         initialValues={{
