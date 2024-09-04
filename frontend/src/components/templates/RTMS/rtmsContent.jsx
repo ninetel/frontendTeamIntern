@@ -1,366 +1,214 @@
-import { Card, Button, Input, Modal, Select, message as antdMessage, Form, Row, Col } from 'antd';
-import { FaWhatsapp, FaTelegramPlane } from 'react-icons/fa';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import TradeForm from './Form';
+import React, { useState, useEffect } from "react";
+import { Form, Input, Select, Button, Modal, Row, Col } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 const { Option } = Select;
 
-const RtmsContent = ({ tradeData = {} }) => {
-    const {
-        buyRange = { to: 18, from: 12, conditions: 'dfn' },
-        buyRange2 = { to: 78, from: 35, conditions: 'jdfkjs' },
-        buyRange3 = { to: 35, from: 24, conditions: 'sndfbksdb' },
-        stopLossBelow = { value: 34, conditions: 'nsdfsdn' },
-        tpRange1 = { to: 53, from: 24, conditions: 'ndsfsndfjk' },
-        tpRange2 = { to: 1, from: 4, conditions: 'sdjfnsdk' },
-        tpRange3 = { to: 14, from: 1, conditions: 'jfdsdkfb' },
-        scrip = { symbol: 'AHL', companyName: 'Asian Hydropower Limited' },
-        holdingPeriod = '14',
-        ...rest
-      } = tradeData;
-    
-      const handleFinish = (values) => {
-        console.log('Form values:', values);
-      };
+const CreateBulkContact = () => {
+  const [options, setOptions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [contactTypes, setContactTypes] = useState([]);
-  const [selectedContactType, setSelectedContactType] = useState('');
-  const [phoneNumbers, setPhoneNumbers] = useState([]);
-  const [message, setMessage] = useState('');
+  const [newOption, setNewOption] = useState("");
+  const [phoneNumbers, setPhoneNumbers] = useState([]); // State to store phone numbers
+  const [form] = Form.useForm();
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchContactTypes = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/contacts/types");
-        setContactTypes(response.data);
-      } catch (error) {
-        antdMessage.error("Error fetching contact types");
-        console.error("Error fetching contact types:", error);
+        const uniqueTypes = Array.from(new Set(response.data)); // Ensure unique types
+        setOptions(uniqueTypes);
+      } catch (err) {
+        console.error("Error fetching contact types:", err);
       }
     };
 
     fetchContactTypes();
   }, []);
 
-  const fetchContent = async (type) => {
+  
+  const handleContactTypeChange = async (value) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/contacts/content/${type}`);
-      const contacts = response.data;
-
-      const numbers = contacts.map(contact => contact.phoneNumber);
-      setPhoneNumbers(numbers);
-    } catch (error) {
-      antdMessage.error("Error fetching contact content");
-      console.error("Error fetching contact content:", error);
+      const response = await axios.get(`http://localhost:3000/api/contacts/content/${value}`);
+      const numbers = response.data.map(contact => contact.phoneNumber);
+      setPhoneNumbers(numbers); // Store the phone numbers as an array
+  
+    } catch (err) {
+      console.error("Error fetching contacts for selected type:", err);
     }
   };
 
-  const handleContactTypeChange = (value) => {
-    setSelectedContactType(value);
-    fetchContent(value);
-  };
-
-  const sendToWhatsApp = async () => {
-    if (!message || !selectedContactType) {
-      antdMessage.warning("Message and contact type must be selected");
-      return;
-    }
-
-    try {
-      const payload = {
-        phone_numbers: phoneNumbers,
-        message: message
-      };
-
-      await axios.post('http://localhost:5000/send_notifications', payload);
-      setSelectedContactType('');
-      setMessage('');
-      antdMessage.success('Message sent successfully!');
-    } catch (error) {
-      antdMessage.error("Error sending message");
-      console.error("Error sending payload:", error);
-    }
-  };
-
-  const sendToTelegram = async () => {
-    if (!message || !selectedContactType) {
-      antdMessage.warning("Message and contact type must be selected");
-      return;
-    }
-
-    try {
-      const payload = {
-        phone_numbers: phoneNumbers,
-        message: message
-      };
-
-      await axios.post('http://localhost:5000/send_telegram_notifications', payload);
-      setSelectedContactType('');
-      setMessage('');
-      antdMessage.success('Message sent successfully!');
-    } catch (error) {
-      antdMessage.error("Error sending message");
-      console.error("Error sending payload:", error);
-    }
-  };
-
-  const showModal = () => {
+  const showAddOptionModal = () => {
     setIsModalVisible(true);
   };
 
-  const hideModal = () => {
+  const handleAddOption = () => {
+    if (newOption && !options.includes(newOption)) {
+      setOptions([...options, newOption]);
+    }
+    setNewOption("");
     setIsModalVisible(false);
   };
 
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setNewOption("");
+  };
+  const scripData = {
+    scripName: "Nabil Bank Limited (NABIL)",
+    sector: "Banking",
+    capitalSize: "High cap",
+    tradeType: "Positional",
+    entryRanges: "Rs. 900 - Rs. 950",
+    targetPrices: "TP1: Rs. 1,000, TP2: Rs. 1,050, TP3: Rs. 1,100, Ultimate Target: Rs. 1,150",
+    stopLoss: "Rs. 850",
+    entryRisk: "Medium",
+    justification: "Nabil Bank is one of the leading banks in Nepal with a strong balance sheet and consistent dividend payouts. The stock is currently trading near a support zone, making it a favorable entry point. Technical indicators suggest potential upward movement.",
+    chart: "Chart showing support at Rs. 900 and resistance levels at Rs. 1,050 and Rs. 1,100.",
+  };
+
+  const handleButtonClick = async (listType) => {
+    try {
+      // Validate form fields
+      await form.validateFields();
+  
+      // Get form values
+      const values = form.getFieldsValue();
+      const contactType = values.ContactType;
+  
+      // Format message
+      const formattedMessage = `${listType} alert: 
+      Scrip Name: ${scripData.scripName}
+      Sector: ${scripData.sector}
+      Capital Size: ${scripData.capitalSize}
+      Trade Type: ${scripData.tradeType}
+      Entry Ranges: ${scripData.entryRanges}
+      Target Prices: ${scripData.targetPrices}
+      Stop Loss: ${scripData.stopLoss}
+      Entry Risk: ${scripData.entryRisk}
+      Justification: ${scripData.justification}
+      Chart: ${scripData.chart}
+      `;
+      
+      setMessage(formattedMessage);
+  
+      // Create log object
+      const logObject = {
+        phone_numbers: phoneNumbers,
+        message: formattedMessage
+      };
+  
+      // Send POST request
+      try {
+        const response = await axios.post('http://localhost:5000/send_notifications', logObject);
+        console.log('Response from server:', response.data);
+      } catch (error) {
+        console.error('Error sending data to server:', error);
+      }
+    } catch (errorInfo) {
+      console.error("Failed to get contact type:", errorInfo);
+    }
+  };
+  
+
+
+
+  const sendToWatchList = () => {
+    handleButtonClick("WatchList");
+  };
+
+  const sendToTradeList = () => {
+    handleButtonClick("TradeList");
+  };
+
+  
+
   return (
-    <div className={`w-auto h-auto flex flex-col justify-center items-center bg-white border-2 border-gray-300 shadow-lg rounded-xl p-8 m- ${isModalVisible ? 'backdrop-blur-sm' : ''}`}>
-        
-        <div className='w-full flex flex-col md:flex-row md:justify-between md:items-start space-y-6 md:space-y-0 md:space-x-8'>
-  <div className='w-1/3 flex flex-col space-y-4'>
-    <Card className='shadow-sm'>
-    <Button
-  className='w-full h-16 text-center bg-gray-200 hover:bg-gray-300 text-gray-700 border-dotted '
-  style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}
-  onClick={showModal}
->
-  Choose from existing contacts
-</Button>
+    <div className="flex">
+      <div className="w-1/4">
+        <Form form={form} layout="vertical" className="max-w-2xl mx-auto p-6">
+          <h2 className="text-2xl font-bold mb-4 text-center mt-6">Import from file</h2>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item label="Contact Type" name="ContactType" rules={[{ required: true }]}>
+                <Select
+                  onChange={handleContactTypeChange}
+                  dropdownRender={(menu) => (
+                    <>
+                      {menu}
+                      <Button
+                        type="text"
+                        icon={<PlusOutlined />}
+                        onClick={showAddOptionModal}
+                        className="w-full text-center py-2"
+                      >
+                        Add New Contact Type
+                      </Button>
+                    </>
+                  )}
+                >
+                  {options.map((option) => (
+                    <Option key={option} value={option}>
+                      {option}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Button
+            className="w-full py-4 font-bold bg-blue-500 text-white hover:bg-blue-600"
+            type="primary"
+            onClick={sendToWatchList}
+            disabled={phoneNumbers.length === 0}
+          >
+            Send To WatchList
+          </Button>
 
-    </Card>
-  </div>
+          <Button
+            className="w-full py-4 font-bold bg-green-500 text-white hover:bg-green-600 mt-4"
+            type="primary"
+            onClick={sendToTradeList}
+            disabled={phoneNumbers.length === 0}
 
-  <div className='w-full md:w-2/3 flex flex-col space-y-4'>
-    {/* <h1 className='text-center font-semibold text-2xl text-gray-700'>Form</h1> */}
-    <Card title="Trade Form" bordered={false} style={{ maxWidth: 900, margin: 'auto' }}>
-      <Form
-        layout="vertical"
-        initialValues={{
-          ...rest,
-          buyRangeTo: buyRange.to,
-          buyRangeFrom: buyRange.from,
-          buyRangeConditions: buyRange.conditions,
-          buyRange2To: buyRange2.to,
-          buyRange2From: buyRange2.from,
-          buyRange2Conditions: buyRange2.conditions,
-          buyRange3To: buyRange3.to,
-          buyRange3From: buyRange3.from,
-          buyRange3Conditions: buyRange3.conditions,
-          stopLossValue: stopLossBelow.value,
-          stopLossConditions: stopLossBelow.conditions,
-          tpRange1To: tpRange1.to,
-          tpRange1From: tpRange1.from,
-          tpRange1Conditions: tpRange1.conditions,
-          tpRange2To: tpRange2.to,
-          tpRange2From: tpRange2.from,
-          tpRange2Conditions: tpRange2.conditions,
-          tpRange3To: tpRange3.to,
-          tpRange3From: tpRange3.from,
-          tpRange3Conditions: tpRange3.conditions,
-          scripSymbol: scrip.symbol,
-          scripCompanyName: scrip.companyName,
-          holdingPeriod,
-        }}
-        onFinish={handleFinish}
-      >
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Scrip Symbol" name="scripSymbol">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Scrip Company Name" name="scripCompanyName">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Holding Period" name="holdingPeriod">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
+          >
+            Send To TradeList
+          </Button>
 
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range From" name="buyRangeFrom">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range To" name="buyRangeTo">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range Conditions" name="buyRangeConditions">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range 2 From" name="buyRange2From">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range 2 To" name="buyRange2To">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range 2 Conditions" name="buyRange2Conditions">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range 3 From" name="buyRange3From">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range 3 To" name="buyRange3To">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Buy Range 3 Conditions" name="buyRange3Conditions">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Stop Loss Value" name="stopLossValue">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Stop Loss Conditions" name="stopLossConditions">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 1 From" name="tpRange1From">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 1 To" name="tpRange1To">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 1 Conditions" name="tpRange1Conditions">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 2 From" name="tpRange2From">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 2 To" name="tpRange2To">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 2 Conditions" name="tpRange2Conditions">
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 3 From" name="tpRange3From">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 3 To" name="tpRange3To">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <Form.Item label="Take Profit Range 3 Conditions" name="tpRange3Conditions">
-              <Input/>
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item>
-          {/* <Button type="primary" htmlType="submit" className="w-full">
-            Submit
-          </Button> */}
-        </Form.Item>
-      </Form>
-    </Card>
-  </div>
-</div>
-
-
-
-      <div className='flex justify-center space-x-20 mt-10'>
-        <Button
-          type="primary"
-          className='bg-green-500 hover:bg-green-600 text-white flex items-center px-6 py-2 rounded-full shadow-sm'
-          icon={<FaWhatsapp className='mr-2' />}
-          onClick={sendToWhatsApp}
-          disabled={!message || !selectedContactType}
-        >
-          WhatsApp
-        </Button>
-        <Button
-          type="primary"
-          className='bg-blue-500 hover:bg-blue-600 text-white flex items-center px-6 py-2 rounded-full shadow-sm'
-          icon={<FaTelegramPlane className='mr-2' />}
-          onClick={sendToTelegram}
-          disabled={!message || !selectedContactType}
-        >
-          Telegram
-        </Button>
+          <Modal
+            title="Add New Contact Type"
+            visible={isModalVisible}
+            onOk={handleAddOption}
+            onCancel={handleCancel}
+            okText="Add"
+          >
+            <Input
+              placeholder="Enter new contact type"
+              value={newOption}
+              onChange={(e) => setNewOption(e.target.value)}
+            />
+          </Modal>
+        </Form>
       </div>
 
-      <Modal
-        title="Choose Contact Type"
-        open={isModalVisible}
-        onOk={hideModal}
-        onCancel={hideModal}
-        footer={[
-          <Button key="back" onClick={hideModal}>
-            Cancel
-          </Button>
-        ]}
-      >
-        <Select
-          style={{ width: '100%' }}
-          placeholder="Select a contact type"
-          onChange={handleContactTypeChange}
-          value={selectedContactType}
-        >
-          {contactTypes.length > 0 ? contactTypes.map(type => (
-            <Option key={type} value={type}>
-              {type}
-            </Option>
-          )) : <Option disabled>No Contact Types Available</Option>}
-        </Select>
-      </Modal>
+      <div className="w-3/4 p-6 bg-gray-100">
+        <h3 className="text-xl font-bold mb-4">Scrip Data</h3>
+        <ul className="list-disc list-inside">
+          <li><strong>Scrip Name:</strong> {scripData.scripName}</li>
+          <li><strong>Sector:</strong> {scripData.sector}</li>
+          <li><strong>Capital Size:</strong> {scripData.capitalSize}</li>
+          <li><strong>Trade Type:</strong> {scripData.tradeType}</li>
+          <li><strong>Entry Ranges:</strong> {scripData.entryRanges}</li>
+          <li><strong>Target Prices:</strong> {scripData.targetPrices}</li>
+          <li><strong>Stop Loss:</strong> {scripData.stopLoss}</li>
+          <li><strong>Entry Risk:</strong> {scripData.entryRisk}</li>
+          <li><strong>Justification:</strong> {scripData.justification}</li>
+          <li><strong>Chart:</strong> {scripData.chart}</li>
+        </ul>
+      </div>
     </div>
   );
 };
 
-export default RtmsContent;
+export default CreateBulkContact;
