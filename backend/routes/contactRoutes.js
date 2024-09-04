@@ -79,31 +79,54 @@ router.get("/", async (req, res) => {
 });
 // Edit contact by ID
 router.put('/edit_contact/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, phoneNumber, email } = req.body;
+
   try {
-    const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!contact) {
+    const contactType = await Contact.findOneAndUpdate(
+      { 'contacts._id': id },
+      {
+        $set: {
+          'contacts.$.username': username,
+          'contacts.$.phoneNumber': phoneNumber,
+          'contacts.$.email': email,
+        },
+      },
+      { new: true }
+    );
+
+    if (!contactType) {
       return res.status(404).json({ message: 'Contact not found' });
     }
-    res.status(200).json(contact); // Make sure to return a 200 status code on success
+
+    res.status(200).json(contactType);
   } catch (error) {
     console.error('Error editing contact:', error.message);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
+
 // Route to delete a contact by id
 router.delete('/delete_contact/:id', async (req, res) => {
   try {
-    const contact = await Contact.findByIdAndDelete(req.params.id);
+    const contact = await Contact.findOneAndUpdate(
+      { 'contacts._id': req.params.id },
+      { $pull: { contacts: { _id: req.params.id } } },
+      { new: true }
+    );
+
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
+
     res.status(200).json({ message: 'Contact deleted successfully' });
   } catch (error) {
     console.error('Error deleting contact:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 // Bulk create or update contacts
