@@ -8,6 +8,9 @@ const staffRoutes = require("./routes/staffRoutes"); // Import staff routes
 const promptRoutes = require("./routes/promptRoutes");
 const signalRoutes = require("./routes/signalRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const chatRoutes = require('./routes/chatRoutes');
+const path = require('path');  // Make sure to import the 'path' module
+
 const cors = require("cors");
 
 require("dotenv").config();
@@ -34,7 +37,8 @@ app.use("/api/staff", staffRoutes); // Use staff routes
 app.use("/api/user", userRoutes);
 app.use("/sikinchaa", signalRoutes);
 app.use("/sikinchaa", promptRoutes);
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/chat', chatRoutes);
 // Start server
 app.listen(3000, () => {
   console.log("Server running on port 3000"); // Fixed logging message

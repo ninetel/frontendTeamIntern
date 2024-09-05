@@ -345,26 +345,44 @@
 // };
 
 // export default CreateChat;
-
-import { Form, Input, Button, Upload, Card } from 'antd';
-import React, { useState } from 'react';
-import { LuSendHorizonal } from "react-icons/lu"; // Importing the icon
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button, Upload } from 'antd';
+import io from 'socket.io-client';
+import { LuSendHorizonal } from "react-icons/lu";
 import { RiFolderUploadLine } from "react-icons/ri";
 import { useAppSelector } from '../../../../store/store';
 import { FcBusinessman } from "react-icons/fc";
 import ManageChat from '../ManageChat/ManageChat';
 
-const CreateChat = () => {
-  const accessToken = useAppSelector(
-    (state) => state.authentication.accessToken
-  );
+const socket = io('http://localhost:5004'); // Replace with your Flask server URL
 
+const CreateChat = () => {
+  const accessToken = useAppSelector((state) => state.authentication.accessToken);
   const [form] = Form.useForm();
   const [messages, setMessages] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [typing, setTyping] = useState(false); // State for typing indicator
 
-  const onFinish = (values) => {
+  useEffect(() => {
+    socket.on('new_message', (data) => {
+      setTyping(false); // Hide typing indicator when message is received
+      // Delay showing the message
+      setTimeout(() => {
+        setMessages((prevMessages) => [...prevMessages, { text: data.response, type: 'received' }]);
+      }, 1000); // Adjust delay as needed
+    });
+
+    socket.on('user_typing', () => {
+      setTyping(true); // Show typing indicator
+    });
+
+    return () => {
+      socket.off('new_message');
+      socket.off('user_typing');
+    };
+  }, []);
+
+  const onFinish = async (values) => {
     if (values.message && values.message.trim()) {
       const newMessage = {
         text: values.message.trim(),
@@ -375,17 +393,31 @@ const CreateChat = () => {
       setMessages([...messages, newMessage]);
       form.resetFields();
       setImagePreview(null);
-      simulateReceiveMessage();
-    }
-  };
 
-  const simulateReceiveMessage = () => {
-    setIsTyping(true);
-    setTimeout(() => {
-      setIsTyping(false);
-      const responseMessage = { text: 'This is a response message!', type: 'received' };
-      setMessages((prevMessages) => [...prevMessages, responseMessage]);
-    }, 2000);
+      const payload = imagePreview
+        ? {
+            img_message: values.message.trim(),
+            image: imagePreview,
+            img_sent: 1,
+            message: '',
+            image_sent: 1
+          }
+        : {
+            message: values.message.trim(),
+            img_message: '',
+            image: '',
+            img_sent: 0,
+            image_sent: 0
+          };
+
+      try {
+        socket.emit('send_message', payload);
+        // Notify the server that the user is typing
+        socket.emit('user_typing');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
   };
 
   const handleUpload = (file) => {
@@ -428,10 +460,10 @@ const CreateChat = () => {
                 </div>
               </div>
             ))}
-            {isTyping && (
-              <div className="mb-4 text-left">
-                <div className="inline-block bg-gray-300 px-4 py-2 rounded-lg max-w-full break-words italic text-green-500 shadow">
-                  Typing...
+            {typing && (
+              <div className="flex mb-4 justify-start">
+                <div className="relative px-4 py-3 rounded-xl max-w-[70%] break-words shadow bg-gray-200 text-black">
+                  <span>Typing...</span>
                 </div>
               </div>
             )}
@@ -452,32 +484,20 @@ const CreateChat = () => {
               />
             </Upload>
 
-            <Form.Item
-              name="message"
-              className="flex-1 mb-0"
-            >
-              <Input
-                className={`h-12 rounded-lg border border-gray-300 px-4 shadow-inner focus:ring-2 focus:ring-blue-500 ${imagePreview ? 'pl-3' : ''}`}
-                placeholder='Type a message...'
-                prefix={
-                  imagePreview && (
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="max-w-[30px] max-h-[30px] mr-2 rounded-sm"
-                    />
-                  )
-                }
-              />
+            <Form.Item name="message" className="flex-1">
+              <Input.TextArea rows={1} placeholder="Type a message" autoSize />
             </Form.Item>
 
-            <Button
-              htmlType="submit"
-              shape="rectangle"
-              icon={<LuSendHorizonal />} // Increase size here
-              className="ml-4 bg-green-500 hover:bg-green-600 border-none text-white w-12 h-12 flex justify-center items-center shadow-md transform hover:scale-105 transition-transform"
-              size={40}
-            />
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="flex items-center gap-2 border-none shadow-md hover:shadow-lg transform hover:scale-105 transition-transform"
+                icon={<LuSendHorizonal className="w-6 h-6 text-gray-800 hover:text-green-500 transition-colors" />}
+              >
+                Send
+              </Button>
+            </Form.Item>
           </Form>
         </div>
       </div>
