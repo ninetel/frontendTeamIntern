@@ -3,6 +3,7 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fetch = require('node-fetch');
+const mongoose = require("mongoose");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -29,10 +30,13 @@ exports.sendMessage = async (req, res) => {
   const { userId, text, image } = req.body;
 
   try {
-    let chat = await Chat.findOne({ userId });
+    let chat;
+    if (mongoose.Types.ObjectId.isValid(userId)) {
+      chat = await Chat.findOne({ userId: mongoose.Types.ObjectId(userId) });
+    }
 
     if (!chat) {
-      chat = new Chat({ userId, messages: [] });
+      chat = new Chat({ userId: mongoose.Types.ObjectId(userId), messages: [] });
     }
 
     const newMessage = {
@@ -70,6 +74,7 @@ exports.sendMessage = async (req, res) => {
 
     res.json(apiData);
   } catch (error) {
+    console.error('Error in sendMessage:', error);
     res.status(500).json({ message: 'Error sending message', error });
   }
 };

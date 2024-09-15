@@ -19,6 +19,7 @@ import StaffAddPrompt from "./components/templates/StaffAddPrompt/StaffAddPrompt
 import StaffManagePrompt from "./components/templates/StaffManagePrompt/StaffManagePrompt";
 import AdminCreateStaff from "../page/AdminCreateStaff.jsx";
 import AdminDashboard from "../page/AdminDashboard.jsx";
+import ChatAI from "../page/ChatAI.jsx";
 import AdminAddSignal from "./components/templates/AdminAddSignal/AdminAddSignal.jsx";
 import AdminManagePrompt from "./components/templates/AdminManagePrompt/AdminManagePrompt.jsx";
 import AdminCreatePrompt from "./components/templates/AdminCreatePrompt/AdminCreatePrompt.jsx";
@@ -28,7 +29,7 @@ import AdminManageContact from "./components/templates/AdminManageContact/AdminM
 import Chat from "./components/templates/Chat/Chat.jsx";
 import AdminSendBulkMessage from "./components/templates/AdminSendBulkMessage/AdminSendBulkMessage.jsx";
 import RTMS from "./components/templates/RTMS/RTMS.jsx";
-
+ 
 const theme = createTheme({
   palette: {
     primary: {
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/admin/createstaff" element={<AdminCreateStaff />}></Route>
         <Route path="/staff/dashboard" element={<StaffDashboard />}></Route>
         <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
+        <Route path="/chatai" element={<ChatAI />}></Route>
         <Route
           path="/staff/dashboard/createsignal"
           element={<StaffAddSignal />}
@@ -77,6 +79,7 @@ const App = () => {
         <Route path="/admin/dashboard/createprompt" element={<AdminCreatePrompt />} />
         <Route path="/admin/dashboard/manageprompt" element={<AdminManagePrompt />} />
         <Route path="/admin/dashboard/Chat" element={<Chat/>} />
+        <Route path="/chatAI" element={<ChatAI/>} />
         <Route path="admin/dashboard/bulkmessage" element={<AdminSendBulkMessage/>} />
         <Route path="admin/dashboard/RTMS" element={<RTMS/>} />
         

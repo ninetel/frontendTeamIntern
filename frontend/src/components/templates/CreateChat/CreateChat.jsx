@@ -345,7 +345,7 @@
 // };
 
 // export default CreateChat;
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, Button, Upload } from 'antd';
 import io from 'socket.io-client';
 import { LuSendHorizonal } from "react-icons/lu";
@@ -353,40 +353,88 @@ import { RiFolderUploadLine } from "react-icons/ri";
 import { useAppSelector } from '../../../../store/store';
 import { FcBusinessman } from "react-icons/fc";
 import ManageChat from '../ManageChat/ManageChat';
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const socket = io('http://localhost:5004'); // Replace with your Flask server URL
 
 const CreateChat = () => {
   const accessToken = useAppSelector((state) => state.authentication.accessToken);
+  const userInfo = useSelector(
+    (state) => state.currentLoggedInUser?.userInfo || {}
+  );
   const [form] = Form.useForm();
   const [messages, setMessages] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
   const [typing, setTyping] = useState(false); // State for typing indicator
+  const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [typingEnded, setTypingEnded] = useState(false); // State to track typing end
+
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
+    // Fetch chat history when the component mounts
+    const fetchChatHistory = async () => {
+      try {
+        const response = await axios.get('http://localhost:5004/get_chat_history', {
+          params: {
+            sender_id: userInfo.id,
+            receiver_id: '66c5977ee15fe197f4ba0ff7' // Replace with the appropriate receiver ID
+          }
+        });
+        if (response.data.status === 'success') {
+          setMessages(response.data.data);
+        } else {
+          console.error('Failed to fetch chat history:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching chat history:', error);
+      }
+    };
+
+    fetchChatHistory();
+
     socket.on('new_message', (data) => {
       setTyping(false); // Hide typing indicator when message is received
+      
+      // Set typingEnded to true to hide the last message if it was sent by admin
+      setTypingEnded(true);
+      
       // Delay showing the message
+      setUpdateTrigger((prev) => !prev); // Toggle the trigger to force update
+
       setTimeout(() => {
-        setMessages((prevMessages) => [...prevMessages, { text: data.response, type: 'received' }]);
+        if (typingEnded) {
+          setMessages((prevMessages) => [...prevMessages, { ...data, type: 'received' }]);
+          setTypingEnded(false); // Reset typing ended state after adding the message
+        }
       }, 1000); // Adjust delay as needed
     });
 
     socket.on('user_typing', () => {
       setTyping(true); // Show typing indicator
+      setTypingEnded(false); // Reset typing ended state
     });
 
     return () => {
       socket.off('new_message');
       socket.off('user_typing');
     };
-  }, []);
+  }, [userInfo, updateTrigger, typingEnded]);
+
+  useEffect(() => {
+    // Scroll to the bottom of the messages container
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   const onFinish = async (values) => {
     if (values.message && values.message.trim()) {
       const newMessage = {
         text: values.message.trim(),
         type: 'sent',
+        sender_id: userInfo.id,
         isImage: !!imagePreview,
         image: imagePreview
       };
@@ -396,17 +444,19 @@ const CreateChat = () => {
 
       const payload = imagePreview
         ? {
+            sender_id: userInfo?.id,
+            receiver_id: '66c5977ee15fe197f4ba0ff7',
             img_message: values.message.trim(),
             image: imagePreview,
-            img_sent: 1,
             message: '',
             image_sent: 1
           }
         : {
+            sender_id: userInfo?.id,
+            receiver_id: '66c5977ee15fe197f4ba0ff7',
             message: values.message.trim(),
             img_message: '',
             image: '',
-            img_sent: 0,
             image_sent: 0
           };
 
@@ -429,6 +479,14 @@ const CreateChat = () => {
     return false;
   };
 
+  // Function to handle Enter key press
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault(); // Prevent newline from being added in textarea
+      form.submit(); // Trigger form submission
+    }
+  };
+
   return (
     <div className="p-5 max-w-7xl mx-auto flex gap-8">
       <div className="w-1/4 bg-white shadow-lg rounded-lg p-6">
@@ -436,29 +494,37 @@ const CreateChat = () => {
         <ManageChat />
       </div>
 
-      <div className="w-3/4 bg-white shadow-lg rounded-lg p-6 flex flex-col">
-        <h1 className="text-center font-bold text-xl mb-6 text-green-600">Chat with Us</h1>
-        <div className="flex-1 overflow-hidden border border-gray-200 rounded-lg flex flex-col justify-between">
-          <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
+      {/* Chat Box */}
+      <div className="w-3/4 bg-gradient-to-br from-green-50 to-white shadow-xl rounded-2xl p-6 flex flex-col">
+        <h1 className="text-center font-extrabold text-2xl mb-6 text-green-700">Chat with Us</h1>
+    
+        {/* Messages Area */}
+        <div className="flex-1 border border-gray-300 rounded-xl flex flex-col justify-between bg-white shadow-lg overflow-hidden">
+          <div
+            className="flex-1 overflow-y-auto p-4 bg-gray-50 border border-gray-300 rounded-lg"
+            style={{ maxHeight: '600px' }}
+          >
             {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex mb-4 ${message.type === 'sent' ? 'justify-end' : 'justify-start'}`}
-              >
-                {message.type === 'received' && (
-                  <FcBusinessman size={30} className="mr-2" />
-                )}
-                <div className={`relative px-4 py-3 rounded-xl max-w-[70%] break-words shadow ${message.type === 'sent' ? 'bg-green-500 text-white' : 'bg-gray-200 text-black'}`}>
-                  {message.isImage && (
-                    <img
-                      src={message.image}
-                      alt="Uploaded"
-                      className="max-w-full max-h-[150px] rounded-lg mb-2 bg-transparent shadow"
-                    />
+              (typingEnded && index === messages.length - 1 && message.sender_id === 'admin_id') ? null : (
+                <div
+                  key={index}
+                  className={`flex mb-4 ${message.sender_id === userInfo.id ? 'justify-end' : 'justify-start'}`}
+                >
+                  {message.sender_id !== userInfo.id && (
+                    <FcBusinessman size={30} className="mr-2" />
                   )}
-                  <span>{message.text}</span>
+                  <div className={`relative px-4 py-3 rounded-xl max-w-[70%] break-words shadow ${message.sender_id === userInfo.id ? 'bg-green-500 text-white' : 'bg-gray-200 text-black'}`}>
+                    {message.image && (
+                      <img
+                        src={message.image}
+                        alt="Uploaded"
+                        className="max-w-full max-h-[150px] rounded-lg mb-2 bg-transparent shadow"
+                      />
+                    )}
+                    <span>{message.message || message.text}</span>
+                  </div>
                 </div>
-              </div>
+              )
             ))}
             {typing && (
               <div className="flex mb-4 justify-start">
@@ -467,6 +533,8 @@ const CreateChat = () => {
                 </div>
               </div>
             )}
+            {/* Scroll to bottom */}
+            <div ref={messagesEndRef} />
           </div>
 
           <Form
@@ -485,7 +553,7 @@ const CreateChat = () => {
             </Upload>
 
             <Form.Item name="message" className="flex-1">
-              <Input.TextArea rows={1} placeholder="Type a message" autoSize />
+              <Input.TextArea rows={1} placeholder="Type a message" autoSize onKeyDown={handleKeyPress} />
             </Form.Item>
 
             <Form.Item>
