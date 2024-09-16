@@ -20,6 +20,7 @@ import StaffManagePrompt from "./components/templates/StaffManagePrompt/StaffMan
 import AdminCreateStaff from "../page/AdminCreateStaff.jsx";
 import AdminDashboard from "../page/AdminDashboard.jsx";
 import ChatAI from "../page/ChatAI.jsx";
+import ChatGeneral from "../page/ChatGeneral.jsx";
 import AdminAddSignal from "./components/templates/AdminAddSignal/AdminAddSignal.jsx";
 import AdminManagePrompt from "./components/templates/AdminManagePrompt/AdminManagePrompt.jsx";
 import AdminCreatePrompt from "./components/templates/AdminCreatePrompt/AdminCreatePrompt.jsx";
@@ -55,6 +56,7 @@ const App = () => {
         <Route path="/staff/dashboard" element={<StaffDashboard />}></Route>
         <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
         <Route path="/chatai" element={<ChatAI />}></Route>
+        <Route path="/chatgeneral" element={<ChatGeneral />}></Route>
         <Route
           path="/staff/dashboard/createsignal"
           element={<StaffAddSignal />}
@@ -80,6 +82,7 @@ const App = () => {
         <Route path="/admin/dashboard/manageprompt" element={<AdminManagePrompt />} />
         <Route path="/admin/dashboard/Chat" element={<Chat/>} />
         <Route path="/chatAI" element={<ChatAI/>} />
+        <Route path="/chatGeneral" element={<ChatGeneral/>} />
         <Route path="admin/dashboard/bulkmessage" element={<AdminSendBulkMessage/>} />
         <Route path="admin/dashboard/RTMS" element={<RTMS/>} />
         
