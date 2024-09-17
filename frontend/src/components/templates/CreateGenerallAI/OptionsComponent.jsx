@@ -1,3 +1,131 @@
+{% comment %} // src/components/OptionsComponent.jsx
+import React, { useState } from 'react';
+import { Button, Tabs } from 'antd';
+import { RiChat1Line, RiImageLine, RiFileTextLine, RiFolderUploadLine } from 'react-icons/ri';
+
+const { TabPane } = Tabs;
+
+const textLists = {
+  'Chat': ['Chat message 1', 'Chat message 2', 'Chat message 3'],
+  'Images': ['Image 1 description', 'Image 2 description', 'Image 3 description'],
+  'Documents': ['Document 1 description', 'Document 2 description', 'Document 3 description'],
+  'Upload': ['Upload 1 description', 'Upload 2 description', 'Upload 3 description'],
+  'Files': ['Files 1 description', 'Files 2 description', 'Files 3 description']
+};
+
+const tabContent = {
+  '1': {
+    icon: <RiChat1Line />,
+    title: 'Chat',
+    icons: [
+      { icon: <RiChat1Line size={32} />, text: 'Chat' },
+      { icon: <RiImageLine size={32} />, text: 'Images' },
+      { icon: <RiFileTextLine size={32} />, text: 'Files' },
+      { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
+    ]
+  },
+  '2': {
+    icon: <RiImageLine />,
+    title: 'Images',
+    icons: [
+      { icon: <RiImageLine size={32} />, text: 'Images' },
+      { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
+      { icon: <RiFileTextLine size={32} />, text: 'Documents' },
+      { icon: <RiChat1Line size={32} />, text: 'Chat' },
+    ]
+  },
+  '3': {
+    icon: <RiFileTextLine />,
+    title: 'Documents',
+    icons: [
+      { icon: <RiFileTextLine size={32} />, text: 'Documents' },
+      { icon: <RiImageLine size={32} />, text: 'Images' },
+      { icon: <RiChat1Line size={32} />, text: 'Chat' },
+      { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
+    ]
+  },
+  '4': {
+    icon: <RiFileTextLine />,
+    title: 'Files',
+    icons: [
+      { icon: <RiFileTextLine size={32} />, text: 'Documents' },
+      { icon: <RiImageLine size={32} />, text: 'Images' },
+      { icon: <RiChat1Line size={32} />, text: 'Chat' },
+      { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
+    ]
+  }
+};
+
+const OptionsComponent = ({ handleIconClick }) => {
+  const [activeTab, setActiveTab] = useState('1');
+  const [openedIcon, setOpenedIcon] = useState(null);
+  const [textSnippets, setTextSnippets] = useState([]);
+  const [showTextList, setShowTextList] = useState(false);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+    setOpenedIcon(null);
+    setShowTextList(false);
+  };
+
+  const handleIconClicked = (iconText) => {
+    setOpenedIcon(iconText);
+    setTextSnippets(textLists[iconText] || []);
+    setShowTextList(true);
+    handleIconClick(iconText);
+  };
+
+  const handleBack = () => {
+    setOpenedIcon(null);
+    setShowTextList(false);
+  };
+
+  return (
+    <div>
+      {openedIcon ? (
+        <div>
+          <div className="text-center mb-4">
+            <Button onClick={handleBack}>Go Back</Button>
+          </div>
+          <div className="flex flex-wrap gap-4 justify-center">
+            {textSnippets.map((text, index) => (
+              <Button key={index} onClick={() => handleIconClicked(text)}>
+                {text}
+              </Button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <Tabs activeKey={activeTab} onChange={handleTabChange}>
+            {Object.keys(tabContent).map((key) => (
+              <TabPane
+                tab={
+                  <span className="flex items-center gap-2">
+                    {tabContent[key].icon} {tabContent[key].title}
+                  </span>
+                }
+                key={key}
+              >
+                <div className="flex flex-wrap gap-4 justify-center">
+                  {tabContent[key].icons.map((icon, index) => (
+                    <Button key={index} onClick={() => handleIconClicked(icon.text)}>
+                      {icon.icon}
+                      <span className="ml-2">{icon.text}</span>
+                    </Button>
+                  ))}
+                </div>
+              </TabPane>
+            ))}
+          </Tabs>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default OptionsComponent; {% endcomment %}
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Form, Input, Button, Upload, Tabs, List } from 'antd';
 import io from 'socket.io-client';
@@ -5,10 +133,9 @@ import { LuSendHorizonal } from 'react-icons/lu';
 import { RiFolderUploadLine, RiChat1Line, RiImageLine, RiFileTextLine, RiCloseLine, RiMenuLine } from 'react-icons/ri';
 import { useAppSelector } from '../../../../store/store';
 import { useSelector } from 'react-redux';
-import { FaUser } from 'react-icons/fa'; // Import the admin icon
 
 const { TabPane } = Tabs;
-const socket = io('http://localhost:5005'); // Replace with your Flask server URL
+const socket = io('http://localhost:5004'); // Replace with your Flask server URL
 
 const predefinedMessages = [
   'Hello, how can I assist you?',
@@ -42,32 +169,26 @@ const CreateGenerallAI = () => {
   const [openedIcon, setOpenedIcon] = useState(null); // Icon clicked
   const [textSnippets, setTextSnippets] = useState([]);
   const [showTextList, setShowTextList] = useState(false);
-  const [showOptions, setShowOptions] = useState(true); // State to track options visibility
-  const [lastMessages, setLastMessages] = useState('');
+  const [showOptions, setShowOptions] = useState(false); // State to track options visibility
 
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     socket.on('new_message', (data) => {
-      
+      console.log('New message received:', data); // Debugging line
+
       setTyping(false);
-      console.log(typing)
       setTypingEnded(true);
-      console.log(typingEnded)
       setUpdateTrigger((prev) => !prev);
-      
+
       setTimeout(() => {
-        if (typingEnded || !typing) {
-          console.log('New message received:', data); // Debugging line
-          setLastMessages(data.response)
-        console.log('Lat message received:', lastMessages)
+        if (typingEnded) {
           console.log('New message received:', data); // Debugging line
 
           setMessages((prevMessages) => [...prevMessages, { ...data, type: 'received' }]);
           setTypingEnded(false);
         }
-        console.log("sadasdasd")
-      }, 10);
+      }, 1000);
     });
 
     socket.on('user_typing', () => {
@@ -92,6 +213,7 @@ const CreateGenerallAI = () => {
       const newMessage = {
         text: values.message.trim(),
         type: 'sent',
+        sender_id: userInfo.id,
         isImage: !!imagePreview,
         image: imagePreview
       };
@@ -102,6 +224,8 @@ const CreateGenerallAI = () => {
 
       const payload = imagePreview
         ? {
+            sender_id: userInfo?.id,
+            receiver_id: '66c5977ee15fe197f4ba0ff7',
             img_message: values.message.trim(),
             image: imagePreview,
             message: '',
@@ -136,7 +260,6 @@ const CreateGenerallAI = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
-      setShowOptions(false)
       event.preventDefault();
       form.submit();
     }
@@ -269,27 +392,17 @@ const CreateGenerallAI = () => {
       )}
       <div className="flex flex-col mt-4 flex-grow overflow-auto">
         <div className="flex flex-col space-y-2 mb-2">
-          {console.log(messages)}
           {messages.map((msg, index) => (
             <div
               key={index}
               className={`p-2 rounded-lg shadow-md ${
-                msg.type === 'sent'
-                  ? 'self-end bg-green-100 text-green-700' // User messages
-                  : 'self-start bg-white text-green-700'   // Admin messages
+                msg.type === 'sent' ? 'self-end bg-green-100 text-green-700' : 'self-start bg-white text-green-700'
               }`}
             >
-              {msg.type === 'received' && (
-                <div className="flex items-center space-x-2">
-                  <FaUser className="text-green-700" /> {/* Admin icon */}
-                  <p>{msg.response}</p>
-                </div>
-              )}
-              {msg.type === 'sent' && (
-                <p>{msg.text}</p>
-              )}
-              {msg.isImage && (
+              {msg.isImage ? (
                 <img src={msg.image} alt="Uploaded" className="max-w-xs rounded-lg" />
+              ) : (
+                <p>{msg.text}</p>
               )}
             </div>
           ))}
