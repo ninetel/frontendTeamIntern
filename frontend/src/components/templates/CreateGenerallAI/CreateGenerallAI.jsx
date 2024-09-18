@@ -6,6 +6,7 @@ import { RiFolderUploadLine, RiChat1Line, RiImageLine, RiFileTextLine, RiCloseLi
 import { useAppSelector } from '../../../../store/store';
 import { useSelector } from 'react-redux';
 import { FaUser } from 'react-icons/fa'; // Import the admin icon
+import { v4 as uuidv4 } from 'uuid';
 
 const { TabPane } = Tabs;
 const socket = io('http://localhost:5005'); // Replace with your Flask server URL
@@ -44,36 +45,35 @@ const CreateGenerallAI = () => {
   const [showTextList, setShowTextList] = useState(false);
   const [showOptions, setShowOptions] = useState(true); // State to track options visibility
   const [lastMessages, setLastMessages] = useState('');
+  const uid = useRef(localStorage.getItem('uid') || uuidv4());
 
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
+    localStorage.setItem('uid', uid.current);
     socket.on('new_message', (data) => {
-      
-      setTyping(false);
-      console.log(typing)
-      setTypingEnded(true);
-      console.log(typingEnded)
-      setUpdateTrigger((prev) => !prev);
-      
-      setTimeout(() => {
-        if (typingEnded || !typing) {
-          console.log('New message received:', data); // Debugging line
-          setLastMessages(data.response)
-        console.log('Lat message received:', lastMessages)
-          console.log('New message received:', data); // Debugging line
+      if (data.uid === uid.current) {
+        setTyping(false);
+        setTypingEnded(true);
+        setUpdateTrigger((prev) => !prev);
 
-          setMessages((prevMessages) => [...prevMessages, { ...data, type: 'received' }]);
-          setTypingEnded(false);
-        }
-        console.log("sadasdasd")
-      }, 10);
+        setTimeout(() => {
+          if (typingEnded || !typing) {
+            setLastMessages(data.response);
+            setMessages((prevMessages) => [...prevMessages, { ...data, type: 'received' }]);
+            setTypingEnded(false);
+          }
+        }, 10);
+      }
     });
 
-    socket.on('user_typing', () => {
-      setTyping(true);
-      setTypingEnded(false);
-    });
+    socket.on('user_typing', (data) => {
+      if (data.uid === uid.current) {
+
+        setTyping(true);
+        setTypingEnded(false);
+      
+    }});
 
     return () => {
       socket.off('new_message');
@@ -89,7 +89,10 @@ const CreateGenerallAI = () => {
 
   const onFinish = async (values) => {
     if (values.message && values.message.trim()) {
+      console.log('uid==='+uid.current);
+
       const newMessage = {
+        uid: uid.current,
         text: values.message.trim(),
         type: 'sent',
         isImage: !!imagePreview,
@@ -102,14 +105,14 @@ const CreateGenerallAI = () => {
 
       const payload = imagePreview
         ? {
+            uid: uid.current,
             img_message: values.message.trim(),
             image: imagePreview,
             message: '',
             image_sent: 1
           }
         : {
-            sender_id: userInfo?.id,
-            receiver_id: '66c5977ee15fe197f4ba0ff7',
+            uid: uid.current,
             message: values.message.trim(),
             img_message: '',
             image: '',
@@ -118,7 +121,7 @@ const CreateGenerallAI = () => {
 
       try {
         socket.emit('send_message', payload);
-        socket.emit('user_typing');
+        socket.emit('user_typing', { uid: uid });
       } catch (error) {
         console.error('Error sending message:', error);
       }
@@ -136,7 +139,7 @@ const CreateGenerallAI = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
-      setShowOptions(false)
+      setShowOptions(false);
       event.preventDefault();
       form.submit();
     }
@@ -179,6 +182,7 @@ const CreateGenerallAI = () => {
     setShowTextList(false);
     form.setFieldsValue({ message: text }); // Set the clicked text in the form
   };
+
 
   const tabContent = {
     '1': {
@@ -267,6 +271,22 @@ const CreateGenerallAI = () => {
           </Tabs>
         </div>
       )}
+      {showTextList && (
+        <div className="text-list-container">
+          <Button onClick={handleBack} className="mb-2">
+            Back
+          </Button>
+          <List
+            bordered
+            dataSource={textSnippets}
+            renderItem={(item) => (
+              <List.Item onClick={() => handleTextClick(item)} className="cursor-pointer">
+                {item}
+              </List.Item>
+            )}
+          />
+        </div>
+      )}
       <div className="flex flex-col mt-4 flex-grow overflow-auto">
         <div className="flex flex-col space-y-2 mb-2">
           {console.log(messages)}
@@ -333,22 +353,7 @@ const CreateGenerallAI = () => {
 
          
 
-        {showTextList && (
-          <div className="text-list-container">
-            <Button onClick={handleBack} className="mb-2">
-              Back
-            </Button>
-            <List
-              bordered
-              dataSource={textSnippets}
-              renderItem={(item) => (
-                <List.Item onClick={() => handleTextClick(item)} className="cursor-pointer">
-                  {item}
-                </List.Item>
-              )}
-            />
-          </div>
-        )}
+        
 
         <div className="flex justify-between items-center">
           <Upload beforeUpload={handleUpload} showUploadList={false}>
