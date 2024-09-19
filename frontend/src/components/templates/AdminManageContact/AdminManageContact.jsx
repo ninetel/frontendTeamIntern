@@ -4,7 +4,10 @@ import StaffSidebar, { SidebarItem } from "../sidebar/Sidebar";
 import { FaHome } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
-import { IoChatbubbleEllipsesOutline, IoSettingsOutline } from "react-icons/io5";
+import {
+  IoChatbubbleEllipsesOutline,
+  IoSettingsOutline,
+} from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import ManageSignal from "../ManageSignal/ManageSignal";
 import { MdOutlineMarkChatRead } from "react-icons/md";
@@ -30,6 +33,9 @@ const AdminManageContact = () => {
   const handleRouteManagePrompt = () => {
     navigate("/admin/dashboard/manageprompt");
   };
+  const handleRouteManageChat = () => {
+    navigate("/admin/dashboard/managechat");
+  };
   const handleRouteManagesignal = () => {
     navigate("/admin/dashboard/managesignal");
   };
@@ -42,10 +48,10 @@ const AdminManageContact = () => {
   const handleRouteBulkMessage = () => {
     navigate("/admin/dashboard/BulkMessage");
   };
-const handleRouteRTMS = () => {
+  const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-//check
+  //check
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -65,14 +71,13 @@ const handleRouteRTMS = () => {
             icon={<TfiWrite size={30} />}
             text="Manage Signal"
             handleClick={handleRouteManagesignal}
-          
           />
           <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Contact"
             handleClick={handleRouteAddContact}
           />
-          
+
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Contact"
@@ -94,22 +99,28 @@ const handleRouteRTMS = () => {
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
           />
-           <SidebarItem
+          <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
+          />
+          <SidebarItem
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat"
+            handleClick={handleRouteManageChat}
+            alert
+            active
           />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
             handleClick={handleRouteBulkMessage}
           />
-<SidebarItem
-            icon={<FaUserClock  size={40} />}
+          <SidebarItem
+            icon={<FaUserClock size={40} />}
             text="RTMS"
             handleClick={handleRouteRTMS}
           />
-
         </StaffSidebar>
       </Box>
       <Box
@@ -122,4 +133,3 @@ const handleRouteRTMS = () => {
 };
 
 export default AdminManageContact;
-

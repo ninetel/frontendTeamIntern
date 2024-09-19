@@ -21,16 +21,18 @@ import AdminCreateStaff from "../page/AdminCreateStaff.jsx";
 import AdminDashboard from "../page/AdminDashboard.jsx";
 import ChatAI from "../page/ChatAI.jsx";
 import ChatGeneral from "../page/ChatGeneral.jsx";
+import AdminManageChat from "./components/templates/AdminManageChat/AdminManageChat.jsx";
 import AdminAddSignal from "./components/templates/AdminAddSignal/AdminAddSignal.jsx";
 import AdminManagePrompt from "./components/templates/AdminManagePrompt/AdminManagePrompt.jsx";
 import AdminCreatePrompt from "./components/templates/AdminCreatePrompt/AdminCreatePrompt.jsx";
 import AdminManageSignal from "./components/templates/AdminManageSignal/AdminManageSignal.jsx";
 import AddContact from "./components/templates/AddContact/AddContact.jsx";
 import AdminManageContact from "./components/templates/AdminManageContact/AdminManageContact.jsx";
+// import AdminManageChat from "./components/templates/AdminManageChat/AdminManageChat.jsx";
 import Chat from "./components/templates/Chat/Chat.jsx";
 import AdminSendBulkMessage from "./components/templates/AdminSendBulkMessage/AdminSendBulkMessage.jsx";
 import RTMS from "./components/templates/RTMS/RTMS.jsx";
- 
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -73,21 +75,40 @@ const App = () => {
           path="/staff/dashboard/manageprompt"
           element={<StaffManagePrompt />}
         ></Route>
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/dashboard/addsignal" element={<AdminAddSignal />} />
-        <Route path="/admin/dashboard/managesignal" element={<AdminManageSignal />} />
-        <Route path="/admin/dashboard/addcontact" element={<AddContact/>} />
-        <Route path="/admin/dashboard/managecontact" element={<AdminManageContact/>} />
-        <Route path="/admin/dashboard/createprompt" element={<AdminCreatePrompt />} />
-        <Route path="/admin/dashboard/manageprompt" element={<AdminManagePrompt />} />
-        <Route path="/admin/dashboard/Chat" element={<Chat/>} />
-        <Route path="/chatAI" element={<ChatAI/>} />
-        <Route path="/chatGeneral" element={<ChatGeneral/>} />
-        <Route path="admin/dashboard/bulkmessage" element={<AdminSendBulkMessage/>} />
-        <Route path="admin/dashboard/RTMS" element={<RTMS/>} />
-        
+        <Route
+          path="/admin/dashboard/managesignal"
+          element={<AdminManageSignal />}
+        />
+        <Route path="/admin/dashboard/addcontact" element={<AddContact />} />
+        <Route
+          path="/admin/dashboard/managecontact"
+          element={<AdminManageContact />}
+        />
+        <Route
+          path="/admin/dashboard/managechat"
+          element={<AdminManageChat />}
+        />
+        <Route
+          path="/admin/dashboard/createprompt"
+          element={<AdminCreatePrompt />}
+        />
+        <Route
+          path="/admin/dashboard/manageprompt"
+          element={<AdminManagePrompt />}
+        />
+        <Route path="/admin/dashboard/Chat" element={<Chat />} />
+        <Route path="/chatAI" element={<ChatAI />} />
+        <Route path="/chatGeneral" element={<ChatGeneral />} />
+        <Route
+          path="admin/dashboard/bulkmessage"
+          element={<AdminSendBulkMessage />}
+        />
+        <Route path="admin/dashboard/RTMS" element={<RTMS />} />
+
         {/* <Route path="/admin/dashboard/changepassword" element={<ChangePassword />} /> */}
-      
+
         {/* <Route
           path="/admin/dashboard/addsignal"
           element={<AdminAddSignal />}
