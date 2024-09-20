@@ -46,6 +46,7 @@ const CreateGenerallAI = () => {
   const [showOptions, setShowOptions] = useState(true); // State to track options visibility
   const [lastMessages, setLastMessages] = useState('');
   const uid = useRef(localStorage.getItem('uid') || uuidv4());
+  const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
 
   const messagesEndRef = useRef(null);
 
@@ -80,6 +81,30 @@ const CreateGenerallAI = () => {
       socket.off('user_typing');
     };
   }, [typingEnded]);
+  useEffect(() => {
+    // Function to get the URL and set it in state
+    const getCurrentUrl = () => {
+      const currentUrl = window.location.href; // Get the current page URL
+      const urlRegex = /https?:\/\/(www\.)?([^\/]+)\.com/; // Regex to match URLs
+      const match = currentUrl.match(urlRegex);
+      console.log("localhostts currentUrl== "+currentUrl)
+      console.log("localhostts match== "+match)
+      if (currentUrl=='http://localhost:5173/chatgeneral'){
+        setUrlValue('nespsetrends');
+      }
+
+      if (match && match[2]) {
+        const domainPart = match[2];
+        if (domainPart === 'nespsetrends') { // Replace with your condition
+          setUrlValue('nespsetrends'); // Set the value you want
+        } else {
+          setUrlValue(domainPart); // Store the extracted domain part
+        }
+      }
+    };
+
+    getCurrentUrl(); // Call the function to get the URL on component mount
+  }, []); // Empty dependency array to run only on mount
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -90,13 +115,15 @@ const CreateGenerallAI = () => {
   const onFinish = async (values) => {
     if (values.message && values.message.trim()) {
       console.log('uid==='+uid.current);
+      console.log("localhostt== "+urlValue)
 
       const newMessage = {
         uid: uid.current,
         text: values.message.trim(),
         type: 'sent',
         isImage: !!imagePreview,
-        image: imagePreview
+        image: imagePreview,
+        url:urlValue
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       form.resetFields();
@@ -109,14 +136,16 @@ const CreateGenerallAI = () => {
             img_message: values.message.trim(),
             image: imagePreview,
             message: '',
-            image_sent: 1
+            image_sent: 1,
+            url:urlValue
           }
         : {
             uid: uid.current,
             message: values.message.trim(),
             img_message: '',
             image: '',
-            image_sent: 0
+            image_sent: 0,
+            url:urlValue
           };
 
       try {

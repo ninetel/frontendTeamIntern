@@ -19,6 +19,7 @@ const CreateChatAI = () => {
   const [typing, setTyping] = useState(false);
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [typingEnded, setTypingEnded] = useState(false);
+  const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
 
   const messagesEndRef = useRef(null);
 
@@ -73,6 +74,29 @@ const CreateChatAI = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    // Function to get the URL and set it in state
+    const getCurrentUrl = () => {
+      const currentUrl = window.location.href; // Get the current page URL
+      const urlRegex = /https?:\/\/(www\.)?([^\/]+)\.com/; // Regex to match URLs
+      const match = currentUrl.match(urlRegex);
+      if (currentUrl=='http://localhost:5173/chatai'){
+        setUrlValue('nespsetrends');
+      }
+      if (match && match[2]) {
+        const domainPart = match[2];
+        if (domainPart === 'nespsetrends') { // Replace with your condition
+          setUrlValue('nespsetrends'); // Set the value you want
+        } else {
+          setUrlValue(domainPart); // Store the extracted domain part
+        }
+      }
+    };
+
+    getCurrentUrl(); // Call the function to get the URL on component mount
+  }, []); // Empty dependency array to run only on mount
+
+
   const onFinish = async (values) => {
     if (values.message && values.message.trim()) {
       const newMessage = {
@@ -80,7 +104,9 @@ const CreateChatAI = () => {
         type: 'sent',
         sender_id: userInfo.id,
         isImage: !!imagePreview,
-        image: imagePreview
+        image: imagePreview,
+        url:urlValue
+
       };
       setMessages([...messages, newMessage]);
       form.resetFields();
@@ -93,7 +119,9 @@ const CreateChatAI = () => {
             img_message: values.message.trim(),
             image: imagePreview,
             message: '',
-            image_sent: 1
+            image_sent: 1,
+            url:urlValue
+
           }
         : {
             sender_id: userInfo?.id,
@@ -101,7 +129,9 @@ const CreateChatAI = () => {
             message: values.message.trim(),
             img_message: '',
             image: '',
-            image_sent: 0
+            image_sent: 0,
+            url:urlValue
+
           };
 
       try {

@@ -8,17 +8,21 @@ import {
   IoChatbubbleEllipsesOutline,
   IoSettingsOutline,
 } from "react-icons/io5";
+import React, { useState, useEffect, useRef } from "react";
+
 import { useNavigate } from "react-router-dom";
 import ManageChat from "./ManageChat";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import ManagePrompt from "../../orgamisms/ManagePrompt/ManagePrompt";
 import { LiaMailBulkSolid } from "react-icons/lia";
-
+import UrlSelection from "./SelectedUrl"
 import { FaUserClock } from "react-icons/fa";
 
 const AdminManageChat = () => {
   const navigate = useNavigate();
+  const [selectedUrl, setSelectedUrl] = useState(null);
+
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
   };
@@ -121,7 +125,11 @@ const AdminManageChat = () => {
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
       >
-        <ManageChat />
+      {selectedUrl ? (
+        <ManageChat selectedUrl={selectedUrl} />
+      ) : (
+        <UrlSelection onSelect={setSelectedUrl} />
+      )}
       </Box>
     </Box>
   );
