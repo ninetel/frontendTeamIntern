@@ -68,15 +68,16 @@ const promptRoutes = require("./routes/promptRoutes");
 const signalRoutes = require("./routes/signalRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const chatRoutes = require('./routes/chatRoutes');
+const urlRoutes = require("./routes/urlRoutes"); // Adjust the path to your urlRoutes file
 
 // Import middleware
-const checkReferrer = require('./middleware/checkReferrer');
+// const checkReferrer = require('./middleware/checkReferrer');
 
 const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: ['http://localhost:3004', 'http://localhost:3005'],
+  origin: ['http://localhost:3004', 'http://localhost:3005','http://localhost:5173',"http://81.181.198.75:5000/"],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -100,7 +101,8 @@ app.use((req, res, next) => {
 });
 
 // Apply middleware to specific routes
-app.use('/api/chat', checkReferrer, chatRoutes);
+// app.use('/api/chat', checkReferrer, chatRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Other routes
 app.use("/api/contacts", contactRoutes);
@@ -110,6 +112,7 @@ app.use("/api/staff", staffRoutes);
 app.use("/api/user", userRoutes);
 app.use("/sikinchaa", signalRoutes);
 app.use("/sikinchaa", promptRoutes);
+app.use("/api/urls", urlRoutes);
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {

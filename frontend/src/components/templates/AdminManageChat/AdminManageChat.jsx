@@ -4,6 +4,8 @@ import StaffSidebar, { SidebarItem } from "../sidebar/Sidebar";
 import { FaHome } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
+import axios from "axios"; // Import axios
+
 import {
   IoChatbubbleEllipsesOutline,
   IoSettingsOutline,
@@ -22,7 +24,32 @@ import { FaUserClock } from "react-icons/fa";
 const AdminManageChat = () => {
   const navigate = useNavigate();
   const [selectedUrl, setSelectedUrl] = useState(null);
+  const [urlOptions, setUrlOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchUrls = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/chat/urls');
+        setUrlOptions(response.data);
+        console.log(urlOptions)
+      } catch (error) {
+        console.error("Error fetching URLs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUrls();
+  }, []);
+
+  const handleRoute = (route) => {
+    navigate(route);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
   };
@@ -55,6 +82,9 @@ const AdminManageChat = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
+  const handleRouteChatIframe=()=>{
+    navigate("/admin/dashboard/manageChatIframe");
+  }
   //check
 
   return (
@@ -111,6 +141,12 @@ const AdminManageChat = () => {
           />
 
           <SidebarItem
+          icon={<PiChatsTeardropLight size={30} />}
+          text="Manage Chat Iframe"
+          handleClick={handleRouteChatIframe}
+
+        />
+          <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
             handleClick={handleRouteBulkMessage}
@@ -128,7 +164,7 @@ const AdminManageChat = () => {
       {selectedUrl ? (
         <ManageChat selectedUrl={selectedUrl} />
       ) : (
-        <UrlSelection onSelect={setSelectedUrl} />
+        <UrlSelection urlOptions={urlOptions} onSelect={setSelectedUrl} />
       )}
       </Box>
     </Box>

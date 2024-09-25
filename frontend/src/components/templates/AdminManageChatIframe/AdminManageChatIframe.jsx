@@ -1,4 +1,5 @@
-import { Box } from "@mui/material";
+import { useSelector } from "react-redux";
+import { Container, Typography, Paper, Box } from "@mui/material";
 import StaffSidebar, { SidebarItem } from "../sidebar/Sidebar";
 import { FaHome } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
@@ -8,35 +9,33 @@ import {
   IoSettingsOutline,
 } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import ManageSignal from "../ManageSignal/ManageSignal";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
-import AddPrompt from "../../orgamisms/AddPrompt/AddPrompt";
 import { LiaMailBulkSolid } from "react-icons/lia";
-
+import CHatIframe from "./ChatIframe"
 import { FaUserClock } from "react-icons/fa";
 
-const AdminCreatePrompt = () => {
+const AdminManageContact = () => {
   const navigate = useNavigate();
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
   };
+
   const handleRouteAddSignal = () => {
     navigate("/admin/dashboard/addsignal");
   };
-  const handleRouteManageSignal = () => {
-    navigate("/admin/dashboard/managesignal");
-  };
   const handleRouteAddContact = () => {
     navigate("/admin/dashboard/addcontact");
-  };
-  const handleRouteManageContact = () => {
-    navigate("/admin/dashboard/managecontact");
   };
   const handleRouteManagePrompt = () => {
     navigate("/admin/dashboard/manageprompt");
   };
   const handleRouteManageChat = () => {
     navigate("/admin/dashboard/managechat");
+  };
+  const handleRouteManagesignal = () => {
+    navigate("/admin/dashboard/managesignal");
   };
   const handleRouteCreatePrompt = () => {
     navigate("/admin/dashboard/createprompt");
@@ -54,6 +53,7 @@ const AdminCreatePrompt = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
   //check
+
   return (
     <Box sx={{ display: "flex" }}>
       <Box sx={{ width: "250px" }}>
@@ -63,11 +63,15 @@ const AdminCreatePrompt = () => {
             text="Home"
             handleClick={handleRouteHome}
           />
-          <SidebarItem icon={<IoMdAdd size={30} />} text="Add Signal" alert />
+          <SidebarItem
+            icon={<IoMdAdd size={30} />}
+            text="Add Signal"
+            handleClick={handleRouteAddSignal}
+          />
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Signal"
-            handleClick={handleRouteManageSignal}
+            handleClick={handleRouteManagesignal}
           />
           <SidebarItem
             icon={<IoMdAdd size={30} />}
@@ -78,13 +82,13 @@ const AdminCreatePrompt = () => {
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Contact"
-            handleClick={handleRouteManageContact}
+            active
+            alert
+            // active={Router.params === "managecontact" ? true : false}
           />
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
             text="Add Prompt"
-            active
-            alert
             handleClick={handleRouteCreatePrompt}
           />
           <SidebarItem
@@ -105,14 +109,13 @@ const AdminCreatePrompt = () => {
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"
             handleClick={handleRouteManageChat}
-            alert
-            active
-          />
-          <SidebarItem
+           
+          /><SidebarItem
           icon={<PiChatsTeardropLight size={30} />}
           text="Manage Chat Iframe"
           handleClick={handleRouteChatIframe}
-
+          alert
+          active
         />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
@@ -129,10 +132,10 @@ const AdminCreatePrompt = () => {
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
       >
-        <AddPrompt />
+        <CHatIframe />
       </Box>
     </Box>
   );
 };
 
-export default AdminCreatePrompt;
+export default AdminManageContact;

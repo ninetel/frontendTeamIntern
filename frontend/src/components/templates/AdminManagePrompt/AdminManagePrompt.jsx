@@ -52,6 +52,9 @@ const AdminManagePrompt = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
+  const handleRouteChatIframe=()=>{
+    navigate("/admin/dashboard/manageChatIframe");
+  }
   //check
   return (
     <Box sx={{ display: "flex" }}>
@@ -111,6 +114,12 @@ const AdminManagePrompt = () => {
             alert
             active
           />
+          <SidebarItem
+          icon={<PiChatsTeardropLight size={30} />}
+          text="Manage Chat Iframe"
+          handleClick={handleRouteChatIframe}
+
+        />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"

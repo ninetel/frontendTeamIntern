@@ -47,7 +47,7 @@ router.get("/types", async (req, res) => {
     console.error("Error fetching contact types:", err.message);
     res.status(500).json({ error: "Failed to fetch contact types" });
   }
-});
+});  
 // Endpoint to get contacts by type
 router.get("/content/:type", async (req, res) => {
   const { type } = req.params;

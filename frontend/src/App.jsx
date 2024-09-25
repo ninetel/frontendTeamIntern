@@ -15,6 +15,7 @@ import UserDashboard from "../page/UserDashboard";
 import StaffDashboard from "../page/StaffDashboard";
 import StaffAddSignal from "./components/templates/StaffAddSignal/StaffAddSignal";
 import StaffManageSignal from "./components/templates/StaffManageSignal/StaffManageSignal";
+import AdminManageChatIframe from "./components/templates/AdminManageChatIframe/AdminManageChatIframe";
 import StaffAddPrompt from "./components/templates/StaffAddPrompt/StaffAddPrompt.jsx";
 import StaffManagePrompt from "./components/templates/StaffManagePrompt/StaffManagePrompt";
 import AdminCreateStaff from "../page/AdminCreateStaff.jsx";
@@ -66,7 +67,10 @@ const App = () => {
         <Route
           path="/staff/dashboard/managesignal"
           element={<StaffManageSignal />}
-        ></Route>
+        ></Route><Route
+        path="/admin/dashboard/manageChatIframe"
+        element={<AdminManageChatIframe />}
+      ></Route>
         <Route
           path="/staff/dashboard/addprompt"
           element={<StaffAddPrompt />}

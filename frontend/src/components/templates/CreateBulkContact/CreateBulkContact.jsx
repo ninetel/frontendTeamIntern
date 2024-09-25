@@ -218,7 +218,7 @@ const CreateBulkContact = () => {
         const contacts = jsonData.map(({ username, phoneNumber, email }) => ({
           contactType: values.ContactType,
           username,
-          phoneNumber: String(phoneNumber), // Ensure phoneNumber is a string
+          phoneNumber: `+${String(phoneNumber)}`, // Add + sign before converting to string
           email,
         }));
 
