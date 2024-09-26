@@ -3,8 +3,7 @@ import { Input, Button, List, Modal, Spin, Typography } from "antd";
 import axios from "axios";
 
 const { Text } = Typography;
-
-const AllowIframe = () => {
+ const AllowIframe = () => {
   const [message, setMessage] = useState("");
   const [urls, setUrls] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,6 +11,7 @@ const AllowIframe = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingUrl, setEditingUrl] = useState(null);
 
+  
   const fetchUrls = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/urls");
@@ -22,7 +22,9 @@ const AllowIframe = () => {
       setLoading(false);
     }
   };
+  console.log("hellow world");
 
+  console.log(import.meta.env.VITE_FRONTEND_URL)
   const handleCopyMessage = () => {
     const copyText = `
     <div 
@@ -36,8 +38,8 @@ const AllowIframe = () => {
       "
     >
       <iframe
-        src="http://localhost:5173/chatai"
-        title="Chat"
+      src="${import.meta.env.VITE_FRONTEND_URL}chatai"
+      title="Chat"
         style="
           width: '100%';
           height: '100%';
