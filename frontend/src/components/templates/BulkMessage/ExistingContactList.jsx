@@ -8,7 +8,7 @@ const ExistingContactList = () => {
   // useEffect(() => {
   //   const fetchContactTypes = async () => {
   //     try {
-  //       const response = await axios.get("http://localhost:3000/api/contacts/types");
+  //       const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
   //       console.log("Fetched data:", response.data);
   //       const uniqueTypes = Array.from(new Set(response.data.map(item => item.contactType)));
   //       setOptions(uniqueTypes);

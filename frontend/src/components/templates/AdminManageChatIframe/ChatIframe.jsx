@@ -14,7 +14,7 @@ const { Text } = Typography;
   
   const fetchUrls = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/urls");
+      const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/urls");
       setUrls(response.data);
       setLoading(false);
     } catch (error) {
@@ -54,7 +54,7 @@ const { Text } = Typography;
 
   const handleAddUrl = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/urls", { url: newUrl });
+      const response = await axios.post("${import.meta.env.VITE_BACKEND_URL}/api/urls", { url: newUrl });
       setUrls([...urls, response.data]);
       setNewUrl("");
       setIsModalVisible(false);
@@ -65,7 +65,7 @@ const { Text } = Typography;
 
   const handleUpdateUrl = async (id, updatedUrl) => {
     try {
-      await axios.put(`http://localhost:3000/api/urls/${id}`, { url: updatedUrl });
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/urls/${id}`, { url: updatedUrl });
       fetchUrls();
     } catch (error) {
       console.error("Error updating URL:", error);
@@ -74,7 +74,7 @@ const { Text } = Typography;
 
   const handleDeleteUrl = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/urls/${id}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/urls/${id}`);
       setUrls(urls.filter((url) => url._id !== id));
     } catch (error) {
       console.error("Error deleting URL:", error);

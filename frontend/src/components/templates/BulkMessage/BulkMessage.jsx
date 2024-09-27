@@ -91,7 +91,7 @@ const BulkMessage = () => {
   useEffect(() => {
     const fetchContactTypes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/contacts/types");
+        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
         setContactTypes(response.data);
       } catch (error) {
         console.error("Error fetching contact types:", error);
@@ -103,7 +103,7 @@ const BulkMessage = () => {
 
   const fetchContent = async (type) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/contacts/content/${type}`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/content/${type}`);
       const contacts = response.data;
 
       // Extract phone numbers

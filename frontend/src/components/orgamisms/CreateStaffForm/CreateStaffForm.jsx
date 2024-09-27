@@ -26,7 +26,7 @@ const CreateStaffForm = () => {
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
-  //     const response = await axios.post('http://localhost:3000/admin/create-staff', formData);
+  //     const response = await axios.post('${import.meta.env.VITE_BACKEND_URL}/admin/create-staff', formData);
   //     console.log('Staff created successfully:', response.data);
   //   } catch (error) {
   //     console.error('Error creating staff:', error);

@@ -50,7 +50,7 @@ const UserQuestions = () => {
     console.log("values of form -->", values);
     try {
       await axios.put(
-        `http://localhost:3000/api/user/responses/${currentUserId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/responses/${currentUserId}`,
         {
           responses: values,
         },

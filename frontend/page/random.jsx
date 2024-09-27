@@ -40,7 +40,7 @@ const UserQuestions = () => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:3000/api/users/responses/${currentUserId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/responses/${currentUserId}`,
         {
           responses,
         }

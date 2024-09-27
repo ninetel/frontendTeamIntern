@@ -18,7 +18,7 @@ const ChatMessages = ({ userId }) => {
       if (!userId) return;
 
       try {
-        const response = await axios.get(`http://localhost:3000/api/chat/messages/${userId}`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
         const allMessages = response.data.allMessages || [];
         const userNameAndNumber = response.data.userNameAndNumber;
 
@@ -66,7 +66,7 @@ const ChatMessages = ({ userId }) => {
     {console.log(messageToSend)}
 
     try {
-      await axios.post(`http://localhost:3000/api/chat/send-message`, messageToSend);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/chat/send-message`, messageToSend);
       setMessages(prev => [...prev, messageToSend]);
       setNewMessage("");
       setUploadedImage(null);

@@ -37,7 +37,7 @@ const authorizeRoles = (...roles) => {
 };
 
 //route to post prompts
-// http://localhost:3000/sikinchaa/create_prompt
+// ${import.meta.env.VITE_BACKEND_URL}/sikinchaa/create_prompt
 router.post(
   "/create_prompt",
   authenticateJWT,

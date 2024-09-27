@@ -15,10 +15,10 @@ const ManageChat = ({ selectedUrl }) => {
     const fetchData = async () => {
       try {
         const [chatResponse, generalResponse] = await Promise.all([
-          axios.get(`http://localhost:3000/api/chat/last-messages/chat`, {
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/last-messages/chat`, {
             params: { url: selectedUrl } // Send selectedUrl as a parameter
           }),
-          axios.get(`http://localhost:3000/api/chat/last-messages/general`, {
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/last-messages/general`, {
             params: { url: selectedUrl } // Send selectedUrl as a parameter
           })
         ]);
@@ -61,7 +61,7 @@ const ManageChat = ({ selectedUrl }) => {
 
   const handleUserSelect = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/chat/messages/${userId}`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
       setSelectedChat({ uid: userId, messages: response.data });
     } catch (error) {
       console.error('Error fetching user messages:', error);

@@ -24,7 +24,7 @@
 //   useEffect(() => {
 //     const fetchContactTypes = async () => {
 //       try {
-//         const response = await axios.get("http://localhost:3000/api/contacts/types");
+//         const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
 //         setContactTypes(response.data);
 //       } catch (error) {
 //         console.error("Error fetching contact types:", error);
@@ -36,7 +36,7 @@
 //   const fetchContacts = async () => {
 //     if (selectedType) {
 //       try {
-//         const response = await axios.get("http://localhost:3000/api/contacts");
+//         const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts");
 //         const filteredContacts = response.data.find(
 //           (contact) => contact.contactType === selectedType
 //         );
@@ -267,7 +267,7 @@ const ManageContact = () => {
   useEffect(() => {
     const fetchContactTypes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/contacts/types");
+        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
         setContactTypes(response.data);
       } catch (error) {
         console.error("Error fetching contact types:", error);
@@ -279,7 +279,7 @@ const ManageContact = () => {
   const fetchContacts = async () => {
     if (selectedType) {
       try {
-        const response = await axios.get("http://localhost:3000/api/contacts");
+        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts");
         const filteredContacts = response.data.find(
           (contact) => contact.contactType === selectedType
         );
@@ -300,7 +300,7 @@ const ManageContact = () => {
       console.log("Submitting updated values:", values);
       try {
         const response = await axios.put(
-          `http://localhost:3000/api/contacts/edit_contact/${editingContact._id}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/contacts/edit_contact/${editingContact._id}`,
           values,
           {
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -326,7 +326,7 @@ const ManageContact = () => {
       cancelText: 'Cancel',
       onOk: async () => {
         try {
-          await axios.delete(`http://localhost:3000/api/contacts/delete_contact/${id}`, {
+          await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/delete_contact/${id}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
           message.success('Contact deleted successfully');

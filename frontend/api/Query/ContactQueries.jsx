@@ -1,7 +1,7 @@
 // api.js
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/contacts";
+const API_URL = "${import.meta.env.VITE_BACKEND_URL}/api/contacts";
 
 // Function to delete a contact by ID
 export const deleteContact = async (id, accessToken) => {

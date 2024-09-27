@@ -62,7 +62,7 @@
 
 //           // Upload the image to the backend
 //           const response = await axios.post(
-//             "http://localhost:3000/sikinchaa/upload",
+//             "${import.meta.env.VITE_BACKEND_URL}/sikinchaa/upload",
 //             formData,
 //             {
 //               headers: {
@@ -82,7 +82,7 @@
 
 //           // Send the signal data to your backend
 //           await axios.post(
-//             "http://localhost:3000/sikinchaa/create_signal",
+//             "${import.meta.env.VITE_BACKEND_URL}/sikinchaa/create_signal",
 //             signalData,
 //             {
 //               headers: {
@@ -418,7 +418,7 @@ const CreateSignal = () => {
             formData.append("signalImage", file);
 
             const response = await axios.post(
-              "http://localhost:3000/sikinchaa/upload",
+              "${import.meta.env.VITE_BACKEND_URL}/sikinchaa/upload",
               formData,
               {
                 headers: {
@@ -435,7 +435,7 @@ const CreateSignal = () => {
           };
 
           await axios.post(
-            "http://localhost:3000/sikinchaa/create_signal",
+            "${import.meta.env.VITE_BACKEND_URL}/sikinchaa/create_signal",
             signalData,
             {
               headers: {

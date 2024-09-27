@@ -30,7 +30,7 @@ const AdminManageChat = () => {
   useEffect(() => {
     const fetchUrls = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/chat/urls');
+        const response = await axios.get('${import.meta.env.VITE_BACKEND_URL}/api/chat/urls');
         setUrlOptions(response.data);
         console.log(urlOptions)
       } catch (error) {

@@ -1,10 +1,10 @@
 Routes::
 Admin Login:
-http://localhost:3000/api/admin/admin/login
+${import.meta.env.VITE_BACKEND_URL}/api/admin/admin/login
 Staff Login:
-http://localhost:3000/api/staff/staff/login
+${import.meta.env.VITE_BACKEND_URL}/api/staff/staff/login
 Login:
-http://localhost:3000/api/users/login
+${import.meta.env.VITE_BACKEND_URL}/api/users/login
 Register:
 
 GET USERS:

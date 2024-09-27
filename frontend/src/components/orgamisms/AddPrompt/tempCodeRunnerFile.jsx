@@ -1,1 +1,1 @@
-http://localhost:3000/sikinchaa/create_prompt
+${import.meta.env.VITE_BACKEND_URL}/sikinchaa/create_prompt

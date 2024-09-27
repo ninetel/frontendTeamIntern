@@ -16,7 +16,7 @@ const CreateBulkContact = () => {
   useEffect(() => {
     const fetchContactTypes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/contacts/types");
+        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
         const uniqueTypes = Array.from(new Set(response.data)); // Ensure unique types
         setOptions(uniqueTypes);
       } catch (err) {
@@ -30,7 +30,7 @@ const CreateBulkContact = () => {
   
   const handleContactTypeChange = async (value) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/contacts/content/${value}`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/content/${value}`);
       const numbers = response.data.map(contact => contact.phoneNumber);
       setPhoneNumbers(numbers); // Store the phone numbers as an array
   
