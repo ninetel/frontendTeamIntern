@@ -256,7 +256,7 @@ const CreateContact = () => {
   useEffect(() => {
     const fetchContactTypes = async () => {
       try {
-        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/types`);
         const uniqueTypes = Array.from(new Set(response.data)); // Ensure unique types
         setOptions(uniqueTypes);
       } catch (err) {
@@ -287,7 +287,7 @@ const CreateContact = () => {
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      await axios.post("${import.meta.env.VITE_BACKEND_URL}/api/contacts", {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/contacts`, {
         contactType: values.ContactType,
         username: values.username,
         phoneNumber: values.phoneNumber,

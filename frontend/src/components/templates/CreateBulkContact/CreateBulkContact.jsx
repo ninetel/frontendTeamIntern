@@ -153,7 +153,7 @@ const CreateBulkContact = () => {
     const fetchContactTypes = async () => {
       try {
         console.log("Fetching contact types...");
-        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/types`);
         console.log("Received contact types:", response.data);
         const uniqueTypes = Array.from(new Set(response.data)); // Ensure unique types
         setOptions(uniqueTypes);
@@ -225,7 +225,7 @@ const CreateBulkContact = () => {
         console.log("Contacts data to be sent to backend:", contacts);
 
         try {
-          const response = await axios.post("${import.meta.env.VITE_BACKEND_URL}/api/contacts/bulk", contacts);
+          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/bulk`, contacts);
           console.log("Backend response:", response.data);
           alert("Contacts saved successfully!");
           form.resetFields();

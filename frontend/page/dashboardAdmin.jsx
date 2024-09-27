@@ -53,7 +53,7 @@ export default function AddStaff() {
     console.log("values from the form", values);
     try {
       const response = await axios.post(
-        "${import.meta.env.VITE_BACKEND_URL}/api/staff/create",
+        `${import.meta.env.VITE_BACKEND_URL}/api/staff/create`,
         values,
         {
           headers: {

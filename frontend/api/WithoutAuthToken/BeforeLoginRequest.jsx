@@ -2,7 +2,7 @@ import axios from "axios";
 export const SignUpRequest = async ({ email, name, password, phoneNumber }) => {
   // console.log("Inside of the SignUpRequest");
   // console.log("email, name, password", email, name, password, phoneNumber);
-  return await axios.post("${import.meta.env.VITE_BACKEND_URL}/api/user/signup", {
+  return await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/signup`, {
     email,
     name,
     password,
@@ -13,7 +13,7 @@ export const SignUpRequest = async ({ email, name, password, phoneNumber }) => {
 export const UserLoginRequest = async ({ email, password }) => {
   try {
     // console.log("Inside of the UserLoginRequest");
-    const response = await axios.post("${import.meta.env.VITE_BACKEND_URL}/api/user/login", {
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`, {
       email,
       password,
     });
@@ -29,7 +29,7 @@ export const AdminLoginRequest = async ({ email, password }) => {
   try {
     // console.log("Inside of the AdminLoginRequest");
     const response = await axios.post(
-      "${import.meta.env.VITE_BACKEND_URL}/api/admin/admin/login",
+      `${import.meta.env.VITE_BACKEND_URL}/api/admin/admin/login`,
       {
         email,
         password,
@@ -46,7 +46,7 @@ export const StaffLoginRequest = async ({ email, password }) => {
   try {
     // console.log("Inside of the Staff Login Request");
     const response = await axios.post(
-      "${import.meta.env.VITE_BACKEND_URL}/api/staff/login ",
+      `${import.meta.env.VITE_BACKEND_URL}/api/staff/login`,
       {
         email,
         password,

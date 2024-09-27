@@ -14,7 +14,7 @@ const { Text } = Typography;
   
   const fetchUrls = async () => {
     try {
-      const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/urls");
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/urls``);
       setUrls(response.data);
       setLoading(false);
     } catch (error) {
@@ -38,7 +38,7 @@ const { Text } = Typography;
       "
     >
       <iframe
-      src="${import.meta.env.VITE_FRONTEND_URL}chatai"
+      src=`${import.meta.env.VITE_FRONTEND_URL}chatai`
       title="Chat"
         style="
           width: '100%';
@@ -54,7 +54,7 @@ const { Text } = Typography;
 
   const handleAddUrl = async () => {
     try {
-      const response = await axios.post("${import.meta.env.VITE_BACKEND_URL}/api/urls", { url: newUrl });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/urls`, { url: newUrl });
       setUrls([...urls, response.data]);
       setNewUrl("");
       setIsModalVisible(false);

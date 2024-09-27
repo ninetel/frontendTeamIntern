@@ -376,7 +376,7 @@ const CreateChat = () => {
     // Fetch chat history when the component mounts
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get('http://localhost:5004/get_chat_history', {
+        const response = await axios.get(`http://localhost:5004/get_chat_history`, {
           params: {
             sender_id: userInfo.id,
             receiver_id: '66c5977ee15fe197f4ba0ff7' // Replace with the appropriate receiver ID

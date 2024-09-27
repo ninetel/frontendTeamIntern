@@ -91,7 +91,7 @@ const BulkMessage = () => {
   useEffect(() => {
     const fetchContactTypes = async () => {
       try {
-        const response = await axios.get("${import.meta.env.VITE_BACKEND_URL}/api/contacts/types");
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/types`);
         setContactTypes(response.data);
       } catch (error) {
         console.error("Error fetching contact types:", error);
