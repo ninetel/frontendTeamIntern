@@ -19,6 +19,7 @@ import AdminManageChatIframe from "./components/templates/AdminManageChatIframe/
 import StaffAddPrompt from "./components/templates/StaffAddPrompt/StaffAddPrompt.jsx";
 import StaffManagePrompt from "./components/templates/StaffManagePrompt/StaffManagePrompt";
 import AdminCreateStaff from "../page/AdminCreateStaff.jsx";
+import Home from "../page/Home.jsx";
 import AdminDashboard from "../page/AdminDashboard.jsx";
 import ChatAI from "../page/ChatAI.jsx";
 import ChatGeneral from "../page/ChatGeneral.jsx";
@@ -51,6 +52,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
+      <Route path="/" element={<Home />}></Route>
         <Route path="/user/login" element={<LogIn />}></Route>
         <Route path="/user/signup" element={<SignUp />}></Route>
         <Route path="/admin/login" element={<AdminLogin />}></Route>
