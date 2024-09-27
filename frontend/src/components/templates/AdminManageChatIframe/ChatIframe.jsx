@@ -3,7 +3,8 @@ import { Input, Button, List, Modal, Spin, Typography } from "antd";
 import axios from "axios";
 
 const { Text } = Typography;
- const AllowIframe = () => {
+
+const AllowIframe = () => {
   const [message, setMessage] = useState("");
   const [urls, setUrls] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,10 +12,9 @@ const { Text } = Typography;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingUrl, setEditingUrl] = useState(null);
 
-  
   const fetchUrls = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/urls``);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/urls`);
       setUrls(response.data);
       setLoading(false);
     } catch (error) {
@@ -22,31 +22,30 @@ const { Text } = Typography;
       setLoading(false);
     }
   };
-  console.log("hellow world");
 
-  console.log(import.meta.env.VITE_FRONTEND_URL)
+  console.log("hellow world");
+  console.log(import.meta.env.VITE_FRONTEND_URL);
+
   const handleCopyMessage = () => {
     const copyText = `
-    <div 
-      style="
-        position: 'fixed';
-        bottom: '16px';
-        right: '16px';
-        width: '300px';
-        height: '520px';
-        z-index: 1000; /* Ensure it's on top of other content */
-      "
-    >
-      <iframe
-      src=`${import.meta.env.VITE_FRONTEND_URL}chatai`
-      title="Chat"
-        style="
-          width: '100%';
-          height: '100%';
-          border: 'none';
-        "
-      ></iframe>
-    </div>
+      <div style="
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+        width: 300px;
+        height: 520px;
+        z-index: 1000;
+      ">
+        <iframe
+          src="http://chatwidgetadmin.nepsetrends.com/chatai"
+          title="Chat"
+          style="
+            width: 100%;
+            height: 100%;
+            border: none;
+          "
+        ></iframe>
+      </div>
     `;
     navigator.clipboard.writeText(copyText);
     setMessage(copyText);
@@ -89,11 +88,11 @@ const { Text } = Typography;
 
   const handleOk = () => {
     if (editingUrl) {
-        setIsModalVisible(false);
       handleUpdateUrl(editingUrl._id, newUrl);
     } else {
       handleAddUrl();
     }
+    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
@@ -107,7 +106,7 @@ const { Text } = Typography;
   }, []);
 
   return (
-    <div style={{ height: "100vh", width:"100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <div style={{ height: "40%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
         <Button onClick={handleCopyMessage}>Get the Iframe</Button>
         {message && (
