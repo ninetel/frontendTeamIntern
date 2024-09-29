@@ -11,7 +11,7 @@ const ChatAI = () => {
   useEffect(() => {
     const fetchAllowedOrigins = async () => {
       try {
-        const response = await axios.get('${import.meta.env.VITE_BACKEND_URL}/api/urls/allowed-origins'); // Adjust the URL if necessary
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/urls/allowed-origins`); // Adjust the URL if necessary
         console.log('Allowed Origins Response:', response.data); // Log the response
         setAllowedOrigins(response.data);
       } catch (error) {
