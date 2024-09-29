@@ -1,57 +1,3 @@
-// // index.js
-// const express = require("express");
-// const mongoose = require("mongoose");
-// const authRoutes = require("./routes/authRoutes");
-// const adminRoutes = require("./routes/adminRoutes");
-// const userRoutes = require("./routes/userRoutes");
-// const staffRoutes = require("./routes/staffRoutes"); // Import staff routes
-// const promptRoutes = require("./routes/promptRoutes");
-// const signalRoutes = require("./routes/signalRoutes");
-// const contactRoutes = require("./routes/contactRoutes");
-// const chatRoutes = require('./routes/chatRoutes');
-// const path = require('path');  // Make sure to import the 'path' module
-
-// const cors = require("cors");
-
-// require("dotenv").config();
-
-// const app = express();
-
-// // Configure CORS to allow specific origin
-// app.use(cors({
-//   origin: ['http://localhost:5173','http://localhost:5000'], // Replace with your frontend URL
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }));
-
-// // Handle preflight requests
-// app.options('*', cors());
-
-// app.use(express.json());
-
-// // Routes
-// app.use("/api/contacts", contactRoutes);
-// app.use("/api/auth", authRoutes);
-// app.use("/api/admin", adminRoutes);
-// app.use("/api/staff", staffRoutes); // Use staff routes
-// app.use("/api/user", userRoutes);
-// app.use("/sikinchaa", signalRoutes);
-// app.use("/sikinchaa", promptRoutes);
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// app.use('/api/chat', chatRoutes);
-// // Start server
-// app.listen(3000, () => {
-//   console.log("Server running on port 3000"); // Fixed logging message
-// });
-
-// // Connect to MongoDB
-// mongoose
-//   .connect(process.env.MONGO_URI)
-//   .then(() => console.log("MongoDB connected"))
-//   .catch((err) => console.error("MongoDB connection error:", err));
-
-
-// index.js
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require('path');
@@ -75,9 +21,20 @@ const urlRoutes = require("./routes/urlRoutes"); // Adjust the path to your urlR
 
 const app = express();
 
-// Configure CORS
+// Configure CORS to allow specific origins
 app.use(cors({
-  origin: ['http://localhost:3004', 'http://localhost:3005','http://localhost:5173',"http://81.181.198.75:5000/","http://chatwidgetadmin.nepsetrends.com"],
+  origin: [
+    'http://localhost:3004',
+    'http://localhost:3000',
+    'http://localhost:3005',
+    'http://localhost:5173',
+    'http://81.181.198.75:5000/',
+    'http://chatwidgetadmin.nepsetrends.com',
+    'http://chatwidget.nepsetrends.com',
+    'https://chatwidgetadmin.nepsetrends.com',
+    'https://chatwidget.nepsetrends.com' // Add your deployed backend URL here
+
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -85,7 +42,7 @@ app.use(cors({
 // Handle preflight requests
 app.options('*', cors());
 
-// Middleware
+// Middleware to parse JSON bodies
 app.use(express.json());
 
 // Static file serving
@@ -104,7 +61,7 @@ app.use((req, res, next) => {
 // app.use('/api/chat', checkReferrer, chatRoutes);
 app.use('/api/chat', chatRoutes);
 
-// Other routes
+// Register other routes
 app.use("/api/contacts", contactRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
@@ -128,6 +85,6 @@ app.listen(PORT, () => {
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
