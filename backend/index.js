@@ -77,7 +77,7 @@ const app = express();
 
 // Configure CORS
 app.use(cors({
-  origin: ['http://localhost:3004', 'http://localhost:3005','http://localhost:5173',"http://81.181.198.75:5000/"],
+  origin: ['http://localhost:3004', 'http://localhost:3005','http://localhost:5173',"http://81.181.198.75:5000/","http://chatwidgetadmin.nepsetrends.com/"],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -96,7 +96,7 @@ app.use(helmet());
 
 // Set Content-Security-Policy to control iframe embedding
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' http://localhost:3004 http://localhost:3005");
+  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' http://localhost:3004 http://localhost:3005 http://chatwidgetadmin.nepsetrends.com/");
   next();
 });
 
