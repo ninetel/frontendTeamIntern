@@ -12,8 +12,6 @@ const ChatMessages = ({ userId }) => {
     url: "",
     receiver_id: ""
   });
-  const [staffList, setStaffList] = useState([]); // State for staff list
-  const [selectedStaff, setSelectedStaff] = useState(""); // State for selected staff
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -29,6 +27,7 @@ const ChatMessages = ({ userId }) => {
 
         if (allMessages.length > 0) {
           const lastMessage = allMessages[allMessages.length - 1];
+         { console.log("LASTMESSAGE===>"+lastMessage)}
           setMessageDetails({
             type: lastMessage.type,
             url: lastMessage.url,
@@ -39,20 +38,8 @@ const ChatMessages = ({ userId }) => {
         console.error('Error fetching messages:', error);
       }
     };
-    {console.log(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`)}
-    {console.log(staffList)}
-
-    const fetchStaffList = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
-        setStaffList(response.data.staff || []);
-      } catch (error) {
-        console.error('Error fetching staff list:', error);
-      }
-    };
 
     fetchMessages();
-    fetchStaffList();
   }, [userId]);
 
   useEffect(() => {
@@ -72,9 +59,11 @@ const ChatMessages = ({ userId }) => {
       type: messageDetails.type,
       url: messageDetails.url,
       uid: userId, // Add uid here or adjust as needed
+
       receiver_id: messageDetails.receiver_id,
       timestamp: Date.now(),
     };
+    {console.log(messageToSend)}
 
     try {
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/chat/send-message`, messageToSend);
@@ -93,31 +82,10 @@ const ChatMessages = ({ userId }) => {
     }
   };
 
-  const handleStaffChange = (e) => {
-    setSelectedStaff(e.target.value);
-  };
-
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 bg-gray-200 font-semibold">
         {userNameAndNumber}
-      </div>
-      <div className="flex items-center p-4">
-        <select
-          value={selectedStaff}
-          onChange={handleStaffChange}
-          className="p-2 border rounded"
-        >
-          <option value="">Select staff</option>
-          {staffList.map((staff) => (
-            <option key={staff.id} value={staff.name}>
-              {staff.name}
-            </option>
-          ))}
-        </select>
-        <span className="ml-4">
-          {selectedStaff ? selectedStaff : "Not redirected"}
-        </span>
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: "70vh" }}>
         {messages.map((msg, index) => (

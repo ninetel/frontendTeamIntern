@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const Staff = require("../models/Staff"); // Adjust the path as necessary
-require("dotenv").config();
+require('dotenv').config({ path: '../.env' });  // Adjust the path as necessary
 
 const staffData = [
   {

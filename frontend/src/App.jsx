@@ -34,6 +34,7 @@ import AdminManageContact from "./components/templates/AdminManageContact/AdminM
 import Chat from "./components/templates/Chat/Chat.jsx";
 import AdminSendBulkMessage from "./components/templates/AdminSendBulkMessage/AdminSendBulkMessage.jsx";
 import RTMS from "./components/templates/RTMS/RTMS.jsx";
+import StaffManageChat from './components/templates/StaffManageChat/StaffManageChat';
 
 const theme = createTheme({
   palette: {
@@ -65,7 +66,10 @@ const App = () => {
         <Route
           path="/staff/dashboard/createsignal"
           element={<StaffAddSignal />}
-        ></Route>
+        ></Route><Route
+        path="/staff/dashboard/managechat"
+        element={<StaffManageChat />}
+      ></Route>
         <Route
           path="/staff/dashboard/managesignal"
           element={<StaffManageSignal />}

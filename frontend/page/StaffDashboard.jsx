@@ -3,9 +3,7 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { Container, Typography, Paper, Box } from "@mui/material";
-import StaffSidebar, {
-  SidebarItem,
-} from "../src/components/templates/sidebar/Sidebar";
+import StaffSidebar, { SidebarItem } from "../src/components/templates/sidebar/Sidebar";
 import { FaHome } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
@@ -22,8 +20,8 @@ const StaffDashboard = () => {
   );
 
   console.log(
-    "name, email, phoneNumber, role  *****",
-    userInfo.name,
+    "firstName, email, phoneNumber, role  *****",
+    userInfo.firstName,
     userInfo.email,
     userInfo.phoneNumber,
     userInfo.role
@@ -34,14 +32,20 @@ const StaffDashboard = () => {
     const newPath = `${currentPath}/createsignal`;
     navigate(newPath);
   };
+
   const handleRouteManageSignal = () => {
     navigate("/staff/dashboard/managesignal");
   };
+
   const handleRouteAddPrompt = () => {
     navigate("/staff/dashboard/addprompt");
   };
+
   const handleRouteManagePrompt = () => {
     navigate("/staff/dashboard/manageprompt");
+  };
+  const handleRouteManageChat = () => {
+    navigate("/staff/dashboard/managechat");
   };
 
   return (
@@ -68,16 +72,18 @@ const StaffDashboard = () => {
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
-          />
+          /><SidebarItem
+          icon={<PiChatsTeardropLight size={30} />}
+          text="Manage Chat"
+          handleClick={handleRouteManageChat}
+        />
           <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
           />
         </StaffSidebar>
       </Box>
-      <Box
-        sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <PieChart
             series={[
@@ -99,16 +105,14 @@ const StaffDashboard = () => {
             series={[
               {
                 data: [1, 2, 3, 4, 3, 2, 3, 3, 4],
-                valueFormatter: (value) =>
-                  value == null ? "NaN" : value.toString(),
+                valueFormatter: (value) => (value == null ? "NaN" : value.toString()),
               },
               {
                 data: [3, 6, 4, 2, 7, 8, 10, 11.5, 15],
               },
               {
                 data: [10, 9, 8, 7, 6, 5, 4, 4, 5],
-                valueFormatter: (value) =>
-                  value == null ? "?" : value.toString(),
+                valueFormatter: (value) => (value == null ? "?" : value.toString()),
               },
             ]}
             height={550}
@@ -116,17 +120,9 @@ const StaffDashboard = () => {
             margin={{ top: 10, bottom: 20 }}
           />
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
+          <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
             <BarChart
-              xAxis={[
-                { scaleType: "band", data: ["group A", "group B", "group C"] },
-              ]}
+              xAxis={[{ scaleType: "band", data: ["group A", "group B", "group C"] }]}
               series={[
                 { data: [4, 3, 5] },
                 { data: [1, 6, 3] },
@@ -149,7 +145,7 @@ const StaffDashboard = () => {
               }}
             >
               <Typography variant="h4" gutterBottom>
-                Welcome, {userInfo?.name || "Guest"}
+                Welcome, {userInfo?.firstName || "Staff Member"}
               </Typography>
               <Box sx={{ mt: 2 }}>
                 <Typography variant="h6" gutterBottom>

@@ -77,6 +77,21 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Error logging in staff" });
   }
 });
+// Route to get all staff members
+router.get(
+  '/staff',
+  authenticateJWT,
+  authorizeRole('admin'), // Ensure only admins can access this route
+  async (req, res) => {
+    try {
+      const staffMembers = await Staff.find().select('-password'); // Fetch all staff members excluding passwords
+      res.json(staffMembers);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching staff members' });
+    }
+  }
+);
+
 
 // Route to get the logged-in staff's information
 router.get(
