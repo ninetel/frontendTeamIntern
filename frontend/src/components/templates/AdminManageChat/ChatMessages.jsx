@@ -18,17 +18,18 @@ const ChatMessages = ({ userId }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       if (!userId) return;
-
+  
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
         const allMessages = response.data.allMessages || [];
         const userNameAndNumber = response.data.userNameAndNumber;
-
+  
         setMessages(allMessages);
         setUserNameAndNumber(userNameAndNumber);
-
+  
         if (allMessages.length > 0) {
           const lastMessage = allMessages[allMessages.length - 1];
+          console.log("LASTMESSAGE===>"+lastMessage);
           setMessageDetails({
             type: lastMessage.type,
             url: lastMessage.url,
@@ -39,22 +40,27 @@ const ChatMessages = ({ userId }) => {
         console.error('Error fetching messages:', error);
       }
     };
-    {console.log(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`)}
-    {console.log(staffList)}
-
+  
     const fetchStaffList = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
-        setStaffList(response.data.staff || []);
+        console.log("Fetching staff list...");
+        const token = localStorage.getItem('token'); // Replace with the actual way you store your token
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        console.log("Staff list fetched successfully");
+        setStaffList(response.data || []);
       } catch (error) {
         console.error('Error fetching staff list:', error);
       }
     };
-
+  
     fetchMessages();
     fetchStaffList();
   }, [userId]);
-
+  
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -72,9 +78,11 @@ const ChatMessages = ({ userId }) => {
       type: messageDetails.type,
       url: messageDetails.url,
       uid: userId, // Add uid here or adjust as needed
+
       receiver_id: messageDetails.receiver_id,
       timestamp: Date.now(),
     };
+    {console.log(messageToSend)}
 
     try {
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/chat/send-message`, messageToSend);
