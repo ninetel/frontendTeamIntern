@@ -8,19 +8,37 @@ require("dotenv").config();
 const router = express.Router();
 
 const authenticateJWT = (req, res, next) => {
-  const accessToken =
-    req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
-  if (accessToken) {
-    jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.status(403).json({ error: "Access denied" });
-      }
-      req.user = user;
-      next();
-    });
-  } else {
-    res.status(401).json({ error: "No accessToken provided" });
-  }
+  // const accessToken =
+  //   req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
+  // if (accessToken) {
+  //   jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
+  //     if (err) {
+  //       return res.status(403).json({ error: "Access denied" });
+  //     }
+  //     req.user = user;
+  //     next();
+  //   });
+  // } else {
+  //   res.status(401).json({ error: "No accessToken provided" });
+  // }
+
+  try {
+    const jwtToken = req.cookies.token;
+
+    if (!jwtToken) return res.status(401).json({ error: "user not authorized!" })
+
+    const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET)
+
+    if(!decoded){
+        return res.status(401).json({ error: "Invalid!" })
+    }
+
+    // pass the data to requested route
+    req.user = decoded.user
+    next()
+} catch (error) {
+    res.status(401).json({ error: "Invalid token" })
+}
 };
 
 // Middleware to authorize roles
@@ -60,7 +78,7 @@ router.post(
         promptDescription,
         status,
       });
-
+        console.log("posted data isss*******", newprompt);
       await newprompt.save();
       res.status(201).json({ message: "prompt created successfully" });
     } catch (error) {
@@ -77,8 +95,8 @@ router.get(
   async (req, res) => {
     try {
       const prompts = await Prompt.find(); // Fetch all prompts
-      // console.log("backend Prompts.find()", prompts)
-      res.status(200).json(prompts);
+      console.log("backend Prompts.find()*************", prompts) 
+      res.status(200).json({message: 'prompt fetched successfully', prompts});
     } catch (error) {
       // console.log("backend error Prompts.find()", error)
       res.status(500).json({ error: "Error fetching prompts" });

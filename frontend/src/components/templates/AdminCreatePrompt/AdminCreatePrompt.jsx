@@ -50,9 +50,10 @@ const AdminCreatePrompt = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-  const handleRouteChatIframe=()=>{
+  const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
+
   //check
   return (
     <Box sx={{ display: "flex" }}>
@@ -63,7 +64,11 @@ const AdminCreatePrompt = () => {
             text="Home"
             handleClick={handleRouteHome}
           />
-          <SidebarItem icon={<IoMdAdd size={30} />} text="Add Signal" alert />
+          <SidebarItem
+            icon={<IoMdAdd size={30} />}
+            text="Add Signal"
+            handleClick={handleRouteAddSignal}
+          />
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Signal"
@@ -92,10 +97,10 @@ const AdminCreatePrompt = () => {
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          />
+          /> */}
           <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
@@ -105,15 +110,13 @@ const AdminCreatePrompt = () => {
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"
             handleClick={handleRouteManageChat}
-            alert
-            active
           />
           <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat Iframe"
+            handleClick={handleRouteChatIframe}
 
-        />
+          />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"

@@ -12,12 +12,14 @@ import {
   getSignal,
 } from "../../../../api/Query/SignalQueries";
 
+const API_URL = `${import.meta.env.VITE_BACKEND_URL}/sikinchaa`;
+
 const ManageSignal = () => {
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
   );
 
-  console.log("accessToken", accessToken);
+  // console.log("accessToken", accessToken);
   // console.log("accessToken", accessToken);
   // const [signals, setSignals] = useState([]);
   // const [loading, setLoading] = useState(true);
@@ -35,7 +37,16 @@ const ManageSignal = () => {
     queryFn: () => fetchSignals(accessToken),
     enabled: !!accessToken,
   });
-  console.log("data", signals);
+  console.log("data***********", signals);
+
+  useEffect(() => {
+    const response = axios.get(`${API_URL}/signals`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    console.log("response+++++++++++++++", response);
+  },[])
 
   // Mutation for deleting a signal
   const mutationDelete = useMutation({
@@ -133,7 +144,7 @@ const ManageSignal = () => {
   return (
     <div>
       <Row gutter={30}>
-        {signals.map((signal) => (
+        { Array.isArray(signals)  && signals.map((signal) => (
           <Col span={8} key={signal.id}>
             <Card
               title={`${signal.signalTitle} ${signal.signalType}`}

@@ -1,7 +1,7 @@
 // api.js
 import axios from "axios";
 // /sikinchaa/prompt
-const API_URL = "${import.meta.env.VITE_BACKEND_URL}/sikinchaa";
+const API_URL = `${import.meta.env.VITE_BACKEND_URL}/sikinchaa`;
 
 export const fetchPrompts = async (accessToken) => {
   const response = await axios.get(`${API_URL}/prompts`, {
@@ -9,7 +9,7 @@ export const fetchPrompts = async (accessToken) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log("fetchPrompt", response);
+  // console.log("fetchPrompt issssssssssssss", response.data);
   return response.data;
 };
 

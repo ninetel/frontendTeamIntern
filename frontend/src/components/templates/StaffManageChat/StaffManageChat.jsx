@@ -101,61 +101,61 @@ const StaffManageChat = () => {
             text="Add Signal"
             handleClick={handleRouteAddSignal}
           />
-          <SidebarItem icon={<TfiWrite size={30} />} text="Manage Signal" />
+          {/* <SidebarItem icon={<TfiWrite size={30} />} text="Manage Signal" /> */}
           <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Contact"
             handleClick={handleRouteAddContact}
           />
 
-          <SidebarItem
+          {/* <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Contact"
             handleClick={handleRouteManageContact}
-          />
+          /> */}
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
             text="Add Prompt"
             handleClick={handleRouteCreatePrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
-          />
-          <SidebarItem
+          /> */}
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          />
-          <SidebarItem
+          /> */}
+          {/* <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
-          />
+          /> */}
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
-            text="Manage Chat"
+            text="Chat"
             handleClick={handleRouteManageChat}
             alert
             active
           />
 
-          <SidebarItem
+          {/* <SidebarItem
           icon={<PiChatsTeardropLight size={30} />}
           text="Manage Chat Iframe"
           handleClick={handleRouteChatIframe}
 
-        />
-          <SidebarItem
+        /> */}
+          {/* <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
             handleClick={handleRouteBulkMessage}
-          />
-          <SidebarItem
+          /> */}
+          {/* <SidebarItem
             icon={<FaUserClock size={40} />}
             text="RTMS"
             handleClick={handleRouteRTMS}
-          />
+          /> */}
         </StaffSidebar>
       </Box>
       <Box

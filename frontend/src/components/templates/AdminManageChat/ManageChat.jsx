@@ -112,11 +112,13 @@ const ManageChat = ({ selectedUrl }) => {
     ? sortedMembers.filter((chat) => chat.type === userType)
     : sortedMembers;
 
+    console.log("filteredMembers===>", sortedMembers);
+
   return (
-    <div className="flex h-screen">
-      <div className="w-1/3 bg-white shadow-md rounded-lg overflow-hidden">
+    <div className="flex h-screen w-full">
+      <div className="w-1/3 shadow-md rounded-lg overflow-hidden">
         <div className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800 text-center">
+          <h2 className="text-lg font-semibold text-gray-800 text-center py-2">
             Chat List for {selectedUrl}
           </h2>
           <select

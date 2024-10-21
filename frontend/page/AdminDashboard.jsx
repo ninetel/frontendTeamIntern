@@ -200,80 +200,110 @@ const AdminDashboard = () => {
   // const handleRouteManagePrompt = () => {
   //   navigate("/admin/dashboard/manageprompt");
   // };
+  const handleRouteHome = () => {
+    navigate("/admin/dashboard");
+  };
+
+  const handleRouteAddSignal = () => {
+    navigate("/admin/dashboard/addsignal");
+  };
+  const handleRouteAddContact = () => {
+    navigate("/admin/dashboard/addcontact");
+  };
+  const handleRouteManageContact = () => {
+    navigate("/admin/dashboard/managecontact");
+  };
+  const handleRouteManagePrompt = () => {
+    navigate("/admin/dashboard/manageprompt");
+  };
+  const handleRouteManageChat = () => {
+    navigate("/admin/dashboard/managechat");
+  };
+
+  const handleRouteCreatePrompt = () => {
+    navigate("/admin/dashboard/createprompt");
+  };
+  const handleRouteChat = () => {
+    navigate("/admin/dashboard/Chat");
+  };
+  const handleRouteBulkMessage = () => {
+    navigate("/admin/dashboard/BulkMessage");
+  };
+  const handleRouteRTMS = () => {
+    navigate("/admin/dashboard/RTMS");
+  };
+  const handleRouteChatIframe=()=>{
+    navigate("/admin/dashboard/manageChatIframe");
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Box sx={{ width: "250px" }}>
+       <Box sx={{ width: "250px" }}>
         <StaffSidebar>
           <SidebarItem
             icon={<FaHome size={30} />}
             text="Home"
+            handleClick={handleRouteHome}
             active
             alert
-            handleClick={() => navigate("/admin/dashboard")}
           />
           <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Signal"
-            handleClick={() => navigate("/admin/dashboard/addsignal")}
-
-            // handleClick={handleRouteAddSignal}
+            handleClick={handleRouteAddSignal}
           />
-          <SidebarItem
-            icon={<TfiWrite size={30} />}
-            text="Manage Signal"
-            handleClick={() => navigate("/admin/dashboard/managesignal")}
-
-            // handleClick={handleRouteManageSignal}
-          />
+          <SidebarItem icon={<TfiWrite size={30} />} text="Manage Signal" />
           <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Contact"
-            handleClick={() => navigate("/admin/dashboard/addcontact")}
-
-            // handleClick={handleRouteAddSignal}
+            handleClick={handleRouteAddContact}
           />
+
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Contact"
-            handleClick={() => navigate("/admin/dashboard/managecontact")}
-
-            // handleClick={handleRouteManageSignal}
+            handleClick={handleRouteManageContact}
           />
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
             text="Add Prompt"
-            handleClick={() => navigate("/admin/dashboard/createprompt")}
-
-            // handleClick={handleRouteAddPrompt}
+            handleClick={handleRouteCreatePrompt}
           />
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Prompt"
-            handleClick={() => navigate("/admin/dashboard/manageprompt")}
-
-            // handleClick={handleRouteManagePrompt}
+            handleClick={handleRouteManagePrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-            handleClick={() => navigate("/admin/dashboard/changepassword")}
-          />
+          /> */}
           <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
-            handleClick={() => navigate("/admin/dashboard/Chat")}
+            handleClick={handleRouteChat}
           />
           <SidebarItem
-            icon={<LiaMailBulkSolid  size={40} />}
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat"
+            handleClick={handleRouteManageChat}
+          />
+
+          <SidebarItem
+          icon={<PiChatsTeardropLight size={30} />}
+          text="Manage Chat Iframe"
+          handleClick={handleRouteChatIframe}
+
+        />
+          <SidebarItem
+            icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
-            handleClick={()=> navigate("/admin/dashboard/bulkmessage")}
+            handleClick={handleRouteBulkMessage}
           />
           <SidebarItem
-            icon={<FaUserClock  size={40} />}
+            icon={<FaUserClock size={40} />}
             text="RTMS"
-            handleClick={()=> navigate("/admin/dashboard/RTMS")}
-           
+            handleClick={handleRouteRTMS}
           />
         </StaffSidebar>
       </Box>

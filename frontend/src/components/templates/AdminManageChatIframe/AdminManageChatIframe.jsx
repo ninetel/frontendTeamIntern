@@ -49,9 +49,12 @@ const AdminManageContact = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-  const handleRouteChatIframe=()=>{
+  const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
+  const handleRouteManageContact = () => {
+    navigate("/admin/dashboard/managecontact");
+  };
   //check
 
   return (
@@ -82,9 +85,8 @@ const AdminManageContact = () => {
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Contact"
-            active
-            alert
-            // active={Router.params === "managecontact" ? true : false}
+            handleClick={handleRouteManageContact}
+          // active={Router.params === "managecontact" ? true : false}
           />
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
@@ -96,10 +98,10 @@ const AdminManageContact = () => {
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          />
+          /> */}
           <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
@@ -109,14 +111,14 @@ const AdminManageContact = () => {
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"
             handleClick={handleRouteManageChat}
-           
-          /><SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
-          alert
-          active
-        />
+          />
+          <SidebarItem
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat Iframe"
+            handleClick={handleRouteChatIframe}
+            alert
+            active
+          />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"

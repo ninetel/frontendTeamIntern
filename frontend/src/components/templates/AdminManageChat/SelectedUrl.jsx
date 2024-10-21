@@ -2,7 +2,7 @@ import React from "react";
 
 const UrlSelection = ({ urlOptions, onSelect }) => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
+    <div className="flex flex-col items-center justify-center h-screen w-full">
       <h1 className="text-2xl mb-4">Select a URL</h1>
       <div className="grid grid-cols-2 gap-4">
 {        console.log(urlOptions)

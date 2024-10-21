@@ -14,6 +14,8 @@ import {
   getPrompt,
 } from "../../../../api/Query/promptQueries";
 
+const API_URL = "${import.meta.env.VITE_BACKEND_URL}/sikinchaa";
+
 const AdminManagePromptOrg = () => {
   console.log("Inside of Admin Manage prompt");
   const accessToken = useAppSelector(
@@ -32,7 +34,20 @@ const AdminManagePromptOrg = () => {
     queryFn: () => fetchPrompts(accessToken),
     enabled: !!accessToken,
   });
-  console.log("data", prompts);
+  // console.log("data", prompts);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/prompts`);
+        console.log("response **************", response); // Log the data
+      } catch (error) {
+        console.error("Error fetching prompts:", error);
+      }
+    };
+  
+    fetchData(); // Call the async function
+  }, []);
 
   // Mutation for deleting a prompt
   const mutationDelete = useMutation({
@@ -121,7 +136,7 @@ const AdminManagePromptOrg = () => {
         style={{ width: "100%" }}
         gutter={[16, 16]} // Optional: Adds space between columns and rows
       >
-        {prompts.map((prompt) => (
+        {Array.isArray(prompts) && prompts.map((prompt) => (
           <Col span={12} key={prompt.id}>
             <Card
               title={`${prompt.promptTitle}`}
