@@ -54,7 +54,7 @@
 //                 </Select>
 //               </Form.Item>
 //             </Col>
-     
+
 
 // <Col span={24} style={{ margin: "20px 0" }}>
 //              <Button
@@ -65,7 +65,7 @@
 //                 //   filter:
 //                 // }}
 //                 type="primary"
-               
+
 //               >
 //                 Upload Contact
 //               </Button>
@@ -78,7 +78,7 @@
 // export default CreateContact
 
 // src/components/CreateContact.js
- 
+
 
 // src/components/CreateContact.js
 
@@ -137,7 +137,7 @@
 //         phoneNumber: values.phoneNumber,
 //         email: values.email,
 //       });
-      
+
 //       alert("Contact saved successfully!");
 //       form.resetFields();
 //     } catch (err) {
@@ -293,7 +293,7 @@ const CreateContact = () => {
         phoneNumber: values.phoneNumber,
         email: values.email,
       });
-      
+
       alert("Contact saved successfully!");
       form.resetFields();
     } catch (err) {
@@ -303,86 +303,119 @@ const CreateContact = () => {
   };
 
   return (<>
-  <div className="container">
-    <Form form={form} layout="vertical" onFinish={handleSubmit} className="max-w-4xl mx-auto p-6">
-    <h2 className="text-3xl font-bold mb-6 text-center">Create New Contact</h2>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item label="Username" name="username" rules={[{ required: true }]}>
-            <Input className="border border-gray-300 rounded" />
-          </Form.Item>
-        </Col>
-
-        <Col span={12}>
-          <Form.Item label="Phone Number" name="phoneNumber" rules={[{ required: true }]}>
-            <Input className="border border-gray-300 rounded" />
-          </Form.Item>
-        </Col>
-
-        <Col span={12}>
-          <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
-            <Input className="border border-gray-300 rounded" />
-          </Form.Item>
-        </Col>
-       
-
-        <Col span={12}>
-          <Form.Item label="Contact Type" name="ContactType" rules={[{ required: true }]}>
-            <Select
-              dropdownRender={(menu) => (
-                <>
-                  {menu}
-                  <Button
-                    type="text"
-                    icon={<PlusOutlined />}
-                    onClick={showAddOptionModal}
-                    className="w-full text-center py-2"
-                  >
-                    Add New Option
-                  </Button>
-                </>
-              )}
-            >
-              {options.map((option) => (
-                <Option key={option} value={option}>
-                  {option}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-
-        <Col span={24}>
-          <Button
-            icon={<BiSolidCloudUpload size={30} />}
-            className="w-full py-4 font-bold bg-blue-500 text-white hover:blue-600"
-            type="primary"
-            htmlType="submit"
-          >
-            Upload Contact
-          </Button>
-        </Col>
-      </Row>
-
-      <Modal
-        title="Add New Contact Type"
-        visible={isModalVisible}
-        onOk={handleAddOption}
-        onCancel={handleCancel}
-        okText="Add"
+    <div className="container mx-auto px-4 py-8">
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg"
       >
-        <Input
-          placeholder="Enter new contact type"
-          value={newOption}
-          onChange={(e) => setNewOption(e.target.value)}
-        />
-      </Modal>
-    </Form>
-    <div className="mt-6">
-      <CreateBulkContact />
+        <h2 className="text-3xl font-extrabold mb-8 text-center text-blue-800">
+          Create New Contact
+        </h2>
+
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[{ required: true }]}
+              className="text-gray-600 font-semibold"
+            >
+              <Input className="border border-gray-300 rounded-lg p-2 focus:border-blue-400 transition duration-300" />
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <Form.Item
+              label="Phone Number"
+              name="phoneNumber"
+              rules={[{ required: true }]}
+              className="text-gray-600 font-semibold"
+            >
+              <Input className="border border-gray-300 rounded-lg p-2 focus:border-blue-400 transition duration-300" />
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, type: "email" }]}
+              className="text-gray-600 font-semibold"
+            >
+              <Input className="border border-gray-300 rounded-lg p-2 focus:border-blue-400 transition duration-300" />
+            </Form.Item>
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <Form.Item
+              label="Contact Type"
+              name="ContactType"
+              rules={[{ required: true }]}
+              className="text-gray-600 font-semibold pt-1"
+            >
+              <Select
+                className="border-gray-300 rounded-lg "
+                dropdownRender={(menu) => (
+                  <>
+                    {menu}
+                    <Button
+                      type="text"
+                      icon={<PlusOutlined />}
+                      onClick={showAddOptionModal}
+                      className="w-full text-center py-2 text-blue-600 hover:text-blue-700"
+                    >
+                      Add New Option
+                    </Button>
+                  </>
+                )}
+              >
+                {options.map((option) => (
+                  <Option key={option} value={option}>
+                    {option}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+
+          {/* Submit Button */}
+          <Col span={24}>
+            <Button
+              icon={<BiSolidCloudUpload size={24} />}
+              className="w-full py-4 mt-4 font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105"
+              type="primary"
+              htmlType="submit"
+            >
+              Upload Contact
+            </Button>
+          </Col>
+        </Row>
+
+        {/* Modal for adding a new contact type */}
+        <Modal
+          title="Add New Contact Type"
+          visible={isModalVisible}
+          onOk={handleAddOption}
+          onCancel={handleCancel}
+          okText="Add"
+        >
+          <Input
+            placeholder="Enter new contact type"
+            value={newOption}
+            onChange={(e) => setNewOption(e.target.value)}
+            className="border border-gray-300 p-2 rounded-lg focus:border-blue-500 transition duration-300"
+          />
+        </Modal>
+      </Form>
+
+      {/* Bulk Contact Section */}
+      <div className="mt-10">
+        <CreateBulkContact />
+      </div>
     </div>
-  </div>
-    </>
+  </>
   );
 };
 
