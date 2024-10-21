@@ -225,7 +225,7 @@ const CreateGenerallAI = () => {
         { icon: <RiChat1Line size={32} />, text: 'Chat' },
         { icon: <RiImageLine size={32} />, text: 'Images' },
         { icon: <RiFileTextLine size={32} />, text: 'Files' },
-        { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
+        { icon: <RiFolderUploadLine size={32} />, text: 'Upload' }, 
       ]
     },
     '2': {
