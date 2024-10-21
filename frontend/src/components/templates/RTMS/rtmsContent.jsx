@@ -9,7 +9,7 @@ const CreateBulkContact = () => {
   const [options, setOptions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newOption, setNewOption] = useState("");
-  const [phoneNumbers, setPhoneNumbers] = useState([]); // State to store phone numbers
+  const [phoneNumbers, setPhoneNumbers] = useState([]); 
   const [form] = Form.useForm();
   const [message, setMessage] = useState("");
 
