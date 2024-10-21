@@ -13,11 +13,11 @@ const chatController = require('../controllers/chatControllers'); // Adjust the 
 // router.get('/api/chat/urls', chatController.getUrls);
 const User = require("../models/User");
 const mongoose = require('mongoose');
-
+const UserStaffAssignment = require('../models/UserStaffAssignment');
 // router.get('/api/chat/last-messages', chatController.getLastMessages);
 const Chat = require('../models/Chat'); // Adjust the path as needed
 const GeneralChat = require('../models/GeneralChat'); // Assuming you have a GeneralChat model
-
+const Staff = require('../models/Staff'); // Ensure the correct path
 // Get last message for each unique user from chat schema
 // router.get('/last-messages/chat', async (req, res) => {
 //     try {
@@ -58,6 +58,112 @@ const GeneralChat = require('../models/GeneralChat'); // Assuming you have a Gen
 //     }
 //   });
   // Get last message for each unique user from chat schema
+  // Endpoint to assign a user to a staff member
+ 
+//post
+router.post('/assign-user-to-staff', async (req, res) => {
+  const { userId, staffId } = req.body;
+  try {
+    // Check if the user assignment already exists
+    const existingAssignment = await UserStaffAssignment.findOne({ userId });
+
+    if (existingAssignment) {
+      // If it exists, just update the staffId
+      existingAssignment.staffId = staffId;
+      await existingAssignment.save();
+      res.status(200).send('User staff assignment updated successfully');
+    } else {
+      // If it does not exist, create a new assignment
+      const newAssignment = new UserStaffAssignment({ userId, staffId });
+      await newAssignment.save();
+      res.status(201).send('User assigned to staff successfully');
+    }
+  } catch (error) {
+    res.status(500).send('Error assigning user to staff: ' + error.message);
+  }
+});
+
+// Update staff assignment for a user
+router.put('/assignment/:userId', async (req, res) => {
+  try {
+    const { staffId } = req.body;
+    let assignment = await UserStaffAssignment.findOne({ userId: req.params.userId });
+
+    if (assignment) {
+      assignment.staffId = staffId;
+      await assignment.save();
+      res.status(200).json({ message: 'Assignment updated successfully', assignment });
+    } else {
+      assignment = new UserStaffAssignment({ userId: req.params.userId, staffId });
+      await assignment.save();
+      res.status(201).json({ message: 'Assignment created successfully', assignment });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get staff assignment for a user
+router.get('/assignment/:userId', async (req, res) => {
+  try {
+    const assignment = await UserStaffAssignment.findOne({ userId: req.params.userId }).populate('staffId', 'name');
+    res.json(assignment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+// Endpoint to fetch messages for a staff member
+router.get('/staff-messages/:staffId', async (req, res) => {
+  const { staffId } = req.params;
+  try {
+    // Get user IDs assigned to the staff member
+    const assignments = await UserStaffAssignment.find({ staffId });
+    const userIds = assignments.map(assignment => assignment.userId);
+
+    // Fetch messages for those user IDs
+    const messages = await messages.find({ userId: { $in: userIds } }).sort({ time: 1 });
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).send('Error fetching messages for staff');
+  }
+});
+
+// router.get('/by-user/:userId', async (req, res) => {
+//   const { userId } = req.params;
+//   try {
+//     const assignment = await UserStaffAssignment.findOne({ userId });
+//     if (userStaffAssignment && userStaffAssignment.staffId) {
+//       const staff = await Staff.findById(userStaffAssignment.staffId);
+//       if (staff) {
+//         res.json(staff);
+//       } else {
+//         res.status(404).json({ message: 'Staff not found' });
+//       }
+//     } else {
+//       res.status(200).json({ message: 'None' });
+//     }
+//   } catch (error) {
+//     console.error('Error fetching staff details:', error);
+//     res.status(500).json({ message: 'Error fetching staff details', error });
+//   }
+// });
+router.get('/by-user/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const assignment = await UserStaffAssignment.findOne({ userId });
+    if (assignment && assignment.staffId) {
+      res.json({ staff: assignment.staffId });
+    } else {
+      res.status(200).json({ message: 'None' });
+    }
+  } catch (error) {
+    console.error('Error fetching staff details:', error);
+    res.status(500).json({ message: 'Error fetching staff details', error });
+  }
+});
+
+
+
 router.get('/last-messages/chat', async (req, res) => {
     try {
       const { url } = req.query; // Get the selectedUrl from the request parameters
@@ -80,7 +186,7 @@ router.get('/last-messages/chat', async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
-  
+
   // Get last message for each unique user from generalchats schema
   router.get('/last-messages/general', async (req, res) => {
     try {
@@ -218,7 +324,7 @@ router.post('/send-message', async (req, res) => {
     }
   });
   
-  
+ 
 router.get("/urls", async (req, res) => {
     console.log("Fetching all unique URLs...");
     try {

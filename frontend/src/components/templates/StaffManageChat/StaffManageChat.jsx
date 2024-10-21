@@ -23,33 +23,17 @@ import { FaUserClock } from "react-icons/fa";
 
 const StaffManageChat = () => {
   const navigate = useNavigate();
-  const [selectedUrl, setSelectedUrl] = useState(null);
-  const [urlOptions, setUrlOptions] = useState([]);
-  const [loading, setLoading] = useState(true);
+ // const [selectedUrl, setSelectedUrl] = useState(null);
+ //const [urlOptions, setUrlOptions] = useState([]);
+  //const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUrls = async () => {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/urls`);
-        setUrlOptions(response.data);
-        console.log(urlOptions)
-      } catch (error) {
-        console.error("Error fetching URLs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUrls();
-  }, []);
+  
 
   const handleRoute = (route) => {
     navigate(route);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+ 
   const handleRouteHome = () => {
     navigate("/staff/dashboard");
   };
@@ -107,31 +91,14 @@ const StaffManageChat = () => {
             text="Add Contact"
             handleClick={handleRouteAddContact}
           />
-
-          <SidebarItem
-            icon={<TfiWrite size={30} />}
-            text="Manage Contact"
-            handleClick={handleRouteManageContact}
-          />
+ 
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
             text="Add Prompt"
             handleClick={handleRouteCreatePrompt}
           />
-          <SidebarItem
-            icon={<PiChatsTeardropLight size={30} />}
-            text="Manage Prompt"
-            handleClick={handleRouteManagePrompt}
-          />
-          <SidebarItem
-            icon={<IoSettingsOutline size={30} />}
-            text="Change Password"
-          />
-          <SidebarItem
-            icon={<IoChatbubbleEllipsesOutline size={30} />}
-            text="Chat"
-            handleClick={handleRouteChat}
-          />
+  
+       
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"
@@ -140,22 +107,7 @@ const StaffManageChat = () => {
             active
           />
 
-          <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
-
-        />
-          <SidebarItem
-            icon={<LiaMailBulkSolid size={40} />}
-            text="Bulk Message"
-            handleClick={handleRouteBulkMessage}
-          />
-          <SidebarItem
-            icon={<FaUserClock size={40} />}
-            text="RTMS"
-            handleClick={handleRouteRTMS}
-          />
+         
         </StaffSidebar>
       </Box>
       <Box

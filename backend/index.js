@@ -15,6 +15,7 @@ const signalRoutes = require("./routes/signalRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const chatRoutes = require('./routes/chatRoutes');
 const urlRoutes = require("./routes/urlRoutes"); // Adjust the path to your urlRoutes file
+const userStaffAssignmentRoutes = require("./routes/userStaffAssignmentRoutes"); // Adjust the path to your urlRoutes file
 
 // Import middleware
 // const checkReferrer = require('./middleware/checkReferrer');
@@ -70,6 +71,7 @@ app.use("/api/user", userRoutes);
 app.use("/sikinchaa", signalRoutes);
 app.use("/sikinchaa", promptRoutes);
 app.use("/api/urls", urlRoutes);
+app.use("/api/usar", userStaffAssignmentRoutes);
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {

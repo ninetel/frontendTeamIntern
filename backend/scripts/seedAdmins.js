@@ -12,7 +12,7 @@ const adminData = [
   },
   {
     name: "Admin Three",
-    email: "ad3@.com",
+    email: "ad3@example.com",
     password: "admin3",
     role: "admin",
     phoneNumber: "123-456-7892",
