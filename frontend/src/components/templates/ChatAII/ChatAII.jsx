@@ -1,7 +1,8 @@
 // src/ChatAII.js
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import CreateChatAI from '../CreateChatAI/CreateChatAI.jsx';
-
+import { BiSolidMessageRounded } from "react-icons/bi";
+import gbull from '../../../assets/gbul.jpg';
 const ChatAII = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -28,10 +29,19 @@ const ChatAII = () => {
           </span>
         ) : (
           <span className="flex items-center space-x-2">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <div className="absolute bottom-full left-0 right-0 mb-5">
+           <img 
+            src={gbull}
+            alt=""   
+          />
+        </div>
+            {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            <span>Chat</span>
+            </svg> */}
+            {/* <span>Chat</span> */}
+            <div> 
+          <BiSolidMessageRounded className="w-10 h-10 mr-2"/>
+        </div> 
           </span>
         )}
       </button>
