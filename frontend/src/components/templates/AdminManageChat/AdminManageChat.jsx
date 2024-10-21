@@ -20,9 +20,13 @@ import ManagePrompt from "../../orgamisms/ManagePrompt/ManagePrompt";
 import { LiaMailBulkSolid } from "react-icons/lia";
 import UrlSelection from "./SelectedUrl"
 import { FaUserClock } from "react-icons/fa";
+import { MoreVertical } from "lucide-react";
 
 const AdminManageChat = () => {
   const navigate = useNavigate();
+  const userInfo = useSelector(
+    (state) => state.currentLoggedInUser?.userInfo || {}
+  );
   const [selectedUrl, setSelectedUrl] = useState(null);
   const [urlOptions, setUrlOptions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,7 +86,7 @@ const AdminManageChat = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-  const handleRouteChatIframe=()=>{
+  const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
   //check
@@ -141,11 +145,11 @@ const AdminManageChat = () => {
           />
 
           <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat Iframe"
+            handleClick={handleRouteChatIframe}
 
-        />
+          />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
@@ -157,15 +161,29 @@ const AdminManageChat = () => {
             handleClick={handleRouteRTMS}
           />
         </StaffSidebar>
+        <div
+          className="
+              flex justify-between items-center
+              overflow-hidden transition-all px-5 pr-10 -mt-10"
+
+        >
+          <div className="leading-4">
+            <h4 className="font-semibold">{userInfo?.name}</h4>
+            <span className="text-xs text-gray-600">
+              {userInfo?.email}
+            </span>
+          </div>
+          <MoreVertical size={20} />
+        </div>
       </Box>
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
       >
-      {selectedUrl ? (
-        <ManageChat selectedUrl={selectedUrl} />
-      ) : (
-        <UrlSelection urlOptions={urlOptions} onSelect={setSelectedUrl} />
-      )}
+        {selectedUrl ? (
+          <ManageChat selectedUrl={selectedUrl} />
+        ) : (
+          <UrlSelection urlOptions={urlOptions} onSelect={setSelectedUrl} />
+        )}
       </Box>
     </Box>
   );

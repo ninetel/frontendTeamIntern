@@ -17,9 +17,15 @@ import { LiaMailBulkSolid } from "react-icons/lia";
 import { FaUserClock } from "react-icons/fa";
 import BulkMessage from "../BulkMessage/BulkMessage";
 import RtmsContent from "./rtmsContent";
+import { MoreVertical } from "lucide-react";
+import { useState } from "react";
 
 const RTMS = () => {
   const navigate = useNavigate();
+  const [click, setClick] = useState(false);
+  const userInfo = useSelector(
+    (state) => state.currentLoggedInUser?.userInfo || {}
+  );
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
   };
@@ -54,13 +60,19 @@ const RTMS = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-  const handleRouteChatIframe=()=>{
+  const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
+  }
+
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+  const logoutBtn = () => {
+    setClick(!click);
   }
   //check
   return (
     <Box sx={{ display: "flex" }}>
-      <Box sx={{ width: "250px" }}>
+      <Box sx={{ width: "300px", overflowY: 'scroll', height: '100vh' }}>
         <StaffSidebar>
           <SidebarItem
             icon={<FaHome size={30} />}
@@ -113,11 +125,11 @@ const RTMS = () => {
             handleClick={handleRouteManageChat}
           />
           <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat Iframe"
+            handleClick={handleRouteChatIframe}
 
-        />
+          />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
@@ -131,6 +143,29 @@ const RTMS = () => {
             active
           />
         </StaffSidebar>
+        {
+          isLoggedIn &&
+          <div
+            className="
+              flex justify-between items-center relative
+              overflow-hidden transition-all px-5 pb-9 pr-10 py-3"
+
+          >
+            <div className="leading-4 ">
+              <h4 className="font-semibold">{userInfo?.name}</h4>
+              <span className="text-xs text-gray-600">
+                {userInfo?.email}
+              </span>
+            </div>
+            <MoreVertical size={20} className="cursor-pointer" onClick={logoutBtn} />
+            {
+              click &&
+              <div className="px-4 absolute left-[45%] top-11 w-[100px]">
+                <button onClick={() => localStorage.clear()} className="bg-gray-300 rounded py-1 text-sm w-full">Logout</button>
+              </div>
+            }
+          </div>
+        }
       </Box>
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}

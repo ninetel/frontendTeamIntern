@@ -9,7 +9,7 @@ const CreateBulkContact = () => {
   const [options, setOptions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newOption, setNewOption] = useState("");
-  const [phoneNumbers, setPhoneNumbers] = useState([]); // State to store phone numbers
+  const [phoneNumbers, setPhoneNumbers] = useState([]); 
   const [form] = Form.useForm();
   const [message, setMessage] = useState("");
 
@@ -27,13 +27,13 @@ const CreateBulkContact = () => {
     fetchContactTypes();
   }, []);
 
-  
+
   const handleContactTypeChange = async (value) => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/content/${value}`);
       const numbers = response.data.map(contact => contact.phoneNumber);
       setPhoneNumbers(numbers); // Store the phone numbers as an array
-  
+
     } catch (err) {
       console.error("Error fetching contacts for selected type:", err);
     }
@@ -72,11 +72,11 @@ const CreateBulkContact = () => {
     try {
       // Validate form fields
       await form.validateFields();
-  
+
       // Get form values
       const values = form.getFieldsValue();
       const contactType = values.ContactType;
-  
+
       // Format message
       const formattedMessage = `${listType} alert: 
       Scrip Name: ${scripData.scripName}
@@ -90,15 +90,15 @@ const CreateBulkContact = () => {
       Justification: ${scripData.justification}
       Chart: ${scripData.chart}
       `;
-      
+
       setMessage(formattedMessage);
-  
+
       // Create log object
       const logObject = {
         phone_numbers: phoneNumbers,
         message: formattedMessage
       };
-  
+
       // Send POST request
       try {
         const response = await axios.post('http://localhost:5000/send_notifications', logObject);
@@ -110,7 +110,7 @@ const CreateBulkContact = () => {
       console.error("Failed to get contact type:", errorInfo);
     }
   };
-  
+
 
 
 
@@ -122,92 +122,129 @@ const CreateBulkContact = () => {
     handleButtonClick("TradeList");
   };
 
-  
+
 
   return (
-    <div className="flex">
-      <div className="w-1/4">
-        <Form form={form} layout="vertical" className="max-w-2xl mx-auto p-6">
-          <h2 className="text-2xl font-bold mb-4 text-center mt-6">Import from file</h2>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item label="Contact Type" name="ContactType" rules={[{ required: true }]}>
-                <Select
-                  onChange={handleContactTypeChange}
-                  dropdownRender={(menu) => (
-                    <>
-                      {menu}
-                      <Button
-                        type="text"
-                        icon={<PlusOutlined />}
-                        onClick={showAddOptionModal}
-                        className="w-full text-center py-2"
-                      >
-                        Add New Contact Type
-                      </Button>
-                    </>
-                  )}
-                >
-                  {options.map((option) => (
-                    <Option key={option} value={option}>
-                      {option}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Button
-            className="w-full py-4 font-bold bg-blue-500 text-white hover:bg-blue-600"
-            type="primary"
-            onClick={sendToWatchList}
-            disabled={phoneNumbers.length === 0}
+    <div className="flex flex-wrap">
+  {/* Left Section: Import from File */}
+  <div className="w-full lg:w-1/4 bg-[#F1F8FF] p-6 rounded-xl shadow-xl border border-gray-200">
+    <Form form={form} layout="vertical" className="max-w-full mx-auto">
+      <h2 className="text-3xl font-extrabold mb-6 text-center text-blue-800 tracking-wide">
+        Import from file
+      </h2>
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item
+            label="Contact Type"
+            name="ContactType"
+            rules={[{ required: true }]}
+            className="font-medium text-gray-600"
           >
-            Send To WatchList
-          </Button>
+            <Select
+              className="border-blue-400 hover:border-blue-500 transition duration-300"
+              onChange={handleContactTypeChange}
+              dropdownRender={(menu) => (
+                <>
+                  {menu}
+                  <Button
+                    type="text"
+                    icon={<PlusOutlined />}
+                    onClick={showAddOptionModal}
+                    className="w-full text-center py-2 text-blue-600 hover:text-blue-700"
+                  >
+                    Add New Contact Type
+                  </Button>
+                </>
+              )}
+            >
+              {options.map((option) => (
+                <Option key={option} value={option}>
+                  {option}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+      </Row>
 
-          <Button
-            className="w-full py-4 font-bold bg-green-500 text-white hover:bg-green-600 mt-4"
-            type="primary"
-            onClick={sendToTradeList}
-            disabled={phoneNumbers.length === 0}
+      {/* Buttons */}
+      <Button
+        className="w-full py-4 mt-4 font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105"
+        type="primary"
+        onClick={sendToWatchList}
+        disabled={phoneNumbers.length === 0}
+      >
+        Send To WatchList
+      </Button>
 
-          >
-            Send To TradeList
-          </Button>
+      <Button
+        className="w-full py-4 mt-4 font-bold bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-lg hover:from-green-600 hover:to-green-700 transition-all duration-300 transform hover:scale-105"
+        type="primary"
+        onClick={sendToTradeList}
+        disabled={phoneNumbers.length === 0}
+      >
+        Send To TradeList
+      </Button>
 
-          <Modal
-            title="Add New Contact Type"
-            visible={isModalVisible}
-            onOk={handleAddOption}
-            onCancel={handleCancel}
-            okText="Add"
-          >
-            <Input
-              placeholder="Enter new contact type"
-              value={newOption}
-              onChange={(e) => setNewOption(e.target.value)}
-            />
-          </Modal>
-        </Form>
-      </div>
+      {/* Modal for adding a new contact type */}
+      <Modal
+        title="Add New Contact Type"
+        visible={isModalVisible}
+        onOk={handleAddOption}
+        onCancel={handleCancel}
+        okText="Add"
+      >
+        <Input
+          placeholder="Enter new contact type"
+          value={newOption}
+          onChange={(e) => setNewOption(e.target.value)}
+          className="border-gray-300 focus:border-blue-500 rounded-md transition duration-300"
+        />
+      </Modal>
+    </Form>
+  </div>
 
-      <div className="w-3/4 p-6 bg-gray-100">
-        <h3 className="text-xl font-bold mb-4">Scrip Data</h3>
-        <ul className="list-disc list-inside">
-          <li><strong>Scrip Name:</strong> {scripData.scripName}</li>
-          <li><strong>Sector:</strong> {scripData.sector}</li>
-          <li><strong>Capital Size:</strong> {scripData.capitalSize}</li>
-          <li><strong>Trade Type:</strong> {scripData.tradeType}</li>
-          <li><strong>Entry Ranges:</strong> {scripData.entryRanges}</li>
-          <li><strong>Target Prices:</strong> {scripData.targetPrices}</li>
-          <li><strong>Stop Loss:</strong> {scripData.stopLoss}</li>
-          <li><strong>Entry Risk:</strong> {scripData.entryRisk}</li>
-          <li><strong>Justification:</strong> {scripData.justification}</li>
-          <li><strong>Chart:</strong> {scripData.chart}</li>
-        </ul>
-      </div>
-    </div>
+  {/* Right Section: Scrip Data */}
+  <div className="w-full lg:w-3/4 p-8 bg-gray-100 mt-6 lg:mt-0 rounded-xl shadow-xl border border-gray-200">
+    <h3 className="text-3xl font-bold mb-6 text-gray-900 tracking-wide">
+      Scrip Data:
+    </h3>
+    <ul className="list-disc list-inside space-y-4 text-lg text-gray-700">
+      <li>
+        <strong className="text-blue-700">Scrip Name:</strong> {scripData.scripName}
+      </li>
+      <li>
+        <strong className="text-blue-700">Sector:</strong> {scripData.sector}
+      </li>
+      <li>
+        <strong className="text-blue-700">Capital Size:</strong> {scripData.capitalSize}
+      </li>
+      <li>
+        <strong className="text-blue-700">Trade Type:</strong> {scripData.tradeType}
+      </li>
+      <li>
+        <strong className="text-blue-700">Entry Ranges:</strong> {scripData.entryRanges}
+      </li>
+      <li>
+        <strong className="text-blue-700">Target Prices:</strong> {scripData.targetPrices}
+      </li>
+      <li>
+        <strong className="text-blue-700">Stop Loss:</strong> {scripData.stopLoss}
+      </li>
+      <li>
+        <strong className="text-blue-700">Entry Risk:</strong> {scripData.entryRisk}
+      </li>
+      <li>
+        <strong className="text-blue-700">Justification:</strong> <span>{scripData.justification}</span>
+      </li>
+      <li>
+        <strong className="text-blue-700">Chart:</strong> {scripData.chart}
+      </li>
+    </ul>
+  </div>
+</div>
+
+  
   );
 };
 

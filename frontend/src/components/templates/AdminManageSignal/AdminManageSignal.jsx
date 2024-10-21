@@ -4,6 +4,7 @@ import StaffSidebar, { SidebarItem } from "../sidebar/Sidebar";
 import { FaHome } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
+import { MoreVertical } from "lucide-react";
 import {
   IoChatbubbleEllipsesOutline,
   IoSettingsOutline,
@@ -19,6 +20,10 @@ import { FaUserClock } from "react-icons/fa";
 
 const AdminManageSignal = () => {
   const navigate = useNavigate();
+
+  const userInfo = useSelector(
+    (state) => state.currentLoggedInUser?.userInfo || {}
+  );
 
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
@@ -50,7 +55,7 @@ const AdminManageSignal = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-  const handleRouteChatIframe=()=>{
+  const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
   const handleRouteManageSignal = () => {
@@ -115,11 +120,11 @@ const AdminManageSignal = () => {
             handleClick={handleRouteManageChat}
           />
           <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat Iframe"
+            handleClick={handleRouteChatIframe}
 
-        />
+          />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
@@ -131,6 +136,20 @@ const AdminManageSignal = () => {
             handleClick={handleRouteRTMS}
           />
         </StaffSidebar>
+        <div
+          className="
+              flex justify-between items-center
+              overflow-hidden transition-all px-5 pr-10 -mt-10"
+
+        >
+          <div className="leading-4">
+            <h4 className="font-semibold">{userInfo?.name}</h4>
+            <span className="text-xs text-gray-600">
+              {userInfo?.email}
+            </span>
+          </div>
+          <MoreVertical size={20} />
+        </div>
       </Box>
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}

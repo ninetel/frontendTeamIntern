@@ -8,37 +8,37 @@ require("dotenv").config();
 const router = express.Router();
 
 const authenticateJWT = (req, res, next) => {
-  // const accessToken =
-  //   req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
-  // if (accessToken) {
-  //   jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
-  //     if (err) {
-  //       return res.status(403).json({ error: "Access denied" });
-  //     }
-  //     req.user = user;
-  //     next();
-  //   });
-  // } else {
-  //   res.status(401).json({ error: "No accessToken provided" });
-  // }
+  const accessToken =
+    req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
+  if (accessToken) {
+    jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: "Access denied" });
+      }
+      req.user = user;
+      next();
+    });
+  } else {
+    res.status(401).json({ error: "No accessToken provided" });
+  }
 
-  try {
-    const jwtToken = req.cookies.token;
+//   try {
+//     const jwtToken = req.cookies.token;
 
-    if (!jwtToken) return res.status(401).json({ error: "user not authorized!" })
+//     if (!jwtToken) return res.status(401).json({ error: "user not authorized!" })
 
-    const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET)
+//     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET)
 
-    if(!decoded){
-        return res.status(401).json({ error: "Invalid!" })
-    }
+//     if(!decoded){
+//         return res.status(401).json({ error: "Invalid!" })
+//     }
 
-    // pass the data to requested route
-    req.user = decoded.user
-    next()
-} catch (error) {
-    res.status(401).json({ error: "Invalid token" })
-}
+//     // pass the data to requested route
+//     req.user = decoded.user
+//     next()
+// } catch (error) {
+//     res.status(401).json({ error: "Invalid token" })
+// }
 };
 
 // Middleware to authorize roles

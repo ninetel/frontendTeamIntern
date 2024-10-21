@@ -15,9 +15,13 @@ import { PiChatsTeardropLight } from "react-icons/pi";
 import { LiaMailBulkSolid } from "react-icons/lia";
 import CHatIframe from "./ChatIframe"
 import { FaUserClock } from "react-icons/fa";
+import { MoreVertical } from "lucide-react";
 
 const AdminManageContact = () => {
   const navigate = useNavigate();
+  const userInfo = useSelector(
+    (state) => state.currentLoggedInUser?.userInfo || {}
+  );
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
   };
@@ -130,6 +134,20 @@ const AdminManageContact = () => {
             handleClick={handleRouteRTMS}
           />
         </StaffSidebar>
+        <div
+          className="
+              flex justify-between items-center
+              overflow-hidden transition-all px-5 pr-10 -mt-10"
+
+        >
+          <div className="leading-4">
+            <h4 className="font-semibold">{userInfo?.name}</h4>
+            <span className="text-xs text-gray-600">
+              {userInfo?.email}
+            </span>
+          </div>
+          <MoreVertical size={20} />
+        </div>
       </Box>
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}

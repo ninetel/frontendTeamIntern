@@ -4,6 +4,7 @@ import StaffSidebar, { SidebarItem } from "../sidebar/Sidebar";
 import { FaHome } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
+import { MoreVertical } from "lucide-react";
 import {
   IoChatbubbleEllipsesOutline,
   IoSettingsOutline,
@@ -17,9 +18,17 @@ import ManageContact from "../ManageContact/ManageContact";
 import { LiaMailBulkSolid } from "react-icons/lia";
 
 import { FaUserClock } from "react-icons/fa";
+import { useState } from "react";
 
 const AdminManageContact = () => {
+  const [click, setClick] = useState(false);
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
   const navigate = useNavigate();
+
+  const userInfo = useSelector(
+    (state) => state.currentLoggedInUser?.userInfo || {}
+  );
+
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
   };
@@ -51,7 +60,7 @@ const AdminManageContact = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-  const handleRouteChatIframe=()=>{
+  const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
   //check
@@ -86,7 +95,7 @@ const AdminManageContact = () => {
             text="Manage Contact"
             active
             alert
-            // active={Router.params === "managecontact" ? true : false}
+          // active={Router.params === "managecontact" ? true : false}
           />
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
@@ -113,11 +122,11 @@ const AdminManageContact = () => {
             handleClick={handleRouteManageChat}
           />
           <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat Iframe"
+            handleClick={handleRouteChatIframe}
 
-        />
+          />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
@@ -128,6 +137,28 @@ const AdminManageContact = () => {
             text="RTMS"
             handleClick={handleRouteRTMS}
           />
+          {
+            isLoggedIn &&
+            <div onClick={() => setClick(!click)}
+              className="
+              flex justify-between items-center relative
+              overflow-hidden transition-all px-5 mt-5 pb-20 py-3 cursor-pointer"
+            >
+              <div className="leading-4 ">
+                <h4 className="font-semibold">{userInfo?.name}</h4>
+                <span className="text-xs text-gray-600">
+                  {userInfo?.email}
+                </span>
+              </div>
+              <MoreVertical size={20} className="cursor-pointer" />
+              {
+                click &&
+                <div className="px-4 absolute w-full left-0 top-16">
+                  <button onClick={() => localStorage.clear()} className="bg-gray-300 rounded py-1 text-sm w-full">Logout</button>
+                </div>
+              }
+            </div>
+          }
         </StaffSidebar>
       </Box>
       <Box

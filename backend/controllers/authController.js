@@ -41,11 +41,11 @@ exports.adminLogin = async (req, res) => {
         if (!match) return res.status(401).json({ error: 'Invalid email odr password' });
 
         const token = jwt.sign({ email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie("token", token, {
-            maxAge: 15 * 24 * 60 * 60 * 1000, //ms
-            httpOnly: true,
-            sameSite: "strict"
-        })
+        // res.cookie("token", token, {
+        //     maxAge: 15 * 24 * 60 * 60 * 1000, //ms
+        //     httpOnly: true,
+        //     sameSite: "strict"
+        // })
         res.json({ accessToken });
     } catch (error) {
         res.status(500).json({ error: 'Error logging in' });
@@ -63,11 +63,11 @@ exports.staffLogin = async (req, res) => {
         if (!match) return res.status(401).json({ error: 'Invalaid email or password' });
 
         const token = jwt.sign({ email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie("token", token, {
-            maxAge: 15 * 24 * 60 * 60 * 1000, //ms
-            httpOnly: true,
-            sameSite: "strict"
-        })
+        // res.cookie("token", token, {
+        //     maxAge: 15 * 24 * 60 * 60 * 1000, //ms
+        //     httpOnly: true,
+        //     sameSite: "strict"
+        // })
         res.json({ accessToken });
     } catch (error) {
         res.status(500).json({ error: 'Error logging in' });

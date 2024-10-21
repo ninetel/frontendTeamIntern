@@ -10,7 +10,7 @@
 
 
 // const CreateBulkContact = () => {
-     
+
 //   const [options, setOptions] = useState([]);
 //   const [isModalVisible, setIsModalVisible] = useState(false);
 //   const [newOption, setNewOption] = useState("");
@@ -57,7 +57,7 @@
 //         phoneNumber: values.phoneNumber,
 //         email: values.email,
 //       });
-      
+
 //       alert("Contact saved successfully!");
 //       form.resetFields();
 //     } catch (err) {
@@ -133,6 +133,10 @@
 // }
 
 // export default CreateBulkContact
+
+
+
+
 import React, { useState, useEffect } from "react";
 import { Form, Input, Select, Button, Modal, Row, Col, Upload } from "antd";
 import { BiSolidCloudUpload } from "react-icons/bi";
@@ -243,21 +247,50 @@ const CreateBulkContact = () => {
   };
 
   return (
-    <div>
-      <Form form={form} layout="vertical" onFinish={handleSubmit} className="max-w-4xl mx-auto p-6">
-        <h2 className="text-2xl font-bold mb-4 text-center mt-6">Import from file</h2>
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item label="Upload File" name="upload" rules={[{ required: true }]}>
-              <Upload fileList={fileList} onChange={handleFileChange} beforeUpload={() => false}>
-                <Button icon={<BiSolidCloudUpload size={20} />}>Click to Upload</Button>
+    <div className="container mx-auto px-4 py-8">
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg"
+      >
+        <h2 className="text-3xl font-bold mb-8 text-center text-blue-800 mt-6">
+          Import from file
+        </h2>
+
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={12} className=" sm-col-span-12">
+            <Form.Item
+              label="Upload File"
+              name="upload"
+              rules={[{ required: true }]}
+              className="text-gray-600 font-semibold"
+            >
+              <Upload
+                fileList={fileList}
+                onChange={handleFileChange}
+                beforeUpload={() => false}
+                className="w-full"
+              >
+                <Button
+                  icon={<BiSolidCloudUpload size={20} />}
+                  className="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105"
+                >
+                  Click to Upload
+                </Button>
               </Upload>
             </Form.Item>
           </Col>
 
-          <Col span={12}>
-            <Form.Item label="Contact Type" name="ContactType" rules={[{ required: true }]}>
+          <Col xs={24} sm={12}>
+            <Form.Item
+              label="Contact Type"
+              name="ContactType"
+              rules={[{ required: true }]}
+              className="text-gray-600 font-semibold"
+            >
               <Select
+                className="w-full border-gray-300 rounded-lg"
                 dropdownRender={(menu) => (
                   <>
                     {menu}
@@ -265,7 +298,7 @@ const CreateBulkContact = () => {
                       type="text"
                       icon={<PlusOutlined />}
                       onClick={showAddOptionModal}
-                      className="w-full text-center py-2"
+                      className="w-full text-center py-2 text-blue-600 hover:text-blue-700"
                     >
                       Add New Contact Type
                     </Button>
@@ -284,7 +317,7 @@ const CreateBulkContact = () => {
 
         <Button
           icon={<BiSolidCloudUpload size={20} />}
-          className="w-full py-4 font-bold bg-blue-500 text-white hover:blue-600"
+          className="w-full py-4 mt-4 font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105"
           type="primary"
           htmlType="submit"
         >
@@ -302,10 +335,12 @@ const CreateBulkContact = () => {
             placeholder="Enter new contact type"
             value={newOption}
             onChange={(e) => setNewOption(e.target.value)}
+            className="border border-gray-300 p-2 rounded-lg focus:border-blue-500 transition duration-300"
           />
         </Modal>
       </Form>
     </div>
+
   );
 };
 
