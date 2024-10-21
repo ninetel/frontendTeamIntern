@@ -129,7 +129,7 @@ const ChatMessages = ({ userId }) => {
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: "70vh" }}>
         {messages.map((msg, index) => (
-          <div key={index} className={`p-4 rounded-lg shadow-sm ${msg.sender === "admin" ? "bg-blue-100 self-end" : "bg-gray-100 self-start"}`}>
+          <div key={index} className={`p-4 rounded-lg shadow-sm ${msg.sender === "admin" ? "bg-blue-100 self-end max-w-[350px]" : "bg-gray-100 ml-[50%] self-start max-w-[350px]"}`}>
             <p className="font-semibold text-gray-900">{msg.sender === "admin" ? "Admin" : "Client"}</p>
             <p className="text-gray-600">{msg.message}</p>
             {msg.image && (

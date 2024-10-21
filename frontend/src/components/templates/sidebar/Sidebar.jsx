@@ -36,7 +36,7 @@ export default function StaffSidebar({ children }) {
             alt=""
             className="w-10 h-10 rounded-md"
           />
-          <div
+          {/* <div
             className={`
               flex justify-between items-center
               overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
@@ -49,7 +49,7 @@ export default function StaffSidebar({ children }) {
               </span>
             </div>
             <MoreVertical size={20} />
-          </div>
+          </div> */}
         </div>
       </nav>
     </aside>
