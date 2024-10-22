@@ -101,12 +101,12 @@ const AdminManagePrompt = () => {
           {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          /> */}
+          /> 
           <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
-          />
+          />*/}
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"

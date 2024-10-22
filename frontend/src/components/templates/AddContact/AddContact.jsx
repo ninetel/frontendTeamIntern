@@ -116,7 +116,7 @@ const AdminAddSignal = () => {
           /> */}
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
-            text="Chat"
+            text="Manage Chat"
             handleClick={handleRouteManageChat}
           />
           <SidebarItem

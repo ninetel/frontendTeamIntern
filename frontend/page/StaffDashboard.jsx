@@ -47,6 +47,9 @@ const StaffDashboard = () => {
   const handleRouteManageChat = () => {
     navigate("/staff/dashboard/managechat");
   };
+  const handleRouteAddContact = () => {
+    navigate("/staff/dashboard/addcontact");
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -63,6 +66,11 @@ const StaffDashboard = () => {
             text="Update Profile"
             handleClick={handleRouteManageSignal}
           /> */}
+            <SidebarItem
+            icon={<IoMdAdd size={30} />}
+            text="Add Contact"
+            handleClick={handleRouteAddContact}
+          />
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
             text="Add Prompt"

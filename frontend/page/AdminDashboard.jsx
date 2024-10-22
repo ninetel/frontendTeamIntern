@@ -268,8 +268,7 @@ const AdminDashboard = () => {
             text="Manage Signal"
             handleClick={handleRouteManageSignal}
           />
-          <SidebarItem icon={<TfiWrite size={30} />} text="Manage Signal" />
-          <SidebarItem
+           <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Contact"
             handleClick={handleRouteAddContact}
@@ -294,11 +293,11 @@ const AdminDashboard = () => {
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
           /> */}
-          <SidebarItem
+          {/* <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
-          />
+          /> */}
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"
