@@ -30,13 +30,13 @@ export default function StaffSidebar({ children }) {
           <ul className="flex-1 px-3">{children}</ul>
         </SidebarContext.Provider>
 
-        <div className="border-t flex p-3">
+        {/* <div className="border-t flex p-3">
           <img
             src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
             alt=""
             className="w-10 h-10 rounded-md"
           />
-          <div
+          {/* <div
             className={`
               flex justify-between items-center
               overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
@@ -50,7 +50,7 @@ export default function StaffSidebar({ children }) {
             </div>
             <MoreVertical size={20} />
           </div>
-        </div>
+        </div> */}
       </nav>
     </aside>
   );

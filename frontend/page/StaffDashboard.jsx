@@ -58,29 +58,30 @@ const StaffDashboard = () => {
             text="Add Signal"
             handleClick={handleAddSignal}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Update Profile"
             handleClick={handleRouteManageSignal}
-          />
+          /> */}
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
             text="Add Prompt"
             handleClick={handleRouteAddPrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
-          /><SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat"
-          handleClick={handleRouteManageChat}
-        />
+          /> */}
           <SidebarItem
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat"
+            handleClick={handleRouteManageChat}
+          />
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          />
+          /> */}
         </StaffSidebar>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>

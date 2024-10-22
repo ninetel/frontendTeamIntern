@@ -123,10 +123,10 @@ const AdminManageChat = () => {
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          />
+          /> */}
           <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"

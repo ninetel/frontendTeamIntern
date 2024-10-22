@@ -32,7 +32,7 @@ const AddPrompt = () => {
       initialValues={{
         promptTitle: "Test Prompt",
         status: "pending",
-        promptDescription: "This is Text prompt",
+        promptDescription: "Write prompt here....",
       }}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         const createdDate = Date.now();
@@ -50,7 +50,6 @@ const AddPrompt = () => {
           );
           console.log("create prompt response", response);
           alert("signal creation success");
-          // Handle success (e.g., show a success message, redirect, etc.)
           resetForm();
         } catch (error) {
           console.log("err while creating prompt", error);
@@ -60,53 +59,58 @@ const AddPrompt = () => {
       }}
     >
       {({ handleSubmit, handleChange, setFieldValue, values }) => (
-        <Form layout="vertical">
-          <h2
-            style={{
-              margin: "80px 100px 20px 100px",
-              fontSize: "2rem",
-            }}
-          >
-            Create New Prompt
-          </h2>
-          <Row style={{ margin: "20px 100px" }}>
-            {/* signal title  */}
-            <Col span={24} style={{ padding: "0 0 0 0" }}>
-              <Form.Item label="Prompt Title">
-                <Input
-                  size="large"
-                  name="promptTitle"
-                  onChange={handleChange}
-                  value={values.promptTitle}
-                  style={{ height: "50px" }}
-                />
-              </Form.Item>
-            </Col>
-
-            <Col span={24}>
-              <Form.Item label="Prompt Description">
-                <Input.TextArea
-                  name="promptDescription"
-                  onChange={handleChange}
-                  value={values.promptDescription}
-                  rows={12}
-                  cols={4}
-                />
-              </Form.Item>
-            </Col>
-
-            <Col span={24} style={{ margin: "20px 10px" }}>
-              <Button
-                icon={<BiSolidCloudUpload size={30} />}
-                style={{ padding: "23px 425px 23px 415px", fontWeight: "bold" }}
-                type="primary"
-                onClick={handleSubmit}
-              >
-                Add Prompt
-              </Button>
-            </Col>
-          </Row>
-        </Form>
+       <Form
+       layout="vertical"
+       className="max-w-4xl  mx-auto bg-white shadow-lg p-8 rounded-lg mt-6"
+     >
+       <h2 className="text-center text-3xl font-bold text-gray-600 mb-6">
+         Create New Prompt
+       </h2>
+     
+       <Row gutter={[16, 16]}>
+         <Col span={24}>
+           <Form.Item
+           label={<span className=" font-bold">Prompt Title</span>}
+             className="text-gray-600 font-semibold text-lg"
+           >
+             <Input
+               size="large"
+               name="promptTitle"
+               onChange={handleChange}
+               value={values.promptTitle}
+               className="border-gray-300 rounded-lg w-full h-12 px-4 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition duration-300"
+             />
+           </Form.Item>
+         </Col>
+     
+         <Col span={24}>
+           <Form.Item
+             label={<span className=" font-bold">Prompt Description:</span>}
+             className="text-gray-500 font-semibold text-lg"
+           >
+             <Input.TextArea
+               name="promptDescription"
+               onChange={handleChange}
+               value={values.promptDescription}
+               rows={10}
+               className="border-gray-300 rounded-lg w-full px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition duration-300"
+             />
+           </Form.Item>
+         </Col>
+     
+         <Col span={24} className="mt-4">
+           <Button
+             icon={<BiSolidCloudUpload size={20} />}
+             className="w-full py-4 text-white font-bold bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 shadow-lg transform transition-all duration-300 hover:scale-105"
+             type="primary"
+             onClick={handleSubmit}
+           >
+             Add Prompt
+           </Button>
+         </Col>
+       </Row>
+     </Form>
+     
       )}
     </Formik>
   );

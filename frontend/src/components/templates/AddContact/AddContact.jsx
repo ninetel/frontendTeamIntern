@@ -98,21 +98,19 @@ const AdminAddSignal = () => {
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          />
-          <SidebarItem
+          /> */}
+          {/* <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
-          />
+          /> */}
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
-            text="Manage Chat"
-            handleClick={handleRouteManageChat}
-            alert
-            active
+            text="Chat"
+            handleClick={handleRouteManageChat}  
           />
           <SidebarItem
           icon={<PiChatsTeardropLight size={30} />}

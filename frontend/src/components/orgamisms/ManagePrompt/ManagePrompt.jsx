@@ -29,7 +29,7 @@ const ManagePrompt = () => {
     queryFn: () => fetchPrompts(accessToken),
     enabled: !!accessToken,
   });
-  // console.log("data", prompts);
+  console.log("data", prompts);
 
   // Mutation for deleting a prompt
   const mutationDelete = useMutation({
@@ -85,7 +85,7 @@ const ManagePrompt = () => {
   return (
     <div>
       <Row gutter={30}>
-        {prompts?.map((prompt) => (
+        {Array.isArray(prompts) && prompts?.map((prompt) => (
           <Col span={24} key={prompt.id}>
             <Card
               title={`${prompt.promptTitle}`}

@@ -1,9 +1,10 @@
 // api.js
 import axios from "axios";
 
-const API_URL = "${import.meta.env.VITE_BACKEND_URL}/sikinchaa";
+const API_URL = `${import.meta.env.VITE_BACKEND_URL}/sikinchaa`;
 
 export const fetchSignals = async (accessToken) => {
+  console.log('signal response is*******##########', accessToken);
   const response = await axios.get(`${API_URL}/signals`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,

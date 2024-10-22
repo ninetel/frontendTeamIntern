@@ -19,10 +19,10 @@ import { FaUserClock } from "react-icons/fa";
 
 const AdminManageSignal = () => {
   const navigate = useNavigate();
+
   const handleRouteHome = () => {
     navigate("/admin/dashboard");
   };
-
   const handleRouteAddSignal = () => {
     navigate("/admin/dashboard/addsignal");
   };
@@ -53,6 +53,9 @@ const AdminManageSignal = () => {
   const handleRouteChatIframe=()=>{
     navigate("/admin/dashboard/manageChatIframe");
   }
+  const handleRouteManageSignal = () => {
+    navigate("/admin/dashboard/managesignal");
+  };
   //check
 
   return (
@@ -72,6 +75,7 @@ const AdminManageSignal = () => {
           <SidebarItem
             icon={<TfiWrite size={30} />}
             text="Manage Signal"
+            handleClick={handleRouteManageSignal}
             alert
             active
           />
@@ -96,10 +100,10 @@ const AdminManageSignal = () => {
             text="Manage Prompt"
             handleClick={handleRouteManagePrompt}
           />
-          <SidebarItem
+          {/* <SidebarItem
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
-          />
+          /> */}
           <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
@@ -109,8 +113,6 @@ const AdminManageSignal = () => {
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"
             handleClick={handleRouteManageChat}
-            alert
-            active
           />
           <SidebarItem
           icon={<PiChatsTeardropLight size={30} />}

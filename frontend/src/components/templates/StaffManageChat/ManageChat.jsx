@@ -1,15 +1,47 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import ChatMessages from './ChatMessages'; // Import the new component
+import ChatMessages from "./ChatMessages";
 
 const ManageChat = ({ selectedUrl }) => {
   const [sortedMembers, setSortedMembers] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null);
-  const [userType, setUserType] = useState("");
-  const [userMessages, setUserMessages] = useState([]); // State to store messages of the selected user
-  const messageEndRef = useRef(null);
+  // const [userType, setUserType] = useState("");
+  // const [userMessages, setUserMessages] = useState([]);
+  // const messageEndRef = useRef(null);
+
+  // Dummy users and messages
+  const dummyUsers = [
+    { uid: '1', name: 'John Doe', lastMessage: 'Hello! Can you help me?', type: 'Auth Users' },
+    { uid: '2', name: 'Jane Smith', lastMessage: 'I am having issues with my order.', type: 'Guest Users' },
+    { uid: '3', name: 'Mike Johnson', lastMessage: 'Can I change my password?', type: 'Auth Users' },
+    { uid: '4', name: 'Emily Davis', lastMessage: 'I need support with my account.', type: 'Guest Users' },
+  ];
+
+  const dummyMessages = {
+    '1': [
+      { message: 'Hello! Can you help me?', username: 'John Doe', time: '2024-10-18T12:00:00Z' },
+      { message: 'Sure, how can I assist?', username: 'admin', time: '2024-10-18T12:05:00Z' },
+    ],
+    '2': [
+      { message: 'I am having issues with my order.', username: 'Jane Smith', time: '2024-10-18T12:10:00Z' },
+      { message: 'Can you provide more details?', username: 'admin', time: '2024-10-18T12:15:00Z' },
+    ],
+    '3': [
+      { message: 'Can I change my password?', username: 'Mike Johnson', time: '2024-10-18T12:20:00Z' },
+      { message: 'Yes, go to settings to update it.', username: 'admin', time: '2024-10-18T12:25:00Z' },
+    ],
+    '4': [
+      { message: 'I need support with my account.', username: 'Emily Davis', time: '2024-10-18T12:30:00Z' },
+      { message: 'How can we assist you?', username: 'admin', time: '2024-10-18T12:35:00Z' },
+    ],
+  };
+
+  const handleUserSelect = (userId) => {
+    // Set the selected user's chat messages
+    setSelectedChat({ uid: userId, messages: dummyMessages[userId] });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,18 +87,18 @@ const ManageChat = ({ selectedUrl }) => {
     }
   }, [selectedUrl]); // Re-fetch when selectedUrl changes
 
-  const handleUserTypeChange = (e) => {
-    setUserType(e.target.value);
-  };
+  // const handleUserTypeChange = (e) => {
+  //   setUserType(e.target.value);
+  // };
 
-  const handleUserSelect = async (userId) => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
-      setSelectedChat({ uid: userId, messages: response.data });
-    } catch (error) {
-      console.error('Error fetching user messages:', error);
-    }
-  };
+  // const handleUserSelect = async (userId) => {
+  //   try {
+  //     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
+  //     setSelectedChat({ uid: userId, messages: response.data });
+  //   } catch (error) {
+  //     console.error('Error fetching user messages:', error);
+  //   }
+  // };
 
   const handleSendMessage = () => {
     if (newMessage.trim() === "" && !uploadedImage) return;
@@ -107,21 +139,33 @@ const ManageChat = ({ selectedUrl }) => {
     }
   };
 
+  console.log("sortedMembers===>", sortedMembers);
+
   // Filter sortedMembers based on selected userType
-  const filteredMembers = userType
-    ? sortedMembers.filter((chat) => chat.type === userType)
-    : sortedMembers;
+  // const filteredMembers = userType
+  //   ? sortedMembers.filter((chat) => chat.type === userType)
+  //   : sortedMembers;
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/3 bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800 text-center">
-            Chat List
+    <div className="flex h-screen w-full">
+      <div className="w-1/3 shadow-md rounded-lg overflow-hidden">
+        {/* <div className="p-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-800 text-center py-2">
+            Chat List for {selectedUrl}
           </h2>
-        </div>
+          <select
+            onChange={handleUserTypeChange}
+            value={userType}
+            className="w-full p-2 border rounded mb-4"
+          >
+            <option value="">All Users</option>
+            <option value="Auth Users">Auth Users</option>
+            <option value="Guest Users">Guest Users</option>
+          </select>
+        </div> */}
         <div className="p-4 overflow-y-auto h-full space-y-4">
-          {filteredMembers.map((chat, index) => (
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer">Hello</div>
+          {/* {sortedMembers.map((chat, index) => (
             <div
               key={index}
               className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
@@ -129,6 +173,16 @@ const ManageChat = ({ selectedUrl }) => {
             >
               <p className="font-semibold text-gray-900">User ID: {chat.uid}</p>
               <p className="text-gray-600 truncate">{chat.message}</p>
+            </div>
+          ))} */}
+           {dummyUsers.map((user, index) => (
+            <div
+              key={index}
+              className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
+              onClick={() => handleUserSelect(user.uid)}
+            >
+              <p className="font-semibold text-gray-900">{user.name}</p>
+              <p className="text-gray-600 truncate">{user.lastMessage}</p>
             </div>
           ))}
         </div>

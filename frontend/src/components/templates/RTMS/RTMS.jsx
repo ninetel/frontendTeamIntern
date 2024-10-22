@@ -111,8 +111,6 @@ const RTMS = () => {
             icon={<PiChatsTeardropLight size={30} />}
             text="Manage Chat"
             handleClick={handleRouteManageChat}
-            alert
-            active
           />
           <SidebarItem
           icon={<PiChatsTeardropLight size={30} />}

@@ -380,7 +380,6 @@ const CreateContact = () => {
             </Form.Item>
           </Col>
 
-          {/* Submit Button */}
           <Col span={24}>
             <Button
               icon={<BiSolidCloudUpload size={24} />}
@@ -393,7 +392,6 @@ const CreateContact = () => {
           </Col>
         </Row>
 
-        {/* Modal for adding a new contact type */}
         <Modal
           title="Add New Contact Type"
           visible={isModalVisible}
@@ -410,7 +408,6 @@ const CreateContact = () => {
         </Modal>
       </Form>
 
-      {/* Bulk Contact Section */}
       <div className="mt-10">
         <CreateBulkContact />
       </div>

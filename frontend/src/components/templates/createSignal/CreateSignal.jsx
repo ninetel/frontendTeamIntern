@@ -9,6 +9,74 @@ import { BiSolidCloudUpload } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
 
 const { Option } = Select;
+const sectors = [
+  "Commercial Banks",
+  "Development Banks",
+  "Finance",
+  "Hotels",
+  "Manufacturing and Processing",
+  "Hydropower",
+  "Mutual Funds",
+  "Insurance",
+  "Microfinance",
+  "Investment",
+  "Trading",
+  "Others",
+];
+
+const scrips = [
+  "NABIL",
+  "NIB",
+  "SCB",
+  "EBL",
+  "KBL",
+  "NCCB",
+  "GBIME",
+  "NICA",
+  "PRVU",
+  "SBI",
+  "SRBL",
+  "ADBL",
+  "MEGA",
+  "CZBIL",
+  "MFIL",
+  "LBBL",
+  "RBBL",
+  "NLIC",
+  "SICL",
+  "HIDCL",
+  "CHCL",
+  "RHPL",
+  "AKPL",
+  "JBNL",
+  "SHIVM",
+  "UPPER",
+  "PCBL",
+  "ICFC",
+  "SBBLJ",
+  "NRIC",
+  "LICN",
+  "NLBBL",
+  "NMB",
+  "SANIMA",
+  "SBL",
+  "MLBBL",
+  "NADEP",
+  "SIC",
+  "GLH",
+  "EIC",
+  "MPFL",
+  "SAPDBL",
+  "KKHC",
+  "LBL",
+  "MLBSL",
+  "OHL",
+  "CIT",
+  "TRH",
+  "UMHL",
+  "GIC",
+  "SIGS2",
+];
 
 const CreateSignal = () => {
   const signalPlans = ["All", "Diamound", "Gold", "Platinium", "Silver"];
@@ -39,11 +107,11 @@ const CreateSignal = () => {
         status: "pending",
         timeFrame: "hour",
         signalDescription: "Write here....",
-        signalPlans: ["All", "Diamound", "Silver"],
+        signalPlans: "Diamound",
         signalImage: [],
       }}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
           const imageUrls = [];
           for (const file of values.signalImage) {
@@ -112,6 +180,7 @@ const CreateSignal = () => {
                   <Input
                     name="signalTitle"
                     onChange={handleChange}
+                    
                     value={values.signalTitle}
                     className="rounded-md border-gray-400"
                   />
@@ -145,7 +214,6 @@ const CreateSignal = () => {
                     name="suitableFor"
                     onChange={(value) => setFieldValue("suitableFor", value)}
                     value={values.suitableFor}
-
                   >
                     <Option value="Active Investor">Active Investor</Option>
                     <Option value="Passive Investor">Passive Investor</Option>
@@ -184,9 +252,9 @@ const CreateSignal = () => {
                     onChange={(value) => setFieldValue("sector", value)}
                     value={values.sector}
                   >
-                    <Option value="Bank">Bank</Option>
-                    <Option value="Hydropower">Hydropower</Option>
-                    <Option value="Finance">Finance</Option>
+                    {sectors.map((sector)=>(
+                      <option key={sector} value={sector}>{sector}</option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
@@ -198,9 +266,9 @@ const CreateSignal = () => {
                     onChange={(value) => setFieldValue("scrips", value)}
                     value={values.scrips}
                   >
-                    <Option value="EBL">EBL</Option>
-                    <Option value="NBL">NBL</Option>
-                    <Option value="NABIL">NABIL</Option>
+                    {scrips.map((scrip)=>(
+                      <option key={scrip} value={scrip}>{scrip}</option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
