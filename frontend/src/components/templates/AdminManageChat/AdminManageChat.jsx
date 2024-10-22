@@ -161,20 +161,6 @@ const AdminManageChat = () => {
             handleClick={handleRouteRTMS}
           />
         </StaffSidebar>
-        <div
-          className="
-              flex justify-between items-center
-              overflow-hidden transition-all px-5 pr-10 -mt-10"
-
-        >
-          <div className="leading-4">
-            <h4 className="font-semibold">{userInfo?.name}</h4>
-            <span className="text-xs text-gray-600">
-              {userInfo?.email}
-            </span>
-          </div>
-          <MoreVertical size={20} />
-        </div>
       </Box>
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}

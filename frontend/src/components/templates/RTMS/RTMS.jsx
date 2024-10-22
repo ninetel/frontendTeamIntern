@@ -143,29 +143,7 @@ const RTMS = () => {
             active
           />
         </StaffSidebar>
-        {
-          isLoggedIn &&
-          <div
-            className="
-              flex justify-between items-center relative
-              overflow-hidden transition-all px-5 pb-9 pr-10 py-3"
-
-          >
-            <div className="leading-4 ">
-              <h4 className="font-semibold">{userInfo?.name}</h4>
-              <span className="text-xs text-gray-600">
-                {userInfo?.email}
-              </span>
-            </div>
-            <MoreVertical size={20} className="cursor-pointer" onClick={logoutBtn} />
-            {
-              click &&
-              <div className="px-4 absolute left-[45%] top-11 w-[100px]">
-                <button onClick={() => localStorage.clear()} className="bg-gray-300 rounded py-1 text-sm w-full">Logout</button>
-              </div>
-            }
-          </div>
-        }
+       
       </Box>
       <Box
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}

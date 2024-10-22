@@ -137,28 +137,7 @@ const AdminManageContact = () => {
             text="RTMS"
             handleClick={handleRouteRTMS}
           />
-          {
-            isLoggedIn &&
-            <div onClick={() => setClick(!click)}
-              className="
-              flex justify-between items-center relative
-              overflow-hidden transition-all px-5 mt-5 pb-20 py-3 cursor-pointer"
-            >
-              <div className="leading-4 ">
-                <h4 className="font-semibold">{userInfo?.name}</h4>
-                <span className="text-xs text-gray-600">
-                  {userInfo?.email}
-                </span>
-              </div>
-              <MoreVertical size={20} className="cursor-pointer" />
-              {
-                click &&
-                <div className="px-4 absolute w-full left-0 top-16">
-                  <button onClick={() => localStorage.clear()} className="bg-gray-300 rounded py-1 text-sm w-full">Logout</button>
-                </div>
-              }
-            </div>
-          }
+           
         </StaffSidebar>
       </Box>
       <Box
