@@ -209,6 +209,9 @@ const AdminDashboard = () => {
   const handleRouteAddSignal = () => {
     navigate("/admin/dashboard/addsignal");
   };
+  const handleRouteManageSignal = () => {
+    navigate("/admin/dashboard/managesignal");
+  };
   const handleRouteAddContact = () => {
     navigate("/admin/dashboard/addcontact");
   };
@@ -259,6 +262,11 @@ const AdminDashboard = () => {
             icon={<IoMdAdd size={30} />}
             text="Add Signal"
             handleClick={handleRouteAddSignal}
+          />
+          <SidebarItem
+            icon={<TfiWrite size={30} />}
+            text="Manage Signal"
+            handleClick={handleRouteManageSignal}
           />
           <SidebarItem icon={<TfiWrite size={30} />} text="Manage Signal" />
           <SidebarItem
