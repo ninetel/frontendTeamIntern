@@ -15,6 +15,7 @@ const ChatMessages = ({ userId }) => {
   });
   const [staffList, setStaffList] = useState([]); // State for staff list
   const [selectedStaff, setSelectedStaff] = useState(""); // State for selected staff
+  const [assignedStaff, setAssignedStaff] = useState(null); // State for assigned staff
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -30,7 +31,6 @@ const ChatMessages = ({ userId }) => {
 
         if (allMessages.length > 0) {
           const lastMessage = allMessages[allMessages.length - 1];
-          console.log("LASTMESSAGE===>" + lastMessage);
           setMessageDetails({
             type: lastMessage.type,
             url: lastMessage.url,
@@ -44,20 +44,44 @@ const ChatMessages = ({ userId }) => {
 
     const fetchStaffList = async () => {
       try {
-        console.log("Fetching staff list...");
-        const token = localStorage.getItem('token'); // Replace with the actual way you store your token
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        console.log("Staff list fetched successfully");
-        setStaffList(response.data || []);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
+        setStaffList(response.data); // Set the staff list state with fetched data
       } catch (error) {
         console.error('Error fetching staff list:', error);
       }
     };
 
+    
+    const fetchAssignedStaff = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/by-user/${userId}`);
+    
+        // Log the full response object
+        //console.log('Full response:', response);
+    
+        // Check if the data structure matches what we expect
+        if (response.data && typeof response.data === 'object') {
+          //console.log('Response Data:', response.data.staff);
+    
+          if (response.data.staff) {
+            const staffId = response.data.staff; // Extract the staff ID from the response
+            //console.log('Assigned Staff ID:', staffId); // Log the staff ID
+    
+            const assignedStaffObject = staffList.find(staff => staff._id === staffId);
+            setAssignedStaff(assignedStaffObject);
+            setSelectedStaff(assignedStaffObject);
+          } else {
+            console.log('No staff ID found in response data');
+          }
+        } else {
+          console.log('Response data is not in the expected format:', response.data.staff);
+        }
+      } catch (error) {
+        console.error('Error fetching assigned staff:', error);
+      }
+    };
+    
+  
     fetchMessages();
     fetchStaffList();
   }, [userId]);
@@ -68,6 +92,42 @@ const ChatMessages = ({ userId }) => {
     ref.current.click(); // Trigger the file input's click event
   };
 
+    
+    const fetchAssignedStaff = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/by-user/${userId}`);
+    
+        // Log the full response object
+        //console.log('Full response:', response);
+    
+        // Check if the data structure matches what we expect
+        if (response.data && typeof response.data === 'object') {
+          //console.log('Response Data:', response.data.staff);
+    
+          if (response.data.staff) {
+            const staffId = response.data.staff; // Extract the staff ID from the response
+            //console.log('Assigned Staff ID:', staffId); // Log the staff ID
+    
+            const assignedStaffObject = staffList.find(staff => staff._id === staffId);
+            setAssignedStaff(assignedStaffObject);
+            setSelectedStaff(assignedStaffObject);
+          } else {
+            console.log('No staff ID found in response data');
+          }
+        } else {
+          console.log('Response data is not in the expected format:', response.data.staff);
+        }
+      } catch (error) {
+        console.error('Error fetching assigned staff:', error);
+      }
+    };
+    
+  
+  //   fetchMessages();
+  //   fetchStaffList();
+  //   fetchAssignedStaff();
+  // }, [userId, staffList]);
+  
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -85,11 +145,9 @@ const ChatMessages = ({ userId }) => {
       type: messageDetails.type,
       url: messageDetails.url,
       uid: userId, // Add uid here or adjust as needed
-
       receiver_id: messageDetails.receiver_id,
       timestamp: Date.now(),
     };
-    { console.log(messageToSend) }
 
     try {
       await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/chat/send-message`, messageToSend);
@@ -107,11 +165,27 @@ const ChatMessages = ({ userId }) => {
       handleSendMessage();
     }
   };
-
-  const handleStaffChange = (e) => {
-    setSelectedStaff(e.target.value);
+  
+  const handleStaffChange = async (e) => {
+    const selectedStaffValue = e.target.value;
+    const selectedStaffObject = staffList.find(staff => staff.firstName + " " + staff.lastName === selectedStaffValue);
+    
+    if (selectedStaffObject) {
+      setSelectedStaff(selectedStaffObject);
+      try {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/chat/assign-user-to-staff`, {
+          staffId: selectedStaffObject._id, // Pass the staffId
+          userId: userId
+        });
+        console.log('Staff assignment updated successfully');
+      } catch (error) {
+        console.error('Error updating staff assignment:', error);
+      }
+    } else {
+      console.log("No staff selected");
+    }
   };
-
+//{console.log(selectedStaff)}
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 bg-gray-200 font-semibold">
@@ -119,19 +193,19 @@ const ChatMessages = ({ userId }) => {
       </div>
       <div className="flex items-center p-4">
         <select
-          value={selectedStaff}
+          value={selectedStaff ? selectedStaff.firstName + " " + selectedStaff.lastName : ""}
           onChange={handleStaffChange}
           className="p-2 border rounded"
         >
           <option value="">Select staff</option>
           {staffList.map((staff) => (
-            <option key={staff.id} value={staff.name}>
-              {staff.name}
+            <option key={staff._id} value={staff.firstName + " " + staff.lastName}>
+              {staff.firstName + " " + staff.lastName + " - " + staff.email}
             </option>
           ))}
         </select>
         <span className="ml-4">
-          {selectedStaff ? selectedStaff : "Not redirected"}
+          {selectedStaff ? `${selectedStaff.firstName} ${selectedStaff.lastName} - ${selectedStaff.email}` : "No staff assigned"}
         </span>
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-4 relative" style={{ maxHeight: "70vh" }}>
@@ -181,6 +255,6 @@ const ChatMessages = ({ userId }) => {
       )}
     </div>
   );
-};
+}
 
-export default ChatMessages;
+export default ChatMessages

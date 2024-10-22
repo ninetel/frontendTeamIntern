@@ -7,6 +7,7 @@ const ManageChat = ({ selectedUrl }) => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null);
+<<<<<<< HEAD
   // const [userType, setUserType] = useState("");
   // const [userMessages, setUserMessages] = useState([]);
   // const messageEndRef = useRef(null);
@@ -42,17 +43,60 @@ const ManageChat = ({ selectedUrl }) => {
     // Set the selected user's chat messages
     setSelectedChat({ uid: userId, messages: dummyMessages[userId] });
   };
+=======
+  const [userType, setUserType] = useState("");
+  const [userMessages, setUserMessages] = useState([]); // State to store messages of the selected user
+  const [staffId, setStaffId] = useState(null); // State to store staff ID
+  const messageEndRef = useRef(null);
+  const [userId, setUserId] = useState('');
+  const [userIds, setUserIds] = useState([]); // State to store user IDs associated with the staff
+
+  useEffect(() => {
+    // Get the user ID from localStorage
+    const storedUserId = localStorage.getItem('currentUserId');
+    
+    // Set the userId state if found
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      console.log("User ID not found in localStorage");
+    }
+  }, []); // Empty dependency array to run once on component mount
+
+
+  useEffect(() => {
+    const fetchUserIds = async () => {
+      if (staffId) {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/usar/user/${staffId}`, {
+           // headers: {
+            //  Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Include your auth token if required
+            //},
+          });
+          setUserIds(response.data.userIds); // Assuming the response structure contains userIds
+        } catch (error) {
+          console.error('Error fetching user IDs:', error);
+        }
+      }
+    };
+
+    fetchUserIds(); // Call the function to fetch user IDs
+  }, [staffId]); // Run this effect when staffId changes
+
+>>>>>>> 752afd1398fec11351f87428625c8ab9e2db51dd
 
   useEffect(() => {
     const fetchData = async () => {
+      //if (!selectedUrl) return; // Fetch only if selectedUrl is defined
+
       try {
         const [chatResponse, generalResponse] = await Promise.all([
           axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/last-messages/chat`, {
-            params: { url: selectedUrl } // Send selectedUrl as a parameter
+            params: { url: selectedUrl }, // Send selectedUrl as a parameter
           }),
           axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/last-messages/general`, {
-            params: { url: selectedUrl } // Send selectedUrl as a parameter
-          })
+            params: { url: selectedUrl }, // Send selectedUrl as a parameter
+          }),
         ]);
 
         const chatData = Array.isArray(chatResponse.data) ? chatResponse.data : [];
@@ -61,7 +105,7 @@ const ManageChat = ({ selectedUrl }) => {
         // Combine data from both routes and map to include user info
         const allChats = [
           ...chatData.map(item => ({ ...item.lastMessage, type: 'Auth Users' })),
-          ...generalChatData.map(item => ({ ...item.lastMessage, type: 'Guest Users' }))
+          ...generalChatData.map(item => ({ ...item.lastMessage, type: 'Guest Users' })),
         ];
 
         // Group by user ID and get the latest message for each unique user
@@ -75,16 +119,14 @@ const ManageChat = ({ selectedUrl }) => {
 
         // Convert grouped object back to an array and sort by time
         const latestChats = Object.values(groupedChats).sort((a, b) => new Date(b.time) - new Date(a.time));
-        
+
         setSortedMembers(latestChats);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
-    if (selectedUrl) { // Fetch data only if selectedUrl is defined
-      fetchData();
-    }
+    fetchData();
   }, [selectedUrl]); // Re-fetch when selectedUrl changes
 
   // const handleUserTypeChange = (e) => {
@@ -153,6 +195,7 @@ const ManageChat = ({ selectedUrl }) => {
           <h2 className="text-lg font-semibold text-gray-800 text-center py-2">
             Chat List for {selectedUrl}
           </h2>
+<<<<<<< HEAD
           <select
             onChange={handleUserTypeChange}
             value={userType}
@@ -163,6 +206,10 @@ const ManageChat = ({ selectedUrl }) => {
             <option value="Guest Users">Guest Users</option>
           </select>
         </div> */}
+=======
+          {staffId && <p>Staff ID: {staffId}</p>} {/* Display staff ID */}
+        </div>
+>>>>>>> 752afd1398fec11351f87428625c8ab9e2db51dd
         <div className="p-4 overflow-y-auto h-full space-y-4">
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer">Hello</div>
           {/* {sortedMembers.map((chat, index) => (

@@ -5,6 +5,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
+
+// Middleware to validate ObjectId
+const validateObjectId = (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.body.id)) {
+    return res.status(400).json({ error: 'Invalid ID format' });
+  }
+  next();
+};
 const authenticateJWT = (req, res, next) => {
   const accessToken =
     req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
@@ -72,30 +80,54 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" }
     );
 
+    // Store staff ID in session
+
+
     res.json({ accessToken });
   } catch (error) {
+    console.error("Error logging in staff:", error);
     res.status(500).json({ error: "Error logging in staff" });
   }
 });
+
 // Route to get all staff members
-// Route to get all staff members
-router.get(
-  '/staff',
-  authenticateJWT, // Ensure JWT is used for authentication only
-  async (req, res) => {
-    try {
-      console.log("Fetching staff members"); // Log for debugging
-      const staffMembers = await Staff.find().select('-password'); // Fetch all staff members excluding passwords
-      res.json(staffMembers);
-    } catch (error) {
-      console.error("Error fetching staff members:", error); // Log error details
-      res.status(500).json({ error: 'Error fetching staff members' });
-    }
+router.get('/staff', async (req, res) => {
+  try {
+    const staffMembers = await Staff.find().select('-password'); // Fetch all staff members excluding passwords
+    res.json(staffMembers);
+  } catch (error) {
+    console.error('Error fetching staff members:', error);
+    res.status(500).json({ error: 'Error fetching staff members' });
   }
-);
+});
 
+// Route to get the logged-in staff's ID without authentication
+router.get('/id', async (req, res) => {
+  try {
+    const staffId = 0;
 
+    console.log('Staff ID:', staffId);
+    if (!staffId) {
+      console.error("User ID not found in request.");
+      return res.status(401).json({ message: 'Unauthorized: User ID not found' });
+    }
 
+    const staffInfo = await Staff.findById(staffId);
+
+    console.log('Fetched Staff Info:', staffInfo);
+
+    if (!staffInfo) {
+      console.error("Staff not found for ID:", staffId);
+      return res.status(404).json({ message: 'Staff not found' });
+    }
+
+    const id = staffInfo._id.toString(); // Convert ObjectId to string
+    res.status(200).json({ id }); // Return the ID in a JSON response
+  } catch (error) {
+    console.error('Error fetching staff ID:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
 
 // Route to get the logged-in staff's information
 router.get(
@@ -116,14 +148,78 @@ router.get(
     }
   }
 );
+// Route to get the logged-in staff's information without jwt
+router.get(
+  "/infos",
+  // authenticateJWT,
+  // authorizeRole("staff"),
+  // later add admin as well
+  async (req, res) => {
+    // For testing purposes, set req.user manually if needed
+    req.user = { id: "someValidStaffId" }; // Replace with a valid staff ID from your database
+    
+    try {
+      console.log(req.user); // Log the user object
+      const staff = await Staff.findById(req.user.id).select("-password");
+
+      if (!staff) {
+        return res.status(404).json({ error: "Staff not found" });
+      }
+      res.json(staff);
+    } catch (error) {
+      console.error("Error fetching staff info:", error); // Log the actual error
+      res.status(500).json({ error: "Error fetching staff info" });
+    }
+  }
+);
 
 // Route to create a new staff
-router.post(
-  "/create",
-  authenticateJWT,
-  authorizeRole("admin"),
-  async (req, res) => {
-    const {
+router.post("/create", async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    middleName,
+    address,
+    phoneNumber,
+    emergencyContactName,
+    emergencyContactNumber,
+    gender,
+    email,
+    ecRelationShip,
+    password,
+    role,
+  } = req.body;
+
+  if (!email || typeof email !== "string") {
+    return res.status(400).json({ error: "Invalid email" });
+  }
+
+  if (
+    !firstName ||
+    !lastName ||
+    !address ||
+    !phoneNumber ||
+    !middleName ||
+    !emergencyContactName ||
+    !emergencyContactNumber ||
+    !email ||
+    !ecRelationShip ||
+    !password ||
+    !role
+  ) {
+    return res.status(400).json({ error: "All required fields must be filled" });
+  }
+
+  try {
+    console.log("req.body", req.body);
+    const existingStaff = await Staff.findOne({ email });
+    if (existingStaff) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newStaff = new Staff({
       firstName,
       lastName,
       middleName,
@@ -134,68 +230,16 @@ router.post(
       gender,
       email,
       ecRelationShip,
-      password,
-      role,
-    } = req.body;
-    // Additional check for email
-    if (!email || typeof email !== "string") {
-      // console.log("personalEmail", personalEmail);
-      return res.status(400).json({ error: "Invalid email" });
-    }
+      password: hashedPassword,
+      role: role,
+    });
 
-    if (
-      !firstName ||
-      !lastName ||
-      !address ||
-      !phoneNumber ||
-      !middleName ||
-      !emergencyContactName ||
-      !emergencyContactNumber ||
-      !email ||
-      !ecRelationShip ||
-      !password ||
-      !role
-    ) {
-      // console.log("All field not filled");
-      return res
-        .status(400)
-        .json({ error: "All required fields must be filled" });
-    }
-
-    try {
-      console.log("req.body", req.body);
-      const existingStaff = await Staff.findOne({ email });
-      if (existingStaff) {
-        // console.log("Email Already exists.");
-        return res.status(400).json({ error: "Email already exists" });
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const newStaff = new Staff({
-        firstName,
-        lastName,
-        middleName,
-        address,
-        phoneNumber,
-        emergencyContactName,
-        emergencyContactNumber,
-        gender,
-        email,
-        ecRelationShip,
-        password: hashedPassword,
-        role: role,
-      });
-
-      await newStaff.save();
-      res.status(201).json({ message: "Staff created successfully" });
-    } catch (error) {
-      // console.log("Final error", error);
-      res.status(500).json({ error: "Error creating staff lasttt ko maa" });
-    }
+    await newStaff.save();
+    res.status(201).json({ message: "Staff created successfully" });
+  } catch (error) {
+    console.error("Error creating staff:", error);
+    res.status(500).json({ error: "Error creating staff" });
   }
-);
-
-
+});
 
 module.exports = router;

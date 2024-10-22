@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Form, Input, Button, Upload, Tabs, List } from 'antd';
+import { Form, Input, Button, Upload, Tabs, List, Card, Col, Row }
+ from 'antd';
 import io from 'socket.io-client';
 import { LuSendHorizonal } from 'react-icons/lu';
 import { RiFolderUploadLine, RiChat1Line, RiImageLine, RiFileTextLine, RiCloseLine, RiMenuLine } from 'react-icons/ri';
@@ -19,13 +20,13 @@ const predefinedMessages = [
   'Can I help with anything else?'
 ];
 
-const textLists = {
-  'Chat': ['Chat message 1', 'Chat message 2', 'Chat message 3'],
-  'Images': ['Image 1 description', 'Image 2 description', 'Image 3 description'],
-  'Documents': ['Document 1 description', 'Document 2 description', 'Document 3 description'],
-  'Upload': ['Upload 1 description', 'Upload 2 description', 'Upload 3 description'],
-  'Files': ['Files 1 description', 'Files 2 description', 'Files 3 description']
-};
+// const textLists = {
+//   'Chat': ['Chat message 1', 'Chat message 2', 'Chat message 3'],
+//   'Images': ['Image 1 description', 'Image 2 description', 'Image 3 description'],
+//   'Documents': ['Document 1 description', 'Document 2 description', 'Document 3 description'],
+//   'Upload': ['Upload 1 description', 'Upload 2 description', 'Upload 3 description'],
+//   'Files': ['Files 1 description', 'Files 2 description', 'Files 3 description']
+// };
 
 const CreateGenerallAI = () => {
   const accessToken = useAppSelector((state) => state.authentication.accessToken);
@@ -156,6 +157,9 @@ const CreateGenerallAI = () => {
       }
     }
   };
+  const onChange = (key) => {
+    console.log(key);
+  };
 
   const handleUpload = (file) => {
     const reader = new FileReader();
@@ -221,7 +225,7 @@ const CreateGenerallAI = () => {
         { icon: <RiChat1Line size={32} />, text: 'Chat' },
         { icon: <RiImageLine size={32} />, text: 'Images' },
         { icon: <RiFileTextLine size={32} />, text: 'Files' },
-        { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
+        { icon: <RiFolderUploadLine size={32} />, text: 'Upload' }, 
       ]
     },
     '2': {
@@ -257,26 +261,24 @@ const CreateGenerallAI = () => {
   };
 
   return (
-    <div className="flex flex-col h-full p-3 bg-gradient-to-br from-green-50 to-white shadow-lg rounded-lg">
-      <h1 className="text-center font-extrabold text-xl mb-4 text-green-700">Chat</h1>
-
+    <div className="flex flex-col absolute w-[400px] h-[500px] p-6 py-6 from-green-50 to-white shadow-lg rounded-lg">
       {/* Options Icon */}
       <div className="flex justify-between items-center mb-4">
         <div>
           {/* Placeholder for any other top-left content */}
         </div>
-        <div>
+        {/* <div>
           <Button
             icon={showOptions ? <RiCloseLine size={24} /> : <RiMenuLine size={24} />}
             onClick={() => setShowOptions(!showOptions)}
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Options Content */}
       {showOptions && (
         <div className="mb-4">
-          <Tabs activeKey={activeTab} onChange={setActiveTab}>
+          {/* <Tabs activeKey={activeTab} onChange={setActiveTab}>
             {Object.entries(tabContent).map(([key, { icon, title, icons }]) => (
               <TabPane
                 tab={<span>{icon}{title}</span>}
@@ -297,10 +299,10 @@ const CreateGenerallAI = () => {
                 </div>
               </TabPane>
             ))}
-          </Tabs>
+          </Tabs> */}
         </div>
       )}
-      {showTextList && (
+      {/* {showTextList && (
         <div className="text-list-container">
           <Button onClick={handleBack} className="mb-2">
             Back
@@ -315,22 +317,144 @@ const CreateGenerallAI = () => {
             )}
           />
         </div>
-      )}
-      <div className="flex flex-col mt-4 flex-grow overflow-auto">
-        <div className="flex flex-col space-y-2 mb-2">
+      )} */}
+
+<div className="">
+      {/* <div className="flex flex-col mt-4 flex-grow overflow-auto"> */}
+      <div className="bg-green-500 text-white rounded p-3 -mt-10">
+              <h1 className="text-lg font-bold">Welome to Sikkincha</h1>
+              <p>नमस्ते, तपाईलाई स्वागत छ</p>
+            </div>
+            <div className='flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg'>
+              <Tabs
+                onChange={onChange}
+                type="card"
+                items={new Array(3).fill(null).map((_, i) => {
+                  const id = String(i + 1);
+                  return {
+                    key: id,
+                    label: id === '1' ? 'Help' : id === '2' ? 'Service' : 'FAQ',
+                    children: id === '1' ? (
+                      <div className=' flex h-[200px] overflow-x-hidden overflow-y-scrol -mt-4'>
+                        <Row className=' flex flex-wrap space-y-2 '
+                          gutter={16}>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 1 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 1 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 1 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 2 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 3 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 3 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 3 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 3 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                          <Col span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => console.log("Card 3 clicked")}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              content
+                            </Card>
+                          </Col>
+                        </Row>
+                      </div>
+                    ) : (
+                      `Content of Tab Pane ${id}`
+                    ),
+                  };
+                })}
+              />
+            </div>
+          
+            
+            <div className='fixed w-[329px] bottom-0'>
+            <div className="flex flex-col text-center mt-4 flex-grow overflow-auto">
+        <div className="flex flex-col bg-black space-y-2 mb-2">
           {console.log(messages)}
           {messages.map((msg, index) => (
             <div
               key={index}
               className={`p-2 rounded-lg shadow-md ${
                 msg.type === 'sent'
-                  ? 'self-end bg-green-100 text-green-700' // User messages
-                  : 'self-start bg-white text-green-700'   // Admin messages
+                  ? 'self-end bg-green-100 text-green-700' 
+                  : 'self-start bg-white text-green-700'   
               }`}
             >
               {msg.type === 'received' && (
                 <div className="flex items-center space-x-2">
-                  <FaUser className="text-green-700" /> {/* Admin icon */}
+                  <FaUser className="text-green-700" /> 
                   <p>{msg.response}</p>
                 </div>
               )}
@@ -351,7 +475,7 @@ const CreateGenerallAI = () => {
         <div ref={messagesEndRef} />
       </div>
       {showSuggestions && (
-        <div className="suggestions-container">
+        <div className="suggestions-container  bg-green-400 text-white">
           <ul>
             {filteredMessages.map((msg, index) => (
               <li
@@ -368,42 +492,43 @@ const CreateGenerallAI = () => {
 
 
       {/* Form */}
-      <Form form={form} onFinish={onFinish} className="flex flex-col mt-auto">
+      <Form form={form} onFinish={onFinish} className="flex flex-col mt-4 relative bottom-6">
         <Form.Item name="message" className="w-full">
+        <div className="relative flex">
           <Input.TextArea
             value={inputValue}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             autoSize={{ minRows: 1, maxRows: 4 }}
             placeholder="Type your message here..."
-            className="rounded-lg p-3 text-green-700"
+            className="rounded-lg pl-10 py-3 text-green-700"
           />
-        </Form.Item>
-
-         
-
-        
-
-        <div className="flex justify-between items-center">
-          <Upload beforeUpload={handleUpload} showUploadList={false}>
-            <Button icon={<RiFolderUploadLine />} className="flex items-center">
-              Upload
-            </Button>
-          </Upload>
+           <Upload beforeUpload={handleUpload} showUploadList={false}>
+                <Button className="absolute left-2 bottom-2 p-2 rounded-full bg-gray-200 hover:bg-gray-300">
+                  +
+                </Button>
+              </Upload>
           <Button
             type="primary"
             htmlType="submit"
-            className="flex items-center rounded-lg"
+            className="absolute right-2 bottom-2 p-2 rounded-full bg-green-500 hover:bg-green-600"
             icon={<LuSendHorizonal />}
           >
-            Send
+          
           </Button>
-        </div>
+          </div>
+        </Form.Item>
+        
+       
+        
       </Form>
-
+</div>
       
     </div>
-  );
-};
+    </div>
+    );
+    };
+  
+
 
 export default CreateGenerallAI;
