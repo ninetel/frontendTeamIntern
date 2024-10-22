@@ -7,43 +7,6 @@ const ManageChat = ({ selectedUrl }) => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null);
-<<<<<<< HEAD
-  // const [userType, setUserType] = useState("");
-  // const [userMessages, setUserMessages] = useState([]);
-  // const messageEndRef = useRef(null);
-
-  // Dummy users and messages
-  const dummyUsers = [
-    { uid: '1', name: 'John Doe', lastMessage: 'Hello! Can you help me?', type: 'Auth Users' },
-    { uid: '2', name: 'Jane Smith', lastMessage: 'I am having issues with my order.', type: 'Guest Users' },
-    { uid: '3', name: 'Mike Johnson', lastMessage: 'Can I change my password?', type: 'Auth Users' },
-    { uid: '4', name: 'Emily Davis', lastMessage: 'I need support with my account.', type: 'Guest Users' },
-  ];
-
-  const dummyMessages = {
-    '1': [
-      { message: 'Hello! Can you help me?', username: 'John Doe', time: '2024-10-18T12:00:00Z' },
-      { message: 'Sure, how can I assist?', username: 'admin', time: '2024-10-18T12:05:00Z' },
-    ],
-    '2': [
-      { message: 'I am having issues with my order.', username: 'Jane Smith', time: '2024-10-18T12:10:00Z' },
-      { message: 'Can you provide more details?', username: 'admin', time: '2024-10-18T12:15:00Z' },
-    ],
-    '3': [
-      { message: 'Can I change my password?', username: 'Mike Johnson', time: '2024-10-18T12:20:00Z' },
-      { message: 'Yes, go to settings to update it.', username: 'admin', time: '2024-10-18T12:25:00Z' },
-    ],
-    '4': [
-      { message: 'I need support with my account.', username: 'Emily Davis', time: '2024-10-18T12:30:00Z' },
-      { message: 'How can we assist you?', username: 'admin', time: '2024-10-18T12:35:00Z' },
-    ],
-  };
-
-  const handleUserSelect = (userId) => {
-    // Set the selected user's chat messages
-    setSelectedChat({ uid: userId, messages: dummyMessages[userId] });
-  };
-=======
   const [userType, setUserType] = useState("");
   const [userMessages, setUserMessages] = useState([]); // State to store messages of the selected user
   const [staffId, setStaffId] = useState(null); // State to store staff ID
@@ -54,7 +17,7 @@ const ManageChat = ({ selectedUrl }) => {
   useEffect(() => {
     // Get the user ID from localStorage
     const storedUserId = localStorage.getItem('currentUserId');
-    
+
     // Set the userId state if found
     if (storedUserId) {
       setUserId(storedUserId);
@@ -69,7 +32,7 @@ const ManageChat = ({ selectedUrl }) => {
       if (staffId) {
         try {
           const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/usar/user/${staffId}`, {
-           // headers: {
+            // headers: {
             //  Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // Include your auth token if required
             //},
           });
@@ -83,7 +46,6 @@ const ManageChat = ({ selectedUrl }) => {
     fetchUserIds(); // Call the function to fetch user IDs
   }, [staffId]); // Run this effect when staffId changes
 
->>>>>>> 752afd1398fec11351f87428625c8ab9e2db51dd
 
   useEffect(() => {
     const fetchData = async () => {
@@ -188,51 +150,37 @@ const ManageChat = ({ selectedUrl }) => {
   //   ? sortedMembers.filter((chat) => chat.type === userType)
   //   : sortedMembers;
 
-  return (
+  return <>
     <div className="flex h-screen w-full">
-      <div className="w-1/3 shadow-md rounded-lg overflow-hidden">
-        {/* <div className="p-4 border-b border-gray-200">
+      {/* <div className="w-1/3 shadow-md rounded-lg overflow-hidden"> */}
+      {/* <div className="p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800 text-center py-2">
             Chat List for {selectedUrl}
           </h2>
-<<<<<<< HEAD
-          <select
-            onChange={handleUserTypeChange}
-            value={userType}
-            className="w-full p-2 border rounded mb-4"
-          >
-            <option value="">All Users</option>
-            <option value="Auth Users">Auth Users</option>
-            <option value="Guest Users">Guest Users</option>
-          </select>
-        </div> */}
-=======
           {staffId && <p>Staff ID: {staffId}</p>} {/* Display staff ID */}
-        </div>
->>>>>>> 752afd1398fec11351f87428625c8ab9e2db51dd
-        <div className="p-4 overflow-y-auto h-full space-y-4">
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer">Hello</div>
-          {/* {sortedMembers.map((chat, index) => (
-            <div
-              key={index}
-              className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
-              onClick={() => handleUserSelect(chat.uid)}
-            >
-              <p className="font-semibold text-gray-900">User ID: {chat.uid}</p>
-              <p className="text-gray-600 truncate">{chat.message}</p>
-            </div>
-          ))} */}
-           {dummyUsers.map((user, index) => (
-            <div
-              key={index}
-              className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
-              onClick={() => handleUserSelect(user.uid)}
-            >
-              <p className="font-semibold text-gray-900">{user.name}</p>
-              <p className="text-gray-600 truncate">{user.lastMessage}</p>
-            </div>
-          ))}
-        </div>
+      {/* </div> */}
+      <div className="p-4 w-1/3 overflow-y-auto h-full space-y-4">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer">Hello</div>
+        {sortedMembers.map((chat, index) => (
+          <div
+            key={index}
+            className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
+            onClick={() => handleUserSelect(chat.uid)}
+          >
+            <p className="font-semibold text-gray-900">User ID: {chat.uid}</p>
+            <p className="text-gray-600 truncate">{chat.message}</p>
+          </div>
+        ))}
+        {/* {dummyUsers.map((user, index) => (
+          <div
+            key={index}
+            className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
+            onClick={() => handleUserSelect(user.uid)}
+          >
+            <p className="font-semibold text-gray-900">{user.name}</p>
+            <p className="text-gray-600 truncate">{user.lastMessage}</p>
+          </div>
+        ))} */}
       </div>
 
       <div className="w-2/3 bg-gray-50 p-4 flex flex-col">
@@ -243,10 +191,9 @@ const ManageChat = ({ selectedUrl }) => {
             <p className="text-gray-500">Select a chat to view messages</p>
           </div>
         )}
-        
       </div>
     </div>
-  );
+  </>;
 };
 
 export default ManageChat;

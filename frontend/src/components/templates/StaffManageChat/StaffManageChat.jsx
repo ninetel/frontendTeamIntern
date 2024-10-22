@@ -91,40 +91,14 @@ const StaffManageChat = () => {
             text="Add Contact"
             handleClick={handleRouteAddContact}
           />
-<<<<<<< HEAD
-
-          {/* <SidebarItem
-            icon={<TfiWrite size={30} />}
-            text="Manage Contact"
-            handleClick={handleRouteManageContact}
-          /> */}
-=======
  
->>>>>>> 752afd1398fec11351f87428625c8ab9e2db51dd
           <SidebarItem
             icon={<MdOutlineMarkChatRead size={30} />}
             text="Add Prompt"
             handleClick={handleRouteCreatePrompt}
           />
-<<<<<<< HEAD
-          {/* <SidebarItem
-            icon={<PiChatsTeardropLight size={30} />}
-            text="Manage Prompt"
-            handleClick={handleRouteManagePrompt}
-          /> */}
-          {/* <SidebarItem
-            icon={<IoSettingsOutline size={30} />}
-            text="Change Password"
-          /> */}
-          {/* <SidebarItem
-            icon={<IoChatbubbleEllipsesOutline size={30} />}
-            text="Chat"
-            handleClick={handleRouteChat}
-          /> */}
-=======
   
        
->>>>>>> 752afd1398fec11351f87428625c8ab9e2db51dd
           <SidebarItem
             icon={<PiChatsTeardropLight size={30} />}
             text="Chat"
@@ -133,26 +107,7 @@ const StaffManageChat = () => {
             active
           />
 
-<<<<<<< HEAD
-          {/* <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
-
-        /> */}
-          {/* <SidebarItem
-            icon={<LiaMailBulkSolid size={40} />}
-            text="Bulk Message"
-            handleClick={handleRouteBulkMessage}
-          /> */}
-          {/* <SidebarItem
-            icon={<FaUserClock size={40} />}
-            text="RTMS"
-            handleClick={handleRouteRTMS}
-          /> */}
-=======
          
->>>>>>> 752afd1398fec11351f87428625c8ab9e2db51dd
         </StaffSidebar>
       </Box>
       <Box
