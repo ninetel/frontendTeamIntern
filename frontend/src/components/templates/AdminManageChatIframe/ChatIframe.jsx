@@ -106,20 +106,19 @@ const AllowIframe = () => {
   }, []);
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <div style={{ height: "40%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-        <Button onClick={handleCopyMessage}>Get the Iframe</Button>
-        {message && (
-          <div style={{ marginTop: "16px", padding: "10px", border: "1px solid #ccc", borderRadius: "4px", width: "80%", maxWidth: "600px", wordWrap: "break-word" }}>
-            <Text code>{message}</Text>
-          </div>
-        )}
-      </div>
-
-      <div style={{ height: "60%", overflowY: "auto" }}>
-        <Button onClick={() => showModal(null)} style={{ margin: "16px" }}>
+    <div className="max-w-4xl mx-auto bg-gray-100 shadow-lg p-4 rounded-lg mt-6 w-2/3 sm:w-full h-fit">
+      <h1 className="text-center text-3xl font-bold text-gray-600 mb-6">Magage Chart IFrame 👉</h1>
+      <div className=" flex p-2 gap-4">
+        <Button onClick={() => showModal(null)} className=" font-semibold hover:bg-yellow-500 bg-green-400 rounded-xl text-xl p-2" >
           Add New URL
         </Button>
+        <Button onClick={handleCopyMessage} className=" font-semibold hover:bg-yellow-500 bg-green-400 rounded-xl text-xl">Get the Iframe</Button>
+
+
+      </div>
+
+      <div >
+
         <Modal
           title={editingUrl ? "Edit URL" : "Add New URL"}
           visible={isModalVisible}
@@ -154,6 +153,14 @@ const AllowIframe = () => {
           />
         )}
       </div>
+
+      {message && (
+        <div className=" bg-white shadow-lg p-4 pt-4 rounded-lg w-full h-fit border-x-orange-400">
+      <h1 className="text-center text-2xl font-bold text-gray-600 mb-2">IFrame <span className="text-gray-400 font-normal">⇛</span> </h1>
+
+          <Text code>{message}</Text>
+        </div>
+      )}
     </div>
   );
 };
