@@ -26,24 +26,6 @@ const authenticateJWT = (req, res, next) => {
     res.status(401).json({ error: "No accessToken provided" });
   }
 
-//   try {
-//     const jwtToken = req.cookies.token;
-//     console.log("jwtToken", jwtToken);
-
-//     if (!jwtToken) return res.status(401).json({ error: "user not authorized!" })
-
-//     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET)
-
-//     if(!decoded){
-//         return res.status(401).json({ error: "Invalid!" })
-//     }
-
-//     // pass the data to requested route
-//     req.user = decoded.user
-//     next()
-// } catch (error) {
-//     res.status(401).json({ error: "Invalid token" })
-// }
 };
 
 // Middleware to authorize roles

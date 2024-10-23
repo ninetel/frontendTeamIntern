@@ -25,6 +25,7 @@ export const fetchLoggedInUserInfo = async (accessToken, role) => {
   }
   if (role === "admin") {
     try {
+      console.log("access tkn", accessToken);
       // console.log("Inside of fetching admin");
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/admin/info`,

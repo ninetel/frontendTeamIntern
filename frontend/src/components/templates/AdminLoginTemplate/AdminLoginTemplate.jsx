@@ -39,6 +39,7 @@ const AdminLoginTemplate = () => {
     queryFn: () => fetchLoggedInUserInfo(accessToken, "admin"),
     enabled: fetchAdminInfo,
   });
+  
   useEffect(() => {
     if (isSuccess && data) {
       // console.log("data inside of useEffect", data);
