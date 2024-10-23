@@ -174,16 +174,24 @@ import { FaHome } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { TfiWrite } from "react-icons/tfi";
 import { IoChatbubbleEllipsesOutline, IoSettingsOutline } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router-dom";
 import { MdOutlineMarkChatRead } from "react-icons/md";
 import { PiChatsTeardropLight } from "react-icons/pi";
 import { LiaMailBulkSolid } from "react-icons/lia";
 
 import { FaUserClock } from "react-icons/fa";
+import { Button } from "antd";
+// import { useRouter } from "next/router";
 
 
 const AdminDashboard = () => {
+
   const navigate = useNavigate();
+  const buttonClick = () => {
+    console.log("hhgfdfgi");
+    localStorage.clear();
+    navigate("/admin/login");
+  }
   const userInfo = useSelector(
     (state) => state.currentLoggedInUser?.userInfo || {}
   );
@@ -232,13 +240,13 @@ const AdminDashboard = () => {
   const handleRouteRTMS = () => {
     navigate("/admin/dashboard/RTMS");
   };
-  const handleRouteChatIframe=()=>{
+  const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
 
   return (
     <Box sx={{ display: "flex" }}>
-       <Box sx={{ width: "250px" }}>
+      <Box sx={{ width: "250px" }}>
         <StaffSidebar>
           <SidebarItem
             icon={<FaHome size={30} />}
@@ -290,11 +298,11 @@ const AdminDashboard = () => {
           />
 
           <SidebarItem
-          icon={<PiChatsTeardropLight size={30} />}
-          text="Manage Chat Iframe"
-          handleClick={handleRouteChatIframe}
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat Iframe"
+            handleClick={handleRouteChatIframe}
 
-        />
+          />
           <SidebarItem
             icon={<LiaMailBulkSolid size={40} />}
             text="Bulk Message"
@@ -393,6 +401,11 @@ const AdminDashboard = () => {
                 <Typography variant="h6" gutterBottom>
                   Role: {userInfo?.role || "N/A"}
                 </Typography>
+                <div className="">
+                  <Button className=" text-xl bg-red-500 hover:bg-red-700 rounded-xl p-2 px-4" onClick={buttonClick} >
+                    LogOut
+                  </Button>
+                </div>
               </Box>
             </Paper>
           </Container>
