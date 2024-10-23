@@ -90,8 +90,8 @@ router.post(
 // Route to get all prompts
 router.get(
   "/prompts",
-  authenticateJWT,
-  authorizeRoles("admin", "staff"),
+  //authenticateJWT,
+  //authorizeRoles("admin", "staff"),
   async (req, res) => {
     try {
       const prompts = await Prompt.find(); // Fetch all prompts

@@ -51,7 +51,7 @@ const CreateSignal = () => {
             formData.append("signalImage", file);
 
             const response = await axios.post(
-              `${import.meta.env.VITE_BACKEND_URL}/sikinchaa/upload`,
+              `${import.meta.env.VITE_BACKEND_URL}/api/signal/upload`,
               formData,
               {
                 headers: {
@@ -68,7 +68,7 @@ const CreateSignal = () => {
           };
 
           await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/sikinchaa/create_signal`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/signal/create_signal`,
             signalData,
             {
               headers: {

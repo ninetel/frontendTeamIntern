@@ -4,6 +4,8 @@ import { Card, Col, Row, Button, Rate, Modal, Form, Input, Upload } from "antd";
 import axios from "axios";
 import { useAppSelector } from "../../../../store/store";
 import { TbUpload } from "react-icons/tb";
+import ButtonComponent from './ButtonComponent.jsx'; // Adjust the path as needed
+
 import {
   fetchPrompts,
   createPrompt,
@@ -14,10 +16,10 @@ import {
   getPrompt,
 } from "../../../../api/Query/promptQueries";
 
-const API_URL = "${import.meta.env.VITE_BACKEND_URL}/sikinchaa";
+const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/prompt`;
 
 const AdminManagePromptOrg = () => {
-  console.log("Inside of Admin Manage prompt");
+  console.log("Inside of Adminyyy Manage prompt");
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
   );
@@ -136,13 +138,19 @@ const AdminManagePromptOrg = () => {
         style={{ width: "100%" }}
         gutter={[16, 16]} // Optional: Adds space between columns and rows
       >
-        {Array.isArray(prompts) && prompts.map((prompt) => (
+        {console.log("prompts")}
+        {console.log(prompts.prompts)}
+        {console.log("prompts")}
+
+        {/* {Array.isArray(prompts) && prompts.map((prompt) => (
+         
           <Col span={12} key={prompt.id}>
             <Card
               title={`${prompt.promptTitle}`}
               key={`${prompt._id}`}
               bordered={false}
             >
+              
               <p>Created Date: {prompt.createdDate}</p>
               <p>prompt Description: {prompt.promptDescription}</p>
               <p>Status: {prompt.status}</p>
@@ -155,7 +163,7 @@ const AdminManagePromptOrg = () => {
                   // paddingLeft: "20px"
                 }}
               >
-                <Button
+                 <ButtonComponent
                   style={{
                     backgroundColor: "#33b249",
                     borderColor: "#33b249",
@@ -164,9 +172,8 @@ const AdminManagePromptOrg = () => {
                   onClick={() => handleApprove(prompt._id)}
                 >
                   Approve
-                </Button>
-                <Button
-                  type="primary"
+                  </ButtonComponent>
+                <ButtonComponent
                   style={{
                     backgroundColor: "#faad14",
                     borderColor: "#faad14",
@@ -175,21 +182,77 @@ const AdminManagePromptOrg = () => {
                   onClick={() => handleReject(prompt._id)}
                 >
                   Reject
-                </Button>
-                <Button type="default" onClick={() => showEditModal(prompt)}>
+                  </ButtonComponent>
+                <ButtonComponent
+                  type="default"
+                  onClick={() => showEditModal(prompt)}
+                >
                   Edit
-                </Button>
-                <Button
+                  </ButtonComponent>
+                <ButtonComponent
                   danger
                   type="primary"
                   onClick={() => handleDelete(prompt._id)}
                 >
                   Delete
-                </Button>
+                  </ButtonComponent>
               </div>
             </Card>
           </Col>
-        ))}
+        ))} */}
+{Array.isArray(prompts.prompts) &&
+          prompts.prompts.map((prompt) => (
+            <Col span={12} key={prompt._id}>
+              <Card
+                title={prompt.promptTitle}
+                bordered={false}
+              >
+                <p>Created Date: {new Date(prompt.createdDate).toLocaleString()}</p>
+                <p>Prompt Description: {prompt.promptDescription}</p>
+                <p>Status: {prompt.status}</p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginTop: "20px",
+                    paddingRight: "80px",
+                  }}
+                >
+                  <Button
+                    style={{
+                      backgroundColor: "#33b249",
+                      borderColor: "#33b249",
+                      color: "#fff",
+                    }}
+                    onClick={() => handleApprove(prompt._id)}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "#faad14",
+                      borderColor: "#faad14",
+                      color: "#fff",
+                    }}
+                    onClick={() => handleReject(prompt._id)}
+                  >
+                    Reject
+                  </Button>
+                  <Button type="default" onClick={() => showEditModal(prompt)}>
+                    Edit
+                  </Button>
+                  <Button
+                    danger
+                    type="primary"
+                    onClick={() => handleDelete(prompt._id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </Card>
+            </Col>
+          ))}
+          
       </Row>
       <Modal
         title="Edit prompt"

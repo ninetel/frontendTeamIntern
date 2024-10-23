@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, Col, Row, Button, Rate, Modal, Form, Input, Upload } from "antd";
+import { Card, Col, Row, Button, Modal, Form, Input, Upload } from "antd";
 import axios from "axios";
 import { useAppSelector } from "../../../../store/store";
 import { TbUpload } from "react-icons/tb";
@@ -12,18 +12,10 @@ import {
   getSignal,
 } from "../../../../api/Query/SignalQueries";
 
-const API_URL = `${import.meta.env.VITE_BACKEND_URL}/sikinchaa`;
-
 const ManageSignal = () => {
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
   );
-
-  // console.log("accessToken", accessToken);
-  // console.log("accessToken", accessToken);
-  // const [signals, setSignals] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
 
   // Fetch all signals
   const {
@@ -37,16 +29,6 @@ const ManageSignal = () => {
     queryFn: () => fetchSignals(accessToken),
     enabled: !!accessToken,
   });
-  console.log("data***********", signals);
-
-  useEffect(() => {
-    const response = axios.get(`${API_URL}/signals`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    console.log("response+++++++++++++++", response);
-  },[])
 
   // Mutation for deleting a signal
   const mutationDelete = useMutation({
@@ -60,17 +42,15 @@ const ManageSignal = () => {
   const mutationEdit = useMutation({
     mutationFn: ({ id, data }) => editSignal({ id, data, accessToken }),
     onSuccess: () => {
-      // invalidateQueries(["signals"]);
       refetch();
     },
   });
 
   // State for managing modal visibility and form data
-  // State for managing modal visibility and form data
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSignal, setEditingSignal] = useState(null);
   const [values, setValues] = useState({});
-  console.log("editSignal", editingSignal);
+  const [form] = Form.useForm();
 
   const showEditModal = (signal) => {
     setEditingSignal(signal);
@@ -78,18 +58,16 @@ const ManageSignal = () => {
     setValues(signal);
     setIsModalOpen(true);
   };
-  const [form] = Form.useForm();
-  const handleEdit = () => {
-    console.log("handle edit called ******");
-    console.log("edit values in handleEdit", values);
 
+  const handleEdit = () => {
     mutationEdit.mutate({ id: editingSignal._id, data: values });
     setIsModalOpen(false);
   };
+
   const handleDelete = (id) => {
-    console.log("handleDelete called");
     mutationDelete.mutate(id);
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({
@@ -98,64 +76,19 @@ const ManageSignal = () => {
     }));
   };
 
-  /* upload images */
-  {
-    /* <Form.Item label="Signal Image">
-            <Upload
-              showUploadList={{ showRemoveIcon: false }} // Prevent showing remove icon
-            >
-              <Button
-                style={{ padding: "20px 850px 20px 20px" }}
-                icon={<TbUpload />}
-              >
-                Choose File
-              </Button>
-            </Upload>
-          </Form.Item> */
-  }
-
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
-  //   const fetchSignals = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         "${import.meta.env.VITE_BACKEND_URL}/sikinchaa/signals",
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${accessToken}`,
-  //           },
-  //         }
-  //       );
-  //       console.log("response", response);
-  //       if (response.statusText !== "OK") {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       setSignals(response);
-  //     } catch (error) {
-  //       console.log("error", error);
-  //       // setError(error.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
 
-  //   fetchSignals();
-  // }, []);
   return (
     <div>
       <Row gutter={30}>
-        { Array.isArray(signals)  && signals.map((signal) => (
+        {signals.map((signal) => (
           <Col span={8} key={signal.id}>
             <Card
               title={`${signal.signalTitle} ${signal.signalType}`}
-              key={`${signal._id}`}
+              key={signal._id}
               bordered={false}
             >
-              {/* <img
-                src={signal.signalImage}
-                alt={`${signal.signalTitle}`}
-                style={{ width: "100%", height: "auto", marginBottom: "10px" }}
-              /> */}
               {Array.isArray(signal.signalImage) ? (
                 signal.signalImage.map((url, index) => (
                   <img
@@ -174,7 +107,6 @@ const ManageSignal = () => {
               ) : (
                 <p>No image available</p>
               )}
-
               <p>Sector: {signal.sector}</p>
               <p>Open Price: {signal.openPrice}</p>
               <p>Book Profit(1): {signal.bookProfit1}</p>
@@ -185,7 +117,6 @@ const ManageSignal = () => {
               <p>Buy Range(3): {signal.buyRange3}</p>
               <p>Stop Loss: {signal.stopLoss}</p>
               <p>Time Frame: {signal.timeFrame}</p>
-              {/* <p>Image url: {signal.signalImage}</p> */}
               <p>Image URLs:</p>
               {Array.isArray(signal.signalImage) ? (
                 signal.signalImage.map((url, index) => (
@@ -204,7 +135,6 @@ const ManageSignal = () => {
               ) : (
                 <p>No image available</p>
               )}
-
               <p>Signal Status: {signal.status}</p>
               <p>Signal Description: {signal.signalDescription}</p>
               <div
@@ -312,13 +242,6 @@ const ManageSignal = () => {
               value={values.timeFrame}
             />
           </Form.Item>
-          {/* <Form.Item label="Image url">
-            <Input
-              name="signalImage"
-              onChange={(e)=>handleChange(e)}
-              value={values.signalImage}
-            />
-          </Form.Item> */}
           <Form.Item label="Image URLs">
             {Array.isArray(values.signalImage) ? (
               values.signalImage.map((url, index) => (
@@ -354,35 +277,21 @@ const ManageSignal = () => {
             ) : (
               <Input
                 name="signalImage"
-                onChange={(e) => {
-                  setValues((prevValues) => ({
-                    ...prevValues,
-                    signalImage: [e.target.value],
-                  }));
-                }}
+                onChange={handleChange}
                 value={values.signalImage}
-                style={{ marginBottom: "10px" }}
               />
             )}
             <Button
-              type="dashed"
+              type="primary"
               onClick={() => {
                 setValues((prevValues) => ({
                   ...prevValues,
-                  signalImage: [...(Array.isArray(values.signalImage) ? values.signalImage : []), ''],
+                  signalImage: [...(values.signalImage || []), ""],
                 }));
               }}
             >
-              Add URL
+              Add Image
             </Button>
-          </Form.Item>
-
-          <Form.Item label="Signal Status">
-            <Input
-              name="status"
-              onChange={handleChange}
-              value={values.status}
-            />
           </Form.Item>
           <Form.Item label="Signal Description">
             <Input
@@ -391,11 +300,16 @@ const ManageSignal = () => {
               value={values.signalDescription}
             />
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" onClick={handleEdit}>
-              Save Changes
-            </Button>
+          <Form.Item label="Signal Status">
+            <Input
+              name="status"
+              onChange={handleChange}
+              value={values.status}
+            />
           </Form.Item>
+          <Button type="primary" onClick={handleEdit}>
+            Update Signal
+          </Button>
         </Form>
       </Modal>
     </div>
@@ -403,5 +317,3 @@ const ManageSignal = () => {
 };
 
 export default ManageSignal;
- 
-

@@ -39,7 +39,7 @@ const AddPrompt = () => {
         const promptValues = { createdDate, ...values };
         try {
           const response = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/sikinchaa/create_prompt`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/prompt/create_prompt`,
             promptValues,
             {
               headers: {

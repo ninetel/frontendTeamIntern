@@ -9,14 +9,15 @@ import {
   createPrompt,
   deletePrompt,
   editPrompt,
+  approvePrompt,
+  rejectPrompt,
   getPrompt,
 } from "../../../../api/Query/promptQueries";
-
-const ManagePrompt = () => {
+const AdminManagePromptOrg = () => {
+  console.log("Inside of Adminii Manage prompt");
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
   );
-
   // Fetch all prompts
   const {
     data: prompts,
@@ -30,7 +31,6 @@ const ManagePrompt = () => {
     enabled: !!accessToken,
   });
   console.log("data", prompts);
-
   // Mutation for deleting a prompt
   const mutationDelete = useMutation({
     mutationFn: (id) => deletePrompt(id, accessToken),
@@ -38,7 +38,6 @@ const ManagePrompt = () => {
       refetch();
     },
   });
-
   // Mutation for updating a prompt
   const mutationEdit = useMutation({
     mutationFn: ({ id, data }) => editPrompt({ id, data, accessToken }),
@@ -47,12 +46,35 @@ const ManagePrompt = () => {
       refetch();
     },
   });
-
+  // Mutation for updating a prompt
+  const mutationApprovePrompt = useMutation({
+    mutationFn: ({ id, data }) => {
+      // Set the status to "approved" before calling the editPrompt function
+      const updatedData = { ...data, status: "approved" };
+      return editPrompt({ id, data: updatedData, accessToken });
+    },
+    onSuccess: () => {
+      // invalidateQueries(["prompts"]);
+      refetch();
+      alert("Prompt approved");
+    },
+  });
+  // Mutation for updating a prompt
+  const mutationRejectPrompt = useMutation({
+    mutationFn: ({ id, data }) => {
+      const updatedData = { ...data, status: "rejected" };
+      return editPrompt({ id, data: updatedData, accessToken });
+    },
+    onSuccess: () => {
+      // invalidateQueries(["prompts"]);
+      refetch();
+      alert("Prompt rejected");
+    },
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState(null);
   const [values, setValues] = useState({});
   // console.log("editprompt", editingPrompt);
-
   const showEditModal = (prompt) => {
     setEditingPrompt(prompt);
     form.setFieldsValue(prompt);
@@ -61,15 +83,17 @@ const ManagePrompt = () => {
   };
   const [form] = Form.useForm();
   const handleEdit = () => {
-    // console.log("handle edit called ******");
-    // console.log("edit values in handleEdit", values);
-
     mutationEdit.mutate({ id: editingPrompt._id, data: values });
     setIsModalOpen(false);
   };
+  const handleApprove = (id) => {
+    mutationApprovePrompt.mutate({ id: id, data: values });
+  };
   const handleDelete = (id) => {
-    console.log("handleDelete called");
     mutationDelete.mutate(id);
+  };
+  const handleReject = (id) => {
+    mutationRejectPrompt.mutate({ id: id, data: values });
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,15 +102,17 @@ const ManagePrompt = () => {
       [name]: value,
     }));
   };
-
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
-
   return (
-    <div>
-      <Row gutter={30}>
-        {Array.isArray(prompts) && prompts?.map((prompt) => (
-          <Col span={24} key={prompt.id}>
+    <div style={{ width: "100%" }}>
+      <Row
+        large
+        style={{ width: "100%" }}
+        gutter={[16, 16]} // Optional: Adds space between columns and rows
+      >
+        {prompts.map((prompt) => (
+          <Col span={12} key={prompt.id}>
             <Card
               title={`${prompt.promptTitle}`}
               key={`${prompt._id}`}
@@ -101,9 +127,30 @@ const ManagePrompt = () => {
                   justifyContent: "space-between",
                   marginTop: "20px",
                   paddingRight: "80px",
+                  // paddingLeft: "20px"
                 }}
               >
-                <Button type="primary">Result</Button>
+                <Button
+                  style={{
+                    backgroundColor: "#33b249",
+                    borderColor: "#33b249",
+                    color: "#fff",
+                  }}
+                  onClick={() => handleApprove(prompt._id)}
+                >
+                  Approve
+                </Button>
+                <Button
+                  type="primary"
+                  style={{
+                    backgroundColor: "#faad14",
+                    borderColor: "#faad14",
+                    color: "#fff",
+                  }}
+                  onClick={() => handleReject(prompt._id)}
+                >
+                  Reject
+                </Button>
                 <Button type="default" onClick={() => showEditModal(prompt)}>
                   Edit
                 </Button>
@@ -159,5 +206,4 @@ const ManagePrompt = () => {
     </div>
   );
 };
-
-export default ManagePrompt;
+export default AdminManagePromptOrg;

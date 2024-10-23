@@ -163,19 +163,29 @@ router.post(
   }
 );
 // Route to get all signals
-router.get(
-  "/signals",
-  authenticateJWT,
-  authorizeRoles("admin", "staff"),
-  async (req, res) => {
-    try {
-      const signals = await Signal.find(); // Fetch all signals
-      res.status(200).json(signals);
-    } catch (error) {
-      res.status(500).json({ error: "Error fetching signals" });
-    }
+// router.get(
+//   "/signals",
+//   authenticateJWT,
+//   authorizeRoles("admin", "staff"),
+//   async (req, res) => {
+//     try {
+//       const signals = await Signal.find(); // Fetch all signals
+//       res.status(200).json(signals);
+//     } catch (error) {
+//       res.status(500).json({ error: "Error fetching signals" });
+//     }
+//   }
+// );
+//without jwt
+router.get('/signals', async (req, res) => {
+  try {
+    const signals = await Signal.find();
+    res.json(signals);
+  } catch (error) {
+    console.error('Error fetching signals:', error);
+    res.status(500).json({ error: 'Something broke!' });
   }
-);
+});
 
 // Route to edit a signal by ID
 router.put(

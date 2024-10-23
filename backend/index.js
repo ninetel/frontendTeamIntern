@@ -68,8 +68,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/staff", staffRoutes);
 app.use("/api/user", userRoutes);
-app.use("/sikinchaa", signalRoutes);
-app.use("/sikinchaa", promptRoutes);
+app.use("/api/signal", signalRoutes);
+app.use("/api/prompt", promptRoutes);
 app.use("/api/urls", urlRoutes);
 app.use("/api/usar", userStaffAssignmentRoutes);
 
