@@ -17,6 +17,13 @@ const adminData = [
     role: "admin",
     phoneNumber: "123-456-7892",
   },
+  {
+    name: "Admin Four",
+    email: "Anil@gmail.com",
+    password: "Itc123",
+    role: "admin",
+    phoneNumber: "123-456-7892",
+  },
 ];
 
 // const adminData = [
