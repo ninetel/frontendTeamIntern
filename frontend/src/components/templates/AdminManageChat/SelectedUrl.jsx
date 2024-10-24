@@ -4,7 +4,7 @@ const UrlSelection = ({ urlOptions, onSelect }) => {
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full">
       <div className=" max-w-4xl bg-white shadow-2xl p-8 rounded-lg  sm:w-full  ">
-        <h1 className="text-3xl mb-1 font-bold text-gray-700 p-4">Select Chat Section:</h1>
+        <h1 className="text-3xl mb-1 font-bold text-gray-700 p-4 text-center">Select Chat Section:</h1>
         <div class="w-full h-0.5 bg-gradient-to-r from-blue-500 via-gray-300 to-pink-500"></div>
 
 
