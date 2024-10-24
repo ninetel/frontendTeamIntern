@@ -6,12 +6,11 @@ import { LuSendHorizonal } from 'react-icons/lu';
 import { RiFolderUploadLine, RiChat1Line, RiImageLine, RiFileTextLine, RiCloseLine, RiMenuLine } from 'react-icons/ri';
 import { useAppSelector } from '../../../../store/store';
 import { useSelector } from 'react-redux';
-import { FaUser } from 'react-icons/fa'; // Import the admin icon
+import { FaUser } from 'react-icons/fa'; 
 import { v4 as uuidv4 } from 'uuid';
 
 const { TabPane } = Tabs;
-const socket = io('http://localhost:5005'); // Replace with your Flask server URL
-
+const socket = io('http://localhost:5005'); 
 const predefinedMessages = [
   'Hello, how can I assist you?',
   'Please provide more details.',
@@ -19,6 +18,9 @@ const predefinedMessages = [
   'Thank you for your patience.',
   'Can I help with anything else?'
 ];
+
+
+
 
 // const textLists = {
 //   'Chat': ['Chat message 1', 'Chat message 2', 'Chat message 3'],
@@ -215,7 +217,7 @@ const CreateGenerallAI = () => {
     setShowTextList(false);
     form.setFieldsValue({ message: text }); 
   };
-
+  const [activeQuestionId, setActiveQuestionId] = useState(null);
 
   const tabContent = {
     '1': {
@@ -259,7 +261,14 @@ const CreateGenerallAI = () => {
       ]
     }
   };
+    
+    const handleQuestionClick = (id) => {
+      setActiveQuestionId(id === activeQuestionId ? null : id); // toggle the active question
+    };
+  
+  
 
+  
   const faqData = [
     
     { id: 1, question: 'What is the best time to buy stocks?', answer: 'The best time to buy stocks depends on your investment strategy, but many investors recommend buying during market corrections or dips for long-term value.' },
@@ -268,8 +277,7 @@ const CreateGenerallAI = () => {
    
     ];
     
-  
-
+   
 const cardData = [
   { id: 1, content: 'content' },
   { id: 2, content: 'content' },
@@ -287,6 +295,7 @@ const tabsData = [
   { id: '2', label: 'Service' },
   { id: '3', label: 'FAQ' },
 ];
+
 
   return (
     <div className="flex flex-col absolute w-[400px] h-[500px] p-6 py-6 from-green-50 to-white shadow-lg rounded-lg">
@@ -351,75 +360,53 @@ const tabsData = [
       <div className="bg-green-500 text-white rounded p-3 -mt-10">
               <h1 className="text-lg font-bold">Welome to Sikkincha</h1>
               <p>नमस्ते, तपाईलाई स्वागत छ</p>
-            </div>
-            {/* <div className='flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg'>
-            <Tabs
-            defaultActiveKey="1"
-             items={tabsData.map(({ id, label }) => ({
-             key: id,
-             label,
-             children: id === '1' ? (
-          <div className="flex h-[200px] overflow-x-hidden overflow-y-scroll -mt-4">
-            <Row className="flex flex-wrap space-y-2" gutter={16}>
-              {cardData.map(({ id, content }, index) => (
-                <Col key={index} span={8}>
-                  <Card
-                    hoverable
-                    onClick={() => console.log(`Card ${id} clicked`)}
-                    style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                    bodyStyle={{ cursor: 'pointer' }}
-                  >
-                    {content}
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </div>
-        ) : (
-          `Content of Tab Pane ${id}`
-        ),
-      }))}
-    />
-  </div>             */}
-
+              </div>
+     
 <div className='flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg'>
-  <Tabs
-    defaultActiveKey="1"
-    items={tabsData.map(({ id, label }) => ({
-      key: id,
-      label,
-      children: id === '1' ? (
-        <div className="flex h-[200px] overflow-x-hidden overflow-y-scroll -mt-4">
-          <Row className="flex flex-wrap space-y-2" gutter={16}>
-            {cardData.map(({ id, content }, index) => (
-              <Col key={index} span={8}>
-                <Card
-                  hoverable
-                  onClick={() => console.log(`Card ${id} clicked`)}
-                  style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                  bodyStyle={{ cursor: 'pointer' }}
-                >
-                  {content}
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </div>
-      ) : id === '3' ? (
-        <div className="flex flex-col space-y-4 h-[200px] overflow-y-scroll">
-          {faqData.map(({ id, question, answer }) => (
-            <div key={id} className="p-4 bg-white rounded shadow-sm ">
-              <h3 className="text-lg font-semibold">{question}</h3>
-              <p className="mt-2 text-gray-600">{answer}</p>
+      <Tabs
+        defaultActiveKey="1"
+        items={tabsData.map(({ id, label }) => ({
+          key: id,
+          label,
+          children: id === '1' ? (
+            <div className="flex h-[200px] overflow-x-hidden overflow-y-scroll -mt-4">
+              <Row className="flex flex-wrap space-y-2" gutter={16}>
+                {cardData.map(({ id, content }, index) => (
+                  <Col key={index} span={8}>
+                    <Card
+                      hoverable
+                      onClick={() => console.log(`Card ${id} clicked`)}
+                      style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                      bodyStyle={{ cursor: 'pointer' }}
+                    >
+                      {content}
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
             </div>
-          ))}
-        </div>
-      ) : (
-        `Content of Tab Pane ${id}`
-      ),
-    }))}
-  />
-</div>
+          ) : id === '3' ? (
+            <div className="flex flex-col space-y-4 h-[200px] overflow-y-scroll">
+              {faqData.map(({ id, question, answer }) => (
+                <div key={id} className="p-4 bg-white shadow-sm text-green-500 rounded ">
+                  <h3
+                    className="text-sm font-semibold cursor-pointer"
+                    onClick={() => handleQuestionClick(id)}
+                  >
+                    {question}
+                  </h3>
+                  {activeQuestionId === id && (
+                    <p className="mt-2 text-gray-600">{answer}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            `Content of Tab Pane ${id}`
+          ),
+        }))}
+      />
+    </div>
             <div className='fixed w-[329px] bottom-0'>
             <div className="flex flex-col text-center mt-4 flex-grow overflow-auto">
         <div className="flex flex-col  space-y-2 mb-2">
@@ -503,4 +490,5 @@ const tabsData = [
     </div>
     );
     };
+  
 export default CreateGenerallAI;
