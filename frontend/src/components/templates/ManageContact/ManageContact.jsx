@@ -10,7 +10,7 @@ const { Option } = Select;
 
 const ManageContact = () => {
   const [contactTypes, setContactTypes] = useState([]);
-  const [selectedType, setSelectedType] = useState(null);
+  const [selectedType, setSelectedType] = useState("Customer");
   const [contacts, setContacts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingContact, setEditingContact] = useState(null);
@@ -19,11 +19,13 @@ const ManageContact = () => {
 
   const accessToken = useAppSelector((state) => state.authentication.accessToken);
 
+  console.log("contact type data are_____________",contactTypes)
+
   useEffect(() => {
     const fetchContactTypes = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/contacts/types`);
-        setContactTypes(response.data);
+        setContactTypes(response?.data);
       } catch (error) {
         console.error("Error fetching contact types:", error);
       }
@@ -153,13 +155,18 @@ const ManageContact = () => {
   ];
 
   return (
-    <div className=" mx-auto bg-white p-8 rounded-xl shadow-lg h-fit my-16">
-      <h2 className="text-2xl font-semibold mb-4">Manage Contacts</h2>
+    <div className=" mx-auto bg-white p-8 rounded-xl shadow-lg h-fit my-8">
+      <h2 className="text-5xl font-bold p-4 text-center">Manage Contacts 📞</h2>
+      <div class="w-full h-0.5 bg-gradient-to-r from-blue-500 via-gray-300 to-pink-500"></div>
 
+      <div className=" mt-4 font-semibold text-2xl"> Select Contact: </div>
       <Select
-        className="w-72 mb-10 border-green-600 border-2 border-r-2 rounded-lg"
-        placeholder="Select a Contact Type"
-        onChange={(value) => setSelectedType(value)}
+        className="w-72 mb-8  border-green-600 border-2 border-r-2 rounded-lg content-center  "
+        placeholder={<span className=' text-gray-800 font-semibold'>Select a Contact Type</span>}
+        onChange={(value) => setSelectedType(value) }
+        value={selectedType}
+        defaultValue={"Customer"}
+       
       >
         {contactTypes.map((type) => (
           <Option key={type} value={type}>
