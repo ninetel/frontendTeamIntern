@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Form, Input, Button, Upload, Tabs, List, Card, Col, Row }
  from 'antd';
 import io from 'socket.io-client';
@@ -83,10 +83,10 @@ const CreateGenerallAI = () => {
     };
   }, [typingEnded]);
   useEffect(() => {
-    // Function to get the URL and set it in state
+   
     const getCurrentUrl = () => {
-      const currentUrl = window.location.href; // Get the current page URL
-      const urlRegex = /https?:\/\/(www\.)?([^\/]+)\.com/; // Regex to match URLs
+      const currentUrl = window.location.href; 
+      const urlRegex = /https?:\/\/(www\.)?([^\/]+)\.com/; 
       const match = currentUrl.match(urlRegex);
       console.log("localhostts currentUrl== "+currentUrl)
       console.log("localhostts match== "+match)
@@ -96,16 +96,16 @@ const CreateGenerallAI = () => {
 
       if (match && match[2]) {
         const domainPart = match[2];
-        if (domainPart === 'nespsetrends') { // Replace with your condition
-          setUrlValue('nespsetrends'); // Set the value you want
+        if (domainPart === 'nespsetrends') { 
+          setUrlValue('nespsetrends');
         } else {
-          setUrlValue(domainPart); // Store the extracted domain part
+          setUrlValue(domainPart); 
         }
       }
     };
 
-    getCurrentUrl(); // Call the function to get the URL on component mount
-  }, []); // Empty dependency array to run only on mount
+    getCurrentUrl();
+  }, []); 
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -195,14 +195,14 @@ const CreateGenerallAI = () => {
   const handleSuggestionClick = (suggestion) => {
     setInputValue(suggestion);
     setShowSuggestions(false);
-    form.setFieldsValue({ message: suggestion }); // Set the suggestion in the form
+    form.setFieldsValue({ message: suggestion }); 
   };
 
   const handleIconClick = (iconText) => {
     setOpenedIcon(iconText);
     setTextSnippets(textLists[iconText] || []);
     setShowTextList(true);
-    setShowSuggestions(false); // Hide suggestions when icons are clicked
+    setShowSuggestions(false); 
   };
 
   const handleBack = () => {
@@ -213,7 +213,7 @@ const CreateGenerallAI = () => {
   const handleTextClick = (text) => {
     setInputValue(text);
     setShowTextList(false);
-    form.setFieldsValue({ message: text }); // Set the clicked text in the form
+    form.setFieldsValue({ message: text }); 
   };
 
 
@@ -259,6 +259,34 @@ const CreateGenerallAI = () => {
       ]
     }
   };
+
+  const faqData = [
+    
+    { id: 1, question: 'What is the best time to buy stocks?', answer: 'The best time to buy stocks depends on your investment strategy, but many investors recommend buying during market corrections or dips for long-term value.' },
+    { id: 2, question: 'How can I track stock market performance?', answer: 'You can track the stock market using financial news outlets, stock market apps, or by monitoring indices like the S&P 500 or Dow Jones Industrial Average.' },
+    { id: 3, question: 'Can I change or cancel a stock order?', answer: 'You can modify or cancel a stock order before it is executed, but once it is processed by the exchange, it is final.' }
+   
+    ];
+    
+  
+
+const cardData = [
+  { id: 1, content: 'content' },
+  { id: 2, content: 'content' },
+  { id: 3, content: 'content' },
+  { id: 4, content: 'content' },
+  { id: 5, content: 'content' },
+  { id: 6, content: 'content' },
+  { id: 7, content: 'content' },
+  { id: 8, content: 'content' },
+  { id: 9, content: 'content' },
+];
+
+const tabsData = [
+  { id: '1', label: 'Help' },
+  { id: '2', label: 'Service' },
+  { id: '3', label: 'FAQ' },
+];
 
   return (
     <div className="flex flex-col absolute w-[400px] h-[500px] p-6 py-6 from-green-50 to-white shadow-lg rounded-lg">
@@ -320,128 +348,81 @@ const CreateGenerallAI = () => {
       )} */}
 
 <div className="">
-      {/* <div className="flex flex-col mt-4 flex-grow overflow-auto"> */}
       <div className="bg-green-500 text-white rounded p-3 -mt-10">
               <h1 className="text-lg font-bold">Welome to Sikkincha</h1>
               <p>नमस्ते, तपाईलाई स्वागत छ</p>
             </div>
-            <div className='flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg'>
-              <Tabs
-                onChange={onChange}
-                type="card"
-                items={new Array(3).fill(null).map((_, i) => {
-                  const id = String(i + 1);
-                  return {
-                    key: id,
-                    label: id === '1' ? 'Help' : id === '2' ? 'Service' : 'FAQ',
-                    children: id === '1' ? (
-                      <div className=' flex h-[200px] overflow-x-hidden overflow-y-scrol -mt-4'>
-                        <Row className=' flex flex-wrap space-y-2 '
-                          gutter={16}>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 1 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 1 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 1 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 2 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 3 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 3 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 3 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 3 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                          <Col span={8}>
-                            <Card
-                              hoverable
-                              onClick={() => console.log("Card 3 clicked")}
-                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
-                              bodyStyle={{ cursor: 'pointer' }}
-                            >
-                              content
-                            </Card>
-                          </Col>
-                        </Row>
-                      </div>
-                    ) : (
-                      `Content of Tab Pane ${id}`
-                    ),
-                  };
-                })}
-              />
+            {/* <div className='flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg'>
+            <Tabs
+            defaultActiveKey="1"
+             items={tabsData.map(({ id, label }) => ({
+             key: id,
+             label,
+             children: id === '1' ? (
+          <div className="flex h-[200px] overflow-x-hidden overflow-y-scroll -mt-4">
+            <Row className="flex flex-wrap space-y-2" gutter={16}>
+              {cardData.map(({ id, content }, index) => (
+                <Col key={index} span={8}>
+                  <Card
+                    hoverable
+                    onClick={() => console.log(`Card ${id} clicked`)}
+                    style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                    bodyStyle={{ cursor: 'pointer' }}
+                  >
+                    {content}
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        ) : (
+          `Content of Tab Pane ${id}`
+        ),
+      }))}
+    />
+  </div>             */}
+
+<div className='flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg'>
+  <Tabs
+    defaultActiveKey="1"
+    items={tabsData.map(({ id, label }) => ({
+      key: id,
+      label,
+      children: id === '1' ? (
+        <div className="flex h-[200px] overflow-x-hidden overflow-y-scroll -mt-4">
+          <Row className="flex flex-wrap space-y-2" gutter={16}>
+            {cardData.map(({ id, content }, index) => (
+              <Col key={index} span={8}>
+                <Card
+                  hoverable
+                  onClick={() => console.log(`Card ${id} clicked`)}
+                  style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
+                  bodyStyle={{ cursor: 'pointer' }}
+                >
+                  {content}
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      ) : id === '3' ? (
+        <div className="flex flex-col space-y-4 h-[200px] overflow-y-scroll">
+          {faqData.map(({ id, question, answer }) => (
+            <div key={id} className="p-4 bg-white rounded shadow-sm ">
+              <h3 className="text-lg font-semibold">{question}</h3>
+              <p className="mt-2 text-gray-600">{answer}</p>
             </div>
-          
-            
+          ))}
+        </div>
+      ) : (
+        `Content of Tab Pane ${id}`
+      ),
+    }))}
+  />
+</div>
             <div className='fixed w-[329px] bottom-0'>
             <div className="flex flex-col text-center mt-4 flex-grow overflow-auto">
-        <div className="flex flex-col bg-black space-y-2 mb-2">
+        <div className="flex flex-col  space-y-2 mb-2">
           {console.log(messages)}
           {messages.map((msg, index) => (
             <div
@@ -489,9 +470,6 @@ const CreateGenerallAI = () => {
           </ul>
         </div>
       )}
-
-
-      {/* Form */}
       <Form form={form} onFinish={onFinish} className="flex flex-col mt-4 relative bottom-6">
         <Form.Item name="message" className="w-full">
         <div className="relative flex">
@@ -517,10 +495,7 @@ const CreateGenerallAI = () => {
           
           </Button>
           </div>
-        </Form.Item>
-        
-       
-        
+        </Form.Item> 
       </Form>
 </div>
       
@@ -528,7 +503,4 @@ const CreateGenerallAI = () => {
     </div>
     );
     };
-  
-
-
 export default CreateGenerallAI;
