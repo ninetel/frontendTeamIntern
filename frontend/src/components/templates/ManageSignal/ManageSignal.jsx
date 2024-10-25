@@ -81,6 +81,8 @@ const ManageSignal = () => {
 
   return (
     <div>
+      <div className=" text-4xl font-bold text-center p-2 pt-6">Admin Manage Signals </div>
+
       <Row gutter={30}>
         {signals.map((signal) => (
           <Col span={8} key={signal.id}>
