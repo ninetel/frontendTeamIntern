@@ -8,10 +8,11 @@ import { useAppSelector } from '../../../../store/store';
 import { useSelector } from 'react-redux';
 import { FaUser } from 'react-icons/fa'; 
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 
 const { TabPane } = Tabs;
-const socket = io('http://localhost:5005'); 
+const socket = io('http://81.181.198.75:5003'); 
 const predefinedMessages = [
   'Hello, how can I assist you?',
   'Please provide more details.',
@@ -51,8 +52,17 @@ const CreateGenerallAI = () => {
   const [lastMessages, setLastMessages] = useState('');
   const uid = useRef(localStorage.getItem('uid') || uuidv4());
   const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
+  const [categories, setCategories] = useState([]);
 
   const messagesEndRef = useRef(null);
+  useEffect(() => {
+    fetchCategories();
+}, []);
+
+const fetchCategories = async () => {
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
+    setCategories(response.data);
+};
 
   useEffect(() => {
     localStorage.setItem('uid', uid.current);
@@ -302,7 +312,9 @@ const tabsData = [
 
 
   return (
+    
     <div className="flex flex-col absolute w-[400px] h-[500px] p-6 py-6 from-green-50 to-white shadow-lg rounded-lg">
+      {console.log(categories)}
       {/* Options Icon */}
       <div className="flex justify-between items-center mb-4">
         <div>
@@ -382,6 +394,7 @@ const tabsData = [
                       onClick={() => console.log(`Card ${id} clicked`)}
                       style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0' }}
                       bodyStyle={{ cursor: 'pointer' }}
+                      className="`${card.id === 1 ? 'mt-6' : ''}`"
                     >
                       {content}
                     </Card>

@@ -16,7 +16,8 @@ const contactRoutes = require("./routes/contactRoutes");
 const chatRoutes = require('./routes/chatRoutes');
 const urlRoutes = require("./routes/urlRoutes"); // Adjust the path to your urlRoutes file
 const userStaffAssignmentRoutes = require("./routes/userStaffAssignmentRoutes"); // Adjust the path to your urlRoutes file
-
+const categoryRoutes = require("./routes/categoryRoutes")
+const contentRoutes = require("./routes/contentRoutes")
 // Import middleware
 // const checkReferrer = require('./middleware/checkReferrer');
 
@@ -72,7 +73,8 @@ app.use("/api/signal", signalRoutes);
 app.use("/api/prompt", promptRoutes);
 app.use("/api/urls", urlRoutes);
 app.use("/api/usar", userStaffAssignmentRoutes);
-
+app.use("/api/categories",categoryRoutes)
+app.use("/api/contents",contentRoutes)
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -76,6 +76,13 @@ const AdminDashboard = () => {
   const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
+  const handleRouteCategoryManagementGeneralChat=()=>{
+    navigate("/admin/dashboard/manageCategory");
+
+  }  
+  const handleRouteContentManagementGeneralChat=()=>{
+    navigate("/admin/dashboard/manageContent");
+  }
 
   const isLoggedIn = localStorage.getItem('isLoggedIn');
 
@@ -155,7 +162,15 @@ const AdminDashboard = () => {
             icon={<FaUserClock size={30} />}
             text="RTMS"
             handleClick={handleRouteRTMS}
-          />
+          /><SidebarItem
+          icon={<FaUserClock size={30} />}
+          text="Category Management General Chat"
+          handleClick={handleRouteCategoryManagementGeneralChat}
+        /><SidebarItem
+        icon={<FaUserClock size={30} />}
+        text="Content Management General Chat"
+        handleClick={handleRouteContentManagementGeneralChat}
+      />
           
         </StaffSidebar>
       </div>
