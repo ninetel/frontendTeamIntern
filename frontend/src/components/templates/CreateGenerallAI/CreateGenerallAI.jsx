@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Form, Input, Button, Upload, Tabs, List, Card, Col, Row }
+import { Form, Input, Button, Upload, Tabs,Card, Col, Row }
  from 'antd';
 import io from 'socket.io-client';
 import { LuSendHorizonal } from 'react-icons/lu';
@@ -8,6 +8,8 @@ import { useAppSelector } from '../../../../store/store';
 import { useSelector } from 'react-redux';
 import { FaUser } from 'react-icons/fa'; 
 import { v4 as uuidv4 } from 'uuid';
+import { RxCross2 } from "react-icons/rx";
+import { LearnAndEarn,TradeSupport } from '../CreateGenerallAI/OptionData';
 
 
 const { TabPane } = Tabs;
@@ -220,6 +222,17 @@ const CreateGenerallAI = () => {
   };
   const [activeQuestionId, setActiveQuestionId] = useState(null);
   const [activeService, setActiveService] = useState(null);
+  const getServiceContent = (service) => {
+    switch (service) {
+      case 'Learn and Earn':
+        return LearnAndEarn;
+      case 'Trade Support':
+        return TradeSupport;
+     
+      default:
+        return [];
+    }
+  };
   const tabContent = {
     '1': {
       icon: <RiChat1Line />,
@@ -360,13 +373,12 @@ const tabsData = [
         </div>
       )} */}
 
-<div className="">
       <div className="bg-green-500 text-white rounded p-3 -mt-10">
               <h1 className="text-lg font-bold">Welome to Sikkincha</h1>
               <p>नमस्ते, तपाईलाई स्वागत छ</p>
               </div>
-    
-    <div className='flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg'>
+  
+    <div className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg">
       <Tabs
         defaultActiveKey="1"
         items={tabsData.map(({ id, label }) => ({
@@ -433,35 +445,26 @@ const tabsData = [
           ),
         }))}
       />
-      {activeService === 'Learn and Earn' && (
-  <div className="absolute top-20 left-0 mt-20 p-4 bg-white shadow-lg rounded-lg space-y-4 h-[250px] w-full max-w-lg overflow-y-scroll z-10">
-    <div className="flex justify-between items-center ">
-      <h4 className="text-lg font-bold">100+ Rich Content Training Videos</h4>
-      <button
-        className="text-gray-500 hover:text-gray-800"
-        onClick={() => setActiveService(null)}
-      >
-        ✖
-      </button>
-    </div>
-    <ul className="list-disc list-inside text-gray-700 mt-2">
-      <li>Technical Analysis Training (Basic)</li>
-      <li>Technical Analysis Training (Intermediate)</li>
-      <li>Technical Analysis Training (Advanced)</li>
-      <li>100+ Rich content training Videos</li>
-      <li>Technical Analysis Training (Basic)</li>
-      <li>Technical Analysis Training (Basic)</li>
-      <li>Technical Analysis Training (Advanced)</li>
-      <li>Smart Money Concepts</li>
-      <li>Fundamental analysis training</li>
-      <li>Free ebooks and resources</li>
-         Price Rs. (3500 for 3 months, 6000 for 6 months, 10000 for 1 year)
-    </ul>
-  </div>
 
+      {activeService && (
+        <div className="absolute top-20 left-0 mt-20 p-4 bg-white shadow-lg rounded-lg space-y-4 h-[250px] w-full max-w-lg overflow-y-scroll z-10">
+          <div className="flex justify-between items-center">
+            <h4 className="text-lg font-bold">{activeService}</h4>
+            <button
+              className="text-gray-500 hover:text-gray-800"
+              onClick={() => setActiveService(null)}
+            >
+              <RxCross2 />
+            </button>
+          </div>
+          <ul className="list-disc list-inside text-gray-700 mt-2">
+            {getServiceContent(activeService).map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
-
             <div className='fixed w-[329px] bottom-0'>
             <div className="flex flex-col text-center mt-4 flex-grow overflow-auto">
         <div className="flex flex-col  space-y-2 mb-2">
@@ -541,7 +544,7 @@ const tabsData = [
       </Form>
 </div>
       
-    </div>
+    
     </div>
     );
     };
