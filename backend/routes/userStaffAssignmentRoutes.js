@@ -70,18 +70,25 @@ router.put('/:uid', async (req, res) => {
 // Route to get all userIds by staffId
 router.get('/user/:staffId', async (req, res) => {
   const { staffId } = req.params;
+  console.log("jay shambho")
+  console.log(staffId)
 
   try {
+    console.log(staffId)
     // Find all user staff assignments based on the provided staffId
     const assignments = await UserStaffAssignment.find({ staffId });
-
+    console.log("assignments")
+    console.log(assignments)
+    console.log("assignments")
     if (!assignments || assignments.length === 0) {
       return res.status(404).json({ error: 'No staff assignments found' });
     }
 
     // Extract userIds from the assignments
-    const userIds = assignments.map(assignment => assignment.userId);
-
+    const userIds = assignments.map(assignment => assignment.uid);
+    console.log("uidpp")
+    console.log(userIds)
+    console.log("uidpp")
     // Return the list of userIds associated with the staffId
     res.json({ userIds });
   } catch (error) {

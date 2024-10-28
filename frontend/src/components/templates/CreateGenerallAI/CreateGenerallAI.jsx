@@ -12,7 +12,7 @@ import axios from 'axios';
 
 
 const { TabPane } = Tabs;
-const socket = io('http://81.181.198.75:5003'); 
+const socket = io('http://localhost:5003'); 
 const predefinedMessages = [
   'Hello, how can I assist you?',
   'Please provide more details.',

@@ -210,6 +210,38 @@ router.get('/last-messages/chat', async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
+
+  // Route to get the last message of each general user in the provided uid array
+router.post('/last-messages/general/selecteduid', async (req, res) => {
+  const { uids } = req.body; // Expecting an array of uids in the request body
+
+  if (!uids || !Array.isArray(uids) || uids.length === 0) {
+    return res.status(400).json({ error: 'Invalid or missing UID array' });
+  }
+
+  try {
+    const lastMessages = await Promise.all(
+      uids.map(async (uid) => {
+        const lastMessage = await GeneralChat.findOne({ uid })
+          .sort({ timestamp: -1 }) // Sort by timestamp in descending order
+          .limit(1); // Take the last (most recent) message
+          console.log("lastMessage")
+          console.log(lastMessage)
+          console.log("lastMessage")
+          return {
+          uid,
+          message: lastMessage ? lastMessage.message : 'No message found', // Assuming 'content' holds the message text
+          timestamp:lastMessage ? lastMessage.timestamp : 'NaN',
+        };
+      })
+    );
+
+    res.json({ lastMessages });
+  } catch (error) {
+    console.error('Error fetching last messages:', error);
+    res.status(500).json({ error: 'Error fetching last messages' });
+  }
+});
 //   router.get('/messages/:userId', async (req, res) => {
 //     try {
 //       const { userId } = req.params;
@@ -279,7 +311,48 @@ router.get('/messages/:userId', async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
-  
+
+
+// Get guest chat messages for a given user ID
+router.get('/guest-messages/:userId', async (req, res) => {
+  try {
+      const { userId } = req.params;
+
+      // Check if userId is a valid ObjectId
+      const isObjectId = mongoose.isValidObjectId(userId);
+      
+      let userDetails;
+
+      // If it's a valid ObjectId, search by ObjectId; otherwise, search by UUID
+      if (isObjectId) {
+          userDetails = await User.findById(userId);
+      } else {
+          userDetails = await User.findOne({ uid: userId }); // Assuming 'uuid' is the field name for UUIDs
+      }
+
+      let userNameAndNumber = "Guest"; // Default value
+      if (userDetails) {
+          userNameAndNumber = userDetails.name && userDetails.phoneNumber
+              ? `${userDetails.name} - ${userDetails.phoneNumber}`
+              : userDetails._id; // Show ObjectId if name or phone is missing
+      }
+
+      // Fetch messages (adjust as necessary)
+      const userMessages = await Chat.find({ uid: userId }).sort({ timestamp: 1 });
+      const generalUserMessages = await GeneralChat.find({ uid: userId }).sort({ timestamp: 1 });
+
+      // Combine all messages
+      const allMessages = [...userMessages, ...generalUserMessages];
+
+      // Respond with messages and user information
+      res.json({ allMessages, userNameAndNumber });
+  } catch (err) {
+      console.error('Error:', err);
+      res.status(500).json({ message: err.message });
+  }
+});
+
+
 router.post('/send-message', async (req, res) => {
     console.log(req.body); // Log the incoming request body
 
@@ -302,6 +375,7 @@ router.post('/send-message', async (req, res) => {
         await newMessage.save();
         return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
       } else {
+        console.log("zebra")
         let newMessage = new GeneralChat({
           sender,
           sender_id,
@@ -312,6 +386,7 @@ router.post('/send-message', async (req, res) => {
           uid,
           receiver_id,
         });
+        console.log(newMessage)
         await newMessage.save();
         return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
       }
