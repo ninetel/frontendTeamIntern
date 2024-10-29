@@ -15,7 +15,7 @@ import SubCat from '../../SubCat';
 
 
 const { TabPane } = Tabs;
-const socket = io('http://81.181.198.75:5003');
+const socket = io('http://81.181.198.75:5003'); 
 const predefinedMessages = [
   'Hello, how can I assist you?',
   'Please provide more details.',
@@ -53,23 +53,20 @@ const CreateGenerallAI = () => {
   const [showTextList, setShowTextList] = useState(false);
   const [showOptions, setShowOptions] = useState(true); // State to track options visibility
   const [lastMessages, setLastMessages] = useState('');
-  const uid = useRef(localStorage.getItem('uid') || uuidv4());
+  const uidValue = localStorage.getItem('uid') ? 1 : 0;
+const uid = useRef(localStorage.getItem('uid') || uuidv4());
   const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
   const [categories, setCategories] = useState([]);
-  // const [subCategorie, setSubCategorie] = useState([])
 
   const messagesEndRef = useRef(null);
   useEffect(() => {
     fetchCategories();
-  }, []);
+}, []);
 
-  const fetchCategories = async () => {
+const fetchCategories = async () => {
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
     setCategories(response.data);
-    // setSubCategorie(response?.data?.subCategories)
-  };
-
-  // console.log(subCategorie)
+};
 
   useEffect(() => {
     localStorage.setItem('uid', uid.current);
@@ -333,7 +330,7 @@ const CreateGenerallAI = () => {
   return (
 
     <div className="flex flex-col absolute w-[400px] h-[500px] p-6 py-6 from-green-50 to-white shadow-lg rounded-lg">
-      {/* {console.log(categories)} */}
+      {console.log(categories)}
       {/* Options Icon */}
       <div className="flex justify-between items-center mb-4">
         <div>

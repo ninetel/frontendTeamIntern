@@ -102,7 +102,11 @@ router.get('/staff', async (req, res) => {
 });
 
 // Route to get the logged-in staff's ID without authentication
-router.get('/id', async (req, res) => {
+router.get('/id',  
+  // authenticateJWT,
+  // authorizeRole("staff"),
+  
+  async (req, res) => {
   try {
     const staffId = 0;
 
