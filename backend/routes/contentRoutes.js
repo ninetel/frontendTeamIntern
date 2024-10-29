@@ -53,6 +53,31 @@ router.put('/:categoryId/subcategories/:subcategoryId/items/:itemId', async (req
     }
 });
 
+// // Delete title and content by ID
+// router.delete('/:categoryId/subcategories/:subcategoryId/items/:itemId', async (req, res) => {
+//     try {
+//         const { categoryId, subcategoryId, itemId } = req.params;
+
+//         // Find the category
+//         const category = await Category.findById(categoryId);
+//         if (!category) return res.status(404).json({ message: 'Category not found' });
+
+//         // Find the subcategory
+//         const subcategory = category.subcategories.id(subcategoryId);
+//         if (!subcategory) return res.status(404).json({ message: 'Subcategory not found' });
+
+//         // Find the item to delete
+//         const item = subcategory.items.id(itemId);
+//         if (!item) return res.status(404).json({ message: 'Item not found' });
+
+//         // Remove the item from the subcategory
+//         item.remove();
+//         await category.save();
+//         res.status(204).send(); // No content
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });
 // Delete title and content by ID
 router.delete('/:categoryId/subcategories/:subcategoryId/items/:itemId', async (req, res) => {
     try {
@@ -60,21 +85,31 @@ router.delete('/:categoryId/subcategories/:subcategoryId/items/:itemId', async (
 
         // Find the category
         const category = await Category.findById(categoryId);
-        if (!category) return res.status(404).json({ message: 'Category not found' });
+        if (!category) {
+            console.error('Category not found');
+            return res.status(404).json({ message: 'Category not found' });
+        }
 
         // Find the subcategory
         const subcategory = category.subcategories.id(subcategoryId);
-        if (!subcategory) return res.status(404).json({ message: 'Subcategory not found' });
+        if (!subcategory) {
+            console.error('Subcategory not found');
+            return res.status(404).json({ message: 'Subcategory not found' });
+        }
 
         // Find the item to delete
         const item = subcategory.items.id(itemId);
-        if (!item) return res.status(404).json({ message: 'Item not found' });
+        if (!item) {
+            console.error('Item not found');
+            return res.status(404).json({ message: 'Item not found' });
+        }
 
         // Remove the item from the subcategory
-        item.remove();
+        subcategory.items.pull(itemId);
         await category.save();
         res.status(204).send(); // No content
     } catch (err) {
+        console.error('Error in DELETE request:', err);
         res.status(500).json({ error: err.message });
     }
 });

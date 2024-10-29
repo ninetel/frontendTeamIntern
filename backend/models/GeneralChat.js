@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const moment = require('moment-timezone');
 
 const generalChatSchema = new Schema({
   uid: {
@@ -16,7 +17,9 @@ const generalChatSchema = new Schema({
   },
   timestamp: {
     type: Date,
+    // default: () => moment().tz('Asia/Kathmandu').toDate(),
     default: Date.now,
+
   },
   url: {
     type: String,
@@ -31,8 +34,15 @@ const generalChatSchema = new Schema({
     required: true,
   },
   sender_id: { type: String, required: false }, // Ensure this line is correct
-  receiver_id: { type: String, required: false }, // Ensure this line is correct
+  // receiver_id: { type: String, required: false }, // Ensure this line is correct
 
 }, { collection: 'generalChats' });
 
-module.exports = mongoose.model('GeneralChat', generalChatSchema);
+generalChatSchema.pre('save', function(next) {
+  // Convert the timestamp to 'Asia/Kathmandu' timezone
+  this.timestamp = moment(this.timestamp).tz('Asia/Kathmandu').toDate();
+  next();
+});
+
+
+module.exports = mongoose.model('generalChats', generalChatSchema);

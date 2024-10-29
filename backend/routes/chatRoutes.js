@@ -12,6 +12,8 @@ const router = express.Router();
 const chatController = require('../controllers/chatControllers'); // Adjust the path as necessary
 // router.get('/api/chat/urls', chatController.getUrls);
 const User = require("../models/User");
+const moment = require('moment-timezone');
+
 const mongoose = require('mongoose');
 const UserStaffAssignment = require('../models/UserStaffAssignment');
 // router.get('/api/chat/last-messages', chatController.getLastMessages);
@@ -354,51 +356,62 @@ router.get('/guest-messages/:userId', async (req, res) => {
 
 
 router.post('/send-message', async (req, res) => {
-    console.log(req.body); // Log the incoming request body
+  console.log(req.body); // Log the incoming request body
 
-    const { sender, sender_id, message, image, type, url,uid, receiver_id } = req.body;
+  const { sender, sender_id, message, image, type, timestamp, url, uid, receiver_id } = req.body;
+  console.log("Received timestamp:", timestamp);
   
-    try {
-    //   let newMessage;
-  
-      if (type === "auth users") {
-        let newMessage = new Chat({
-          sender,
-          sender_id,
-          message,
-          image,
-          type,
-          url,
-          uid,
-          receiver_id,
-        });
-        await newMessage.save();
-        return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
-      } else {
-        console.log("zebra")
-        let newMessage = new GeneralChat({
-          sender,
-          sender_id,
-          message,
-          image,
-          type,
-          url,
-          uid,
-          receiver_id,
-        });
-        console.log(newMessage)
-        await newMessage.save();
-        return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
-      }
-  
-    //   await newMessage.save();
-      
-    } catch (error) {
-      console.error('Error saving message:', error);
-      return res.status(500).json({ message: 'Error sending message', error: error.message });
+  try {
+    // let newTimestamp;
+    // if (timestamp) {
+    //   // Add 5:45 to the provided timestamp to convert it to 'Asia/Kathmandu' timezone
+    //   newTimestamp = moment(timestamp).add(5, 'hours').add(45, 'minutes').toDate();
+    //   console.log("Converted timestamp to 'Asia/Kathmandu':", newTimestamp);
+    // } else {
+    //   // If no timestamp is provided, use the current time in 'Asia/Kathmandu' timezone
+    //   newTimestamp = moment().add(5, 'hours').add(45, 'minutes').toDate();
+    //   console.log("Defaulting to current 'Asia/Kathmandu' time:", newTimestamp);
+    // }
+
+    if (type === "auth users") {
+      let newMessage = new Chat({
+        sender,
+        sender_id,
+        message,
+        image,
+        type,
+        url,
+        uid,
+        receiver_id,
+        timestamp
+      });
+      await newMessage.save();
+      return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
+    } else {
+      console.log("zebra");
+
+      let newMessage = new GeneralChat({
+        sender,
+        sender_id,
+        message,
+        image,
+        type,
+        url,
+        uid,
+        timestamp, // Convert timestamp here
+        receiver_id,
+      });
+
+      console.log("Prepared newMessage:", newMessage);
+      await newMessage.save();
+      return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
     }
-  });
-  
+  } catch (error) {
+    console.error('Error saving message:', error);
+    return res.status(500).json({ message: 'Error sending message', error: error.message });
+  }
+});
+
  
 router.get("/urls", async (req, res) => {
     console.log("Fetching all unique URLs...");

@@ -265,6 +265,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ChatMessages from "./ChatMessages";
+import moment from 'moment-timezone';
 
 const ManageChat = ({ selectedUrl }) => {
   const [sortedMembers, setSortedMembers] = useState([]);
@@ -310,15 +311,32 @@ const ManageChat = ({ selectedUrl }) => {
   const lastMessages = response.data.lastMessages || []; // Ensure this is an array
         
   // Filter, convert timestamps, and sort the messages
-  const filteredSortedMembers = lastMessages
-      .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
-      .map(chat => ({
-          ...chat,
-          timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
-      }))
-      .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+  // const filteredSortedMembers = lastMessages
+  //     .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
+  //     .map(chat => ({
+  //         ...chat,
+  //         timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
+  //     }))
+  //     .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
   
-  console.log('Sorted messages:', filteredSortedMembers);
+  // console.log('Sorted messages:', filteredSortedMembers);
+  const filteredSortedMembers = lastMessages
+  .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
+  .map(chat => {
+    // Extract the timestamp part without the timezone
+    const timestampWithoutTimezone = chat.timestamp.split('+')[0].split('.')[0];
+    console.log("timestampWithoutTimezone")
+    console.log(timestampWithoutTimezone)
+    console.log("timestampWithoutTimezone")
+    return {
+      ...chat,
+      timestamp: new Date(timestampWithoutTimezone) // Convert to Date object without timezone
+    };
+  })
+  .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+
+console.log(filteredSortedMembers);
+
 
   setGuestChat(lastMessages); // Keep the original messages if needed
   setSortedMembers(filteredSortedMembers); // Set the sorted messages
@@ -379,7 +397,7 @@ const ManageChat = ({ selectedUrl }) => {
       const userMessage = {
         username: "admin", // Set the sender to admin
         message: newMessage,
-        time: Date.now(),
+        time: moment().tz('Asia/Kathmandu').format(),
         url: selectedUrl,
       };
       messagesToSend.push(userMessage);
@@ -390,7 +408,7 @@ const ManageChat = ({ selectedUrl }) => {
       const imageMessage = {
         username: "admin", // Set the sender to admin
         message: uploadedImage,
-        time: Date.now(),
+        time: moment().tz('Asia/Kathmandu').format(),
         url: selectedUrl,
       };
       messagesToSend.push(imageMessage);
