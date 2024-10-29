@@ -9,9 +9,8 @@ import { useSelector } from 'react-redux';
 import { FaUser } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import { RxCross2 } from "react-icons/rx";
-import { LearnAndEarn, TradeSupport } from '../CreateGenerallAI/OptionData';
 import axios from 'axios';
-import SubCat from '../../SubCat';
+
 
 
 const { TabPane } = Tabs;
@@ -216,6 +215,7 @@ const fetchCategories = async () => {
     form.setFieldsValue({ message: suggestion });
   };
 
+  
   // const handleIconClick = (iconText) => {
   //   setOpenedIcon(iconText);
   //   setTextSnippets(textLists[iconText] || []);
@@ -233,8 +233,10 @@ const fetchCategories = async () => {
   //   setShowTextList(false);
   //   form.setFieldsValue({ message: text });
   // };
-  const [activeQuestionId, setActiveQuestionId] = useState(1);
-  const [isActiveService, setIsActiveService] = useState(false);
+  
+  // const [activeCategory, setActiveCategory] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [selectedContent, setSelectedContent] = useState('');
   // const getServiceContent = (service) => {
   //   switch (service) {
   //     case 'Learn and Earn':
@@ -289,43 +291,7 @@ const fetchCategories = async () => {
   //   }
   // };
 
-  // const handleServiceClick = (service) => {
-  //   setActiveService(activeService === service ? null : service);
-  // };
-  // const handleQuestionClick = (id) => {
-  //   setActiveQuestionId(id === activeQuestionId ? null : id); // toggle the active question
-  // };
-
-
-
-
-  // const faqData = [
-
-  //   { id: 1, question: 'What is the best time to buy stocks?', answer: 'The best time to buy stocks depends on your investment strategy, but many investors recommend buying during market corrections or dips for long-term value.' },
-  //   { id: 2, question: 'How can I track stock market performance?', answer: 'You can track the stock market using financial news outlets, stock market apps, or by monitoring indices like the S&P 500 or Dow Jones Industrial Average.' },
-  //   { id: 3, question: 'Can I change or cancel a stock order?', answer: 'You can modify or cancel a stock order before it is executed, but once it is processed by the exchange, it is final.' }
-
-  // ];
-
-
-  // const cardData = [
-  //   { id: 1, content: 'content' },
-  //   { id: 2, content: 'content' },
-  //   { id: 3, content: 'content' },
-  //   { id: 4, content: 'content' },
-  //   { id: 5, content: 'content' },
-  //   { id: 6, content: 'content' },
-  //   { id: 7, content: 'content' },
-  //   { id: 8, content: 'content' },
-  //   { id: 9, content: 'content' },
-  // ];
-
-  // const tabsData = [
-  //   { id: '1', label: 'Help' },
-  //   { id: '2', label: 'Service' },
-  //   { id: '3', label: 'FAQ' },
-  // ];
-
+  
 
   return (
 
@@ -393,41 +359,59 @@ const fetchCategories = async () => {
         <p>नमस्ते, तपाईलाई स्वागत छ</p>
       </div>
 
-      <div className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg">
+      
+ <div className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg">
+      <Tabs
+        defaultActiveKey="2"
+        items={categories.map((category) => ({
+          key: category._id,
+          label: category.name,
+          children: (
+            <div className="flex h-[100px] overflow-x-hidden pt-3 overflow-y-scroll -mt-4">
+              <Row className="flex flex-wrap space-y-2" gutter={16}>
+                {category.subcategories?.map((subcat, index) => (
+                  <Col key={index} span={8}>
+                    <Card
+                      hoverable
+                      onClick={() => {
+                        setActiveCategory(category._id === activeCategory ? null : category._id);
+                        setSelectedContent(subcat.items[0].content); 
+                      }}
+                      style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0', width: "300px" }}
+                      bodyStyle={{ cursor: 'pointer' }}
+                    >
+                      {subcat.name}
+                    </Card>
+                    {activeCategory === category._id && (
+                      <div className="mt-2"> 
+                    
+                      </div>
+                    )}
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          )
+        }))}
+      /> 
 
-        <Tabs
-          // defaultActiveKey="2"
-          items={categories.map((category) => ({
-            key: category._id,
-            label: category.name,
-            // onChange={()=>callback(category._id)},
-            children: (
-              <div className="flex h-[100px] overflow-x-hidden pt-3 overflow-y-scroll -mt-4">
-                {/* <div className='bg-white'>{category.name}</div> */}
-                <Row className="flex flex-wrap space-y-2" gutter={16}>
-                  {category.subcategories?.map((subcat, index) => (
-                    <Col key={index} span={8}>
-                      <Card
-                        hoverable
-                        onClick={() => setIsActiveService(!isActiveService)}
-                        style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0', width: "300px" }}
-                        bodyStyle={{ cursor: 'pointer' }}
-                      >
-                        {subcat.name}
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-            )
-          }))}
-        />
-        {isActiveService && (categories.map((item) => <>
-        {console.log(item)}
-          <SubCat key={item._id} item={item} isActiveService={isActiveService} setIsActiveService={setIsActiveService} />
-        </>)
-        )}
-      </div>
+      
+      {selectedContent && (
+        <div className="mt-4 p-4 bg-white rounded-lg shadow relative">
+          <button
+            onClick={() => setSelectedContent('')}
+            className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+          >
+            <RxCross2 />
+          </button>
+          <h2 className="text-lg font-bold">Content</h2>
+          <p>{selectedContent}</p>
+        </div>
+      )}
+    </div>
+
+
+
 
       <div className='fixed w-[329px] bottom-0'>
         <div className="flex flex-col text-center mt-4 flex-grow overflow-auto">
