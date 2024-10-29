@@ -35,7 +35,8 @@ import AdminManageContact from "./components/templates/AdminManageContact/AdminM
 import AdminSendBulkMessage from "./components/templates/AdminSendBulkMessage/AdminSendBulkMessage.jsx";
 import RTMS from "./components/templates/RTMS/RTMS.jsx";
 import StaffManageChat from './components/templates/StaffManageChat/StaffManageChat';
-
+import CategoryManagement  from "./components/templates/AdminCategoryManagement/AdminCategoryManagement.jsx";
+import ContentManagement from "./components/templates/AdminContentManagement/AdminContentManagement.jsx";
 const theme = createTheme({
   palette: {
     primary: {
@@ -107,7 +108,13 @@ const App = () => {
         <Route
           path="/admin/dashboard/manageprompt"
           element={<AdminManagePrompt />}
-        />
+        /><Route
+        path="/admin/dashboard/manageCategory"
+        element={<CategoryManagement />}
+      /><Route
+      path="/admin/dashboard/manageContent"
+      element={<ContentManagement />}
+    />
         {/* <Route path="/admin/dashboard/Chat" element={<Chat />} /> */}
         <Route path="/chatAI" element={<ChatAI />} />
         <Route path="/chatGeneral" element={<ChatGeneral />} />

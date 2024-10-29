@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, Col, Row, Button, Rate, Modal, Form, Input, Upload } from "antd";
+import { Card, Col, Row, Button, Rate, Modal, Form, Input, Upload, Table } from "antd";
 import axios from "axios";
 import { useAppSelector } from "../../../../store/store";
 import { TbUpload } from "react-icons/tb";
@@ -19,12 +19,11 @@ import {
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/prompt`;
 
 const AdminManagePromptOrg = () => {
-  console.log("Inside of Adminyyy Manage prompt");
+
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
   );
 
-  // Fetch all prompts
   const {
     data: prompts,
     isLoading,
@@ -36,20 +35,27 @@ const AdminManagePromptOrg = () => {
     queryFn: () => fetchPrompts(accessToken),
     enabled: !!accessToken,
   });
-  // console.log("data", prompts);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/prompts`);
-        console.log("response **************", response); // Log the data
+        console.log("response **************", response);
       } catch (error) {
         console.error("Error fetching prompts:", error);
       }
     };
-  
-    fetchData(); // Call the async function
+
+    fetchData();
   }, []);
+
+  const [expandedPrompts, setExpandedPrompts] = useState({});
+  const toggleExpand = (id) => {
+    setExpandedPrompts((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
 
   // Mutation for deleting a prompt
   const mutationDelete = useMutation({
@@ -97,6 +103,7 @@ const AdminManagePromptOrg = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPrompt, setEditingPrompt] = useState(null);
   const [values, setValues] = useState({});
+  // const [click, setClick] = useState(false);
   // console.log("editprompt", editingPrompt);
 
   const showEditModal = (prompt) => {
@@ -128,169 +135,124 @@ const AdminManagePromptOrg = () => {
     }));
   };
 
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
-  return (
-    <div style={{ width: "100%" }}>
-      <Row
-        large
-        style={{ width: "100%" }}
-        gutter={[16, 16]} // Optional: Adds space between columns and rows
-      >
-        {console.log("prompts")}
-        {console.log(prompts.prompts)}
-        {console.log("prompts")}
+  // const clickHandle = (id, index) => {
+  //   console.log(prompts.prompts[index]._id, id)
+  //   if (prompts.prompts[index]._id == id) {
+  //     setClick(true)
+  //   }
+  // }
 
-        {/* {Array.isArray(prompts) && prompts.map((prompt) => (
-         
-          <Col span={12} key={prompt.id}>
-            <Card
-              title={`${prompt.promptTitle}`}
-              key={`${prompt._id}`}
-              bordered={false}
-            >
-              
-              <p>Created Date: {prompt.createdDate}</p>
-              <p>prompt Description: {prompt.promptDescription}</p>
-              <p>Status: {prompt.status}</p>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: "20px",
-                  paddingRight: "80px",
-                  // paddingLeft: "20px"
-                }}
-              >
-                 <ButtonComponent
-                  style={{
-                    backgroundColor: "#33b249",
-                    borderColor: "#33b249",
-                    color: "#fff",
-                  }}
-                  onClick={() => handleApprove(prompt._id)}
+  return (
+    <div className="">
+      <div className=" text-center justify-center text-4xl font-bold pt-4 p-2 ">Manage Prompts 🤖 </div>
+      <div style={{ width: "100%" }}>
+        <Row>
+          {Array.isArray(prompts?.prompts) &&
+            prompts.prompts.map((prompt, index) => (
+              <Col span={12} key={prompt._id}>
+                <Card className="m-4"
+                  title={
+                    <span className="text-2xl font-semibold text-center">
+                      {prompt.promptTitle}
+                    </span>
+                  }
+                  bordered={false}
                 >
-                  Approve
-                  </ButtonComponent>
-                <ButtonComponent
-                  style={{
-                    backgroundColor: "#faad14",
-                    borderColor: "#faad14",
-                    color: "#fff",
-                  }}
-                  onClick={() => handleReject(prompt._id)}
-                >
-                  Reject
-                  </ButtonComponent>
-                <ButtonComponent
-                  type="default"
-                  onClick={() => showEditModal(prompt)}
-                >
-                  Edit
-                  </ButtonComponent>
-                <ButtonComponent
-                  danger
-                  type="primary"
-                  onClick={() => handleDelete(prompt._id)}
-                >
-                  Delete
-                  </ButtonComponent>
-              </div>
-            </Card>
-          </Col>
-        ))} */}
-{Array.isArray(prompts.prompts) &&
-          prompts.prompts.map((prompt) => (
-            <Col span={12} key={prompt._id}>
-              <Card
-                title={prompt.promptTitle}
-                bordered={false}
-              >
-                <p>Created Date: {new Date(prompt.createdDate).toLocaleString()}</p>
-                <p>Prompt Description: {prompt.promptDescription}</p>
-                <p>Status: {prompt.status}</p>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "20px",
-                    paddingRight: "80px",
-                  }}
-                >
-                  <Button
-                    style={{
-                      backgroundColor: "#33b249",
-                      borderColor: "#33b249",
-                      color: "#fff",
-                    }}
-                    onClick={() => handleApprove(prompt._id)}
+                  <h2 className="text-sm font-semibold gap-2 py-2">
+                    Created Date: {new Date(prompt.createdDate).toLocaleString()}
+                  </h2>
+                  <button
+                    className="absolut text-white bg-blue-500 rounded-sm"
+                    onClick={() => toggleExpand(prompt._id)}
                   >
-                    Approve
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: "#faad14",
-                      borderColor: "#faad14",
-                      color: "#fff",
-                    }}
-                    onClick={() => handleReject(prompt._id)}
+                    {expandedPrompts[prompt._id] ? "See Less" : "See More"}
+                  </button>
+                  <p
+                    className={`${expandedPrompts[prompt._id] ? "h-auto" : "h-[100px]"
+                      } overflow-hidden pb-10 relative`}
                   >
-                    Reject
-                  </Button>
-                  <Button type="default" onClick={() => showEditModal(prompt)}>
-                    Edit
-                  </Button>
-                  <Button
-                    danger
-                    type="primary"
-                    onClick={() => handleDelete(prompt._id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </Card>
+                    Prompt Description: {prompt.promptDescription}
+
+                  </p>
+                  <p>Status: {prompt.status}</p>
+                  <div className="flex justify-between mt-4 pr8">
+                    <Button
+                      style={{
+                        backgroundColor: "#33b249",
+                        borderColor: "#33b249",
+                        color: "#fff",
+                      }}
+                      onClick={() => handleApprove(prompt._id)}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      style={{
+                        backgroundColor: "#faad14",
+                        borderColor: "#faad14",
+                        color: "#fff",
+                      }}
+                      onClick={() => handleReject(prompt._id)}
+                    >
+                      Reject
+                    </Button>
+                    <Button type="default" onClick={() => showEditModal(prompt)}>
+                      Edit
+                    </Button>
+                    <Button
+                      danger
+                      type="primary"
+                      onClick={() => handleDelete(prompt._id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </Card>
+              </Col>
+            ))}
+        </Row>
+        <Modal
+          title="Edit prompt"
+          open={isModalOpen}
+          onCancel={() => setIsModalOpen(false)}
+          footer={null}
+        >
+          <Form form={form} initialValues={values}>
+            <Col span={12} style={{ padding: "0 10px 0 0" }}>
+              <Form.Item label="prompt Title">
+                <Input
+                  name="promptTitle"
+                  onChange={handleChange}
+                  value={values.promptTitle}
+                />
+              </Form.Item>
             </Col>
-          ))}
-          
-      </Row>
-      <Modal
-        title="Edit prompt"
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={null}
-      >
-        <Form form={form} initialValues={values}>
-          <Col span={12} style={{ padding: "0 10px 0 0" }}>
-            <Form.Item label="prompt Title">
+            <Form.Item label="prompt Status">
               <Input
-                name="promptTitle"
+                name="status"
                 onChange={handleChange}
-                value={values.promptTitle}
+                value={values.status}
               />
             </Form.Item>
-          </Col>
-          <Form.Item label="prompt Status">
-            <Input
-              name="status"
-              onChange={handleChange}
-              value={values.status}
-            />
-          </Form.Item>
-          <Form.Item label="prompt Description">
-            <Input
-              name="promptDescription"
-              onChange={handleChange}
-              value={values.promptDescription}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" onClick={handleEdit}>
-              Save Changes
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+            <Form.Item label="prompt Description">
+              <Input
+                name="promptDescription"
+                onChange={handleChange}
+                value={values.promptDescription}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" onClick={handleEdit}>
+                Save Changes
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
     </div>
   );
 };

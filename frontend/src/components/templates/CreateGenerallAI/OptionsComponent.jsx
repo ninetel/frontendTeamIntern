@@ -135,7 +135,7 @@ import { useAppSelector } from '../../../../store/store';
 import { useSelector } from 'react-redux';
 
 const { TabPane } = Tabs;
-const socket = io('http://localhost:5004'); // Replace with your Flask server URL
+const socket = io('http://81.181.198.75:5002'); // Replace with your Flask server URL
 
 const predefinedMessages = [
   'Hello, how can I assist you?',

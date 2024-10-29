@@ -356,7 +356,7 @@ import ManageChat from '../ManageChat/ManageChat';
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const socket = io('http://localhost:5004'); // Replace with your Flask server URL
+const socket = io('http://81.181.198.75:5002'); // Replace with your Flask server URL
 
 const CreateChat = () => {
   const accessToken = useAppSelector((state) => state.authentication.accessToken);

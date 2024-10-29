@@ -11,7 +11,7 @@ const CreateGeneral = () => {
   useEffect(() => {
     const fetchAllowedOrigins = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/allowed-origins`); // Adjust the URL if necessary
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/urls/allowed-origins`); // Adjust the URL if necessary
         setAllowedOrigins(response.data);
       } catch (error) {
         console.error('Failed to fetch allowed origins:', error);
