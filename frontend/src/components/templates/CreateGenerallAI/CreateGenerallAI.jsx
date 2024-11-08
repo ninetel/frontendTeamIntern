@@ -9,12 +9,13 @@ import { useSelector } from 'react-redux';
 import { FaUser } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import { RxCross2 } from "react-icons/rx";
+import { BsThreeDots } from "react-icons/bs";
 import axios from 'axios';
 
 
 
 const { TabPane } = Tabs;
-const socket = io('http://localhost:5003'); 
+const socket = io('http://localhost:5003');
 
 const predefinedMessages = [
   'Hello, how can I assist you?',
@@ -54,128 +55,125 @@ const CreateGenerallAI = () => {
   const [showOptions, setShowOptions] = useState(true); // State to track options visibility
   const [lastMessages, setLastMessages] = useState('');
   const uidValue = localStorage.getItem('uid') ? 1 : 0;
-const uid = useRef(localStorage.getItem('uid') || uuidv4());
+  const uid = useRef(localStorage.getItem('uid') || uuidv4());
   const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
   const [categories, setCategories] = useState([]);
-  var varr=0
+  const [hideDiv, setHideDiv] = useState(false);
+  const [showDiv, setShowDiv] = useState(false);
+  var varr = 0
 
 
   const messagesEndRef = useRef(null);
   useEffect(() => {
     fetchCategories();
-}, []);
-useEffect(() => {
+  }, []);
+  useEffect(() => {
 
-  if (uid){
+    if (uid) {
 
-    fetchStaffs();
+      fetchStaffs();
 
+    }
+  }, []);
 
+  const checkUid = async (staffz) => {
 
-  }
+    // Check if uid is already present in localStorage
 
-  
-
-}, []);
-
-const checkUid =async (staffz) => {
-
-  // Check if uid is already present in localStorage
-
- // let storedUid = localStorage.getItem('uid');
-
-  
-
-  if (uidValue==0 && varr==0) {
-
-    // Generate a new uid if not already stored
-
-    // storedUid = uuidv4();
-
-    localStorage.setItem('uid', uid.current);
-
-   // console.log("hari hari")
-
-    // window.location.reload();
+    // let storedUid = localStorage.getItem('uid');
 
 
 
-   // console.log(staffz)
+    if (uidValue == 0 && varr == 0) {
 
-    console.log("ram hari")
+      // Generate a new uid if not already stored
 
-    // const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
+      // storedUid = uuidv4();
 
-// const staffz= response.data
+      localStorage.setItem('uid', uid.current);
 
-    selectRandomStaffAndSend(staffz,uid)
+      // console.log("hari hari")
 
-    varr=1
-
-   }
-
-  console.log("hari hari hari")
+      // window.location.reload();
 
 
 
-  // Update the uid reference
+      // console.log(staffz)
 
- // uid.current = storedUid;
+      console.log("ram hari")
 
-};
+      // const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
+
+      // const staffz= response.data
+
+      selectRandomStaffAndSend(staffz, uid)
+
+      varr = 1
+
+    }
+
+    console.log("hari hari hari")
 
 
-const fetchCategories = async () => {
+
+    // Update the uid reference
+
+    // uid.current = storedUid;
+
+  };
+
+
+  const fetchCategories = async () => {
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
     setCategories(response.data);
-};
-const selectRandomStaffAndSend= async (staffs, uid)=> {
+  };
+  const selectRandomStaffAndSend = async (staffs, uid) => {
 
-  // Generate a random number and select a random staff ID
+    // Generate a random number and select a random staff ID
 
-  {console.log(staffs)}
+    { console.log(staffs) }
 
-  const randomIndex = Math.floor(Math.random() * staffs.length);
+    const randomIndex = Math.floor(Math.random() * staffs.length);
 
-  {console.log("randomIndex")}
+    { console.log("randomIndex") }
 
-  {console.log(randomIndex)}
+    { console.log(randomIndex) }
 
-  const selectedStaffId = staffs[randomIndex]._id;
-
-
-
-  // Log the selected staff ID
-
-  console.log("Selected Staff ID:", selectedStaffId);
-
-  console.log("Selected UID:", uid.current);
-
-  const data = { uid: uid.current, staffId: selectedStaffId };
-
-  console.log("Selected data:", data);
-
-  try {
-
-    console.log("Selectssed UID:", uid.current);
+    const selectedStaffId = staffs[randomIndex]._id;
 
 
 
-    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usar/assign`, data
+    // Log the selected staff ID
 
-    );
+    console.log("Selected Staff ID:", selectedStaffId);
+
+    console.log("Selected UID:", uid.current);
+
+    const data = { uid: uid.current, staffId: selectedStaffId };
+
+    console.log("Selected data:", data);
+
+    try {
+
+      console.log("Selectssed UID:", uid.current);
 
 
 
-    console.log("Data sent successfully:", response.data);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usar/assign`, data
 
-  } catch (error) {
+      );
 
-    console.error("Error sending data:", error);
 
-  }
 
-};
+      console.log("Data sent successfully:", response.data);
+
+    } catch (error) {
+
+      console.error("Error sending data:", error);
+
+    }
+
+  };
 
 
 
@@ -183,65 +181,65 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
 
   // fetch('https://your-api-url.com/endpoint', {
 
-    //   method: 'POST',
+  //   method: 'POST',
 
-    //   headers: {
+  //   headers: {
 
-    //     'Content-Type': 'application/json',
+  //     'Content-Type': 'application/json',
 
-    //   },
+  //   },
 
-    //   body: JSON.stringify({
+  //   body: JSON.stringify({
 
-    //     staff_id: selectedStaffId,
+  //     staff_id: selectedStaffId,
 
-    //     uid: uid,
+  //     uid: uid,
 
-    //   }),
+  //   }),
 
-    // })
+  // })
 
-    //   .then(response => response.json())
+  //   .then(response => response.json())
 
-    //   .then(data => {
+  //   .then(data => {
 
-    //     console.log("API Response:", data);
+  //     console.log("API Response:", data);
 
-    //   })
+  //   })
 
-    //   .catch(error => {
+  //   .catch(error => {
 
-    //     console.error("Error:", error);
+  //     console.error("Error:", error);
 
-    //   });
+  //   });
 
-    
 
-    // Start server
 
-    
+  // Start server
+
+
 
   //}
 
 
 
-const fetchStaffs = async () => {
+  const fetchStaffs = async () => {
 
-  const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
 
-  checkUid(response.data);
+    checkUid(response.data);
 
-};
+  };
 
-// Check if uid was newly generated
+  // Check if uid was newly generated
 
-// useEffect to handle any additional setup related to uid
+  // useEffect to handle any additional setup related to uid
 
-// useEffect(() => {
+  // useEffect(() => {
 
   // Any other logic depending on uid
 
-// }, [uid]);
+  // }, [uid]);
 
 
   useEffect(() => {
@@ -311,6 +309,8 @@ const fetchStaffs = async () => {
     if (values.message && values.message.trim()) {
       console.log('uid===' + uid.current);
       console.log("localhostt== " + urlValue)
+
+      setHideDiv(true);
 
       const newMessage = {
         uid: uid.current,
@@ -392,7 +392,7 @@ const fetchStaffs = async () => {
     form.setFieldsValue({ message: suggestion });
   };
 
-  
+
   // const handleIconClick = (iconText) => {
   //   setOpenedIcon(iconText);
   //   setTextSnippets(textLists[iconText] || []);
@@ -410,7 +410,7 @@ const fetchStaffs = async () => {
   //   setShowTextList(false);
   //   form.setFieldsValue({ message: text });
   // };
-  
+
   // const [activeCategory, setActiveCategory] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [selectedContent, setSelectedContent] = useState('');
@@ -468,7 +468,7 @@ const fetchStaffs = async () => {
   //   }
   // };
 
-  
+
 
   return (
 
@@ -531,68 +531,72 @@ const fetchStaffs = async () => {
         </div>
       )} */}
 
-      <div className="bg-green-500 text-white rounded p-3 -mt-10">
-        <h1 className="text-lg font-bold">Welome to Sikkincha</h1>
-        <p>नमस्ते, तपाईलाई स्वागत छ</p>
-      </div>
-
-      
- <div className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg">
-      <Tabs
-        defaultActiveKey="2"
-        items={categories.map((category) => ({
-          key: category._id,
-          label: category.name,
-          children: (
-            <div className="flex h-[100px] overflow-x-hidden pt-3 overflow-y-scroll -mt-4">
-              <Row className="flex flex-wrap space-y-2" gutter={16}>
-                {category.subcategories?.map((subcat, index) => (
-                  <Col key={index} span={8}>
-                    <Card
-                      hoverable
-                      onClick={() => {
-                        setActiveCategory(category._id === activeCategory ? null : category._id);
-                        setSelectedContent(subcat.items[0].content); 
-                      }}
-                      style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0', width: "300px" }}
-                      bodyStyle={{ cursor: 'pointer' }}
-                    >
-                      {subcat.name}
-                    </Card>
-                    {activeCategory === category._id && (
-                      <div className="mt-2"> 
-                    
-                      </div>
-                    )}
-                  </Col>
-                ))}
-              </Row>
+      {
+        hideDiv ? <div className='ml-[90%] -mt-10 text-black cursor-pointer'><BsThreeDots size={40} onClick={() => setHideDiv(!hideDiv)} /></div> :
+          <div className={`flex flex-col z-50`}>
+            <div className="bg-green-500 text-white rounded p-3 -mt-10">
+              <h1 className="text-lg font-bold">Welome to Sikkincha</h1>
+              <p>नमस्ते, तपाईलाई स्वागत छ</p>
             </div>
-          )
-        }))}
-      /> 
 
-      
-      {selectedContent && (
-        <div className="mt-4 p-4 bg-white rounded-lg shadow relative">
-          <button
-            onClick={() => setSelectedContent('')}
-            className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-          >
-            <RxCross2 />
-          </button>
-          <h2 className="text-lg font-bold">Content</h2>
-          <p>{selectedContent}</p>
-        </div>
-      )}
-    </div>
+            <div className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg">
+              <Tabs
+                defaultActiveKey="2"
+                items={categories.map((category) => ({
+                  key: category._id,
+                  label: category.name,
+                  children: (
 
+                    <div className={` flex h-[150px] overflow-x-hidden relative pt-3 overflow-y-scroll -mt-4`}>
+                      <Row className="flex flex-wrap" gutter={16}>
+                        {category.subcategories?.map((subcat, index) => (
+                          <Col key={index} span={8}>
+                            <Card
+                              hoverable
+                              onClick={() => {
+                                setActiveCategory(category._id === activeCategory ? null : category._id);
+                                setSelectedContent(subcat.items[0].content);
+                              }}
+                              style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0', width: "200px" }}
+                              bodyStyle={{ cursor: 'pointer' }}
+                            >
+                              {subcat.name}
+                            </Card>
+                            {activeCategory === category._id && (
+                              <div className="mt-2">
+                              </div>
+                            )}
+                          </Col>
+                        ))}
+                      </Row>
+                      {selectedContent && (
+                        <div className=" absolute w-full h-[150px] px-2 bg-white rounded-lg shadow">
+                          <div className='flex justify-between'>
+                            <h2 className="text-lg font-bold">Content</h2>
+                            <button
+                              onClick={() => setSelectedContent('')}
+                              className=" text-red-500 hover:text-red-700"
+                            >
+                              <RxCross2 />
+                            </button>
+                          </div>
+                          <p>{selectedContent}</p>
+                        </div>
+                      )}
+                    </div>
+                  )
+                }))}
+              />
 
+            </div>
 
+          </div>
+      }
 
-      <div className='fixed w-[329px] bottom-0'>
-        <div className="flex flex-col text-center mt-4 flex-grow overflow-auto">
-          <div className="flex flex-col  space-y-2 mb-2">
+      <div className='fixed w-[350px] bottom-0 '>
+        <div className="flex flex-col-reverse h-[47vh] overflow-y-scroll mt-4 flex-grow overflow-auto">
+          <div ref={messagesEndRef} />
+          <div className="flex flex-col space-y-2 mb-2">
             {/* {console.log(messages)} */}
             {messages.map((msg, index) => (
               <div
@@ -622,7 +626,6 @@ const fetchStaffs = async () => {
               </div>
             )}
           </div>
-          <div ref={messagesEndRef} />
         </div>
         {showSuggestions && (
           <div className="suggestions-container  bg-green-400 text-white">
