@@ -25,22 +25,12 @@ const predefinedMessages = [
   'Can I help with anything else?'
 ];
 
-
-
-
-// const textLists = {
-//   'Chat': ['Chat message 1', 'Chat message 2', 'Chat message 3'],
-//   'Images': ['Image 1 description', 'Image 2 description', 'Image 3 description'],
-//   'Documents': ['Document 1 description', 'Document 2 description', 'Document 3 description'],
-//   'Upload': ['Upload 1 description', 'Upload 2 description', 'Upload 3 description'],
-//   'Files': ['Files 1 description', 'Files 2 description', 'Files 3 description']
-// };
-
 const CreateGenerallAI = () => {
+  const [messages, setMessages] = useState([]);
+
   const accessToken = useAppSelector((state) => state.authentication.accessToken);
   const userInfo = useSelector((state) => state.currentLoggedInUser?.userInfo || {});
   const [form] = Form.useForm();
-  const [messages, setMessages] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
   const [typing, setTyping] = useState(false);
   const [updateTrigger, setUpdateTrigger] = useState(false);
@@ -61,6 +51,12 @@ const CreateGenerallAI = () => {
   const [hideDiv, setHideDiv] = useState(false);
   const [showDiv, setShowDiv] = useState(false);
   var varr = 0
+  var varr=0
+  const [messageDetails, setMessageDetails] = useState({
+    type: "text",
+    url: "",
+    receiver_id: ""
+  });
 
 
   const messagesEndRef = useRef(null);
@@ -89,6 +85,38 @@ const CreateGenerallAI = () => {
       // Generate a new uid if not already stored
 
       // storedUid = uuidv4();
+} [] }
+
+useEffect(() => {
+  const fetchMessages = async () => {
+ 
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/guest-messages/${uid}`);
+      const allMessages = response.data.allMessages || [];
+ 
+      // Filter out messages containing '+'
+      const filteredMessages = allMessages.filter(msg => !msg.message.includes('+'));
+
+      // Sort messages by timestamp in descending order
+      const sortedMessages = filteredMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+      setMessages(sortedMessages);
+ 
+      if (sortedMessages.length > 0) {
+        const lastMessage = sortedMessages[sortedMessages.length - 1];
+        setMessageDetails({
+          type: lastMessage.type,
+          url: lastMessage.url,
+          receiver_id: lastMessage.sender_id,
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  fetchMessages();
+}, []);
 
       localStorage.setItem('uid', uid.current);
 
@@ -105,6 +133,12 @@ const CreateGenerallAI = () => {
       // const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
 
       // const staffz= response.data
+  if (uidValue==0 && varr==0) {
+
+    localStorage.setItem('uid', uid.current);
+
+    console.log("ram hari")
+
 
       selectRandomStaffAndSend(staffz, uid)
 
@@ -120,32 +154,42 @@ const CreateGenerallAI = () => {
 
     // uid.current = storedUid;
 
-  };
-
 
   const fetchCategories = async () => {
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
     setCategories(response.data);
   };
-  const selectRandomStaffAndSend = async (staffs, uid) => {
+//   const selectRandomStaffAndSend = async (staffs, uid) => {
 
-    // Generate a random number and select a random staff ID
+//     // Generate a random number and select a random staff ID
 
-    { console.log(staffs) }
+//     { console.log(staffs) }
 
-    const randomIndex = Math.floor(Math.random() * staffs.length);
+//     const randomIndex = Math.floor(Math.random() * staffs.length);
 
-    { console.log("randomIndex") }
+//     { console.log("randomIndex") }
 
-    { console.log(randomIndex) }
+//     { console.log(randomIndex) }
 
-    const selectedStaffId = staffs[randomIndex]._id;
+//     const selectedStaffId = staffs[randomIndex]._id;
 
 
 
-    // Log the selected staff ID
+//     // Log the selected staff ID
 
-    console.log("Selected Staff ID:", selectedStaffId);
+//     console.log("Selected Staff ID:", selectedStaffId);
+// };
+const selectRandomStaffAndSend= async (staffs, uid)=> {
+  {console.log(staffs)}
+
+  const randomIndex = Math.floor(Math.random() * staffs.length);
+  {console.log("randomIndex")}
+
+  {console.log(randomIndex)}
+  const selectedStaffId = staffs[randomIndex]._id;
+
+ 
+  console.log("Selected Staff ID:", selectedStaffId);
 
     console.log("Selected UID:", uid.current);
 
@@ -221,6 +265,7 @@ const CreateGenerallAI = () => {
 
   //}
 
+ 
 
 
   const fetchStaffs = async () => {
@@ -242,6 +287,8 @@ const CreateGenerallAI = () => {
   // }, [uid]);
 
 
+// };
+ 
   useEffect(() => {
     localStorage.setItem('uid', uid.current);
     socket.on('new_message', (data) => {
@@ -274,6 +321,7 @@ const CreateGenerallAI = () => {
       socket.off('user_typing');
     };
   }, [typingEnded]);
+
   useEffect(() => {
 
     const getCurrentUrl = () => {
@@ -412,8 +460,8 @@ const CreateGenerallAI = () => {
   // };
 
   // const [activeCategory, setActiveCategory] = useState(null);
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [selectedContent, setSelectedContent] = useState('');
+  // const [activeCategory, setActiveCategory] = useState(null);
+  // const [selectedContent, setSelectedContent] = useState('');
   // const getServiceContent = (service) => {
   //   switch (service) {
   //     case 'Learn and Earn':
@@ -469,6 +517,11 @@ const CreateGenerallAI = () => {
   // };
 
 
+ 
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [selectedContent, setSelectedContent] = useState('');
+ 
+  
 
   return (
 
@@ -477,59 +530,17 @@ const CreateGenerallAI = () => {
       {/* Options Icon */}
       <div className="flex justify-between items-center mb-4">
         <div>
-          {/* Placeholder for any other top-left content */}
-        </div>
-        {/* <div>
-          <Button
-            icon={showOptions ? <RiCloseLine size={24} /> : <RiMenuLine size={24} />}
-            onClick={() => setShowOptions(!showOptions)}
-          />
-        </div> */}
+         </div>
+        
       </div>
 
       {/* Options Content */}
       {showOptions && (
         <div className="mb-4">
-          {/* <Tabs activeKey={activeTab} onChange={setActiveTab}>
-            {Object.entries(tabContent).map(([key, { icon, title, icons }]) => (
-              <TabPane
-                tab={<span>{icon}{title}</span>}
-                key={key}
-                className="custom-tab"
-              >
-                <div className="grid grid-cols-4 gap-4 mt-4">
-                  {icons.map(({ icon, text }) => (
-                    <div
-                      key={text}
-                      onClick={() => handleIconClick(text)}
-                      className="flex flex-col items-center cursor-pointer hover:scale-110 transition-transform duration-200 ease-in-out"
-                    >
-                      {icon}
-                      <p className="mt-2 text-sm">{text}</p>
-                    </div>
-                  ))}
-                </div>
-              </TabPane>
-            ))}
-          </Tabs> */}
+         
         </div>
       )}
-      {/* {showTextList && (
-        <div className="text-list-container">
-          <Button onClick={handleBack} className="mb-2">
-            Back
-          </Button>
-          <List
-            bordered
-            dataSource={textSnippets}
-            renderItem={(item) => (
-              <List.Item onClick={() => handleTextClick(item)} className="cursor-pointer">
-                {item}
-              </List.Item>
-            )}
-          />
-        </div>
-      )} */}
+      
 
       {
         hideDiv ? <div className='ml-[90%] -mt-10 text-black cursor-pointer'><BsThreeDots size={40} onClick={() => setHideDiv(!hideDiv)} /></div> :
@@ -674,6 +685,7 @@ const CreateGenerallAI = () => {
 
     </div >
   );
-};
+
+}
 
 export default CreateGenerallAI;

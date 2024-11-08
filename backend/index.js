@@ -18,6 +18,7 @@ const urlRoutes = require("./routes/urlRoutes"); // Adjust the path to your urlR
 const userStaffAssignmentRoutes = require("./routes/userStaffAssignmentRoutes"); // Adjust the path to your urlRoutes file
 const categoryRoutes = require("./routes/categoryRoutes")
 const contentRoutes = require("./routes/contentRoutes")
+const predefinedQuestionsRoutes =require('./routes/predefinedQuestions')
 // Import middleware
 // const checkReferrer = require('./middleware/checkReferrer');
 
@@ -75,6 +76,8 @@ app.use("/api/urls", urlRoutes);
 app.use("/api/usar", userStaffAssignmentRoutes);
 app.use("/api/categories",categoryRoutes)
 app.use("/api/contents",contentRoutes)
+app.use('/api/predefinedQuestions', predefinedQuestionsRoutes);
+
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {
   console.error(err.stack);

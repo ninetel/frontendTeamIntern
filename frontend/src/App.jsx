@@ -37,6 +37,7 @@ import RTMS from "./components/templates/RTMS/RTMS.jsx";
 import StaffManageChat from './components/templates/StaffManageChat/StaffManageChat';
 import CategoryManagement  from "./components/templates/AdminCategoryManagement/AdminCategoryManagement.jsx";
 import ContentManagement from "./components/templates/AdminContentManagement/AdminContentManagement.jsx";
+import AdminPredefinedQuestions from "./components/templates/AdminPredefinedQuestions/AdminPredefinedQuestions.jsx"
 const theme = createTheme({
   palette: {
     primary: {
@@ -114,7 +115,10 @@ const App = () => {
       /><Route
       path="/admin/dashboard/manageContent"
       element={<ContentManagement />}
-    />
+    /><Route
+    path="/admin/dashboard/PredefinedQuestions"
+    element={<AdminPredefinedQuestions />}
+  />
         {/* <Route path="/admin/dashboard/Chat" element={<Chat />} /> */}
         <Route path="/chatAI" element={<ChatAI />} />
         <Route path="/chatGeneral" element={<ChatGeneral />} />

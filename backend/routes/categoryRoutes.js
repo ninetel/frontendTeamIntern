@@ -188,24 +188,37 @@ router.put('/:categoryId/url/:urlIndex', async (req, res) => {
 // });
 
 // Delete Category
-router.delete('/:categoryId/url/:urlIndex', async (req, res) => {
-    try {
-        const { categoryId, urlIndex } = req.params;
+// router.delete('/:categoryId/url/:urlIndex', async (req, res) => {
+//     try {
+//         const { categoryId, urlIndex } = req.params;
 
-        const category = await Category.findById(categoryId);
+//         const category = await Category.findById(categoryId);
+//         if (!category) return res.status(404).json({ message: 'Category not found' });
+
+//         if (urlIndex >= category.urls.length) return res.status(400).json({ message: 'Invalid URL index' });
+
+//         category.urls.splice(urlIndex, 1); // Remove the URL at urlIndex
+//         await category.save();
+
+//         res.status(200).json(category);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });
+router.delete('/:categoryId', async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+
+        const category = await Category.findByIdAndDelete(categoryId);
         if (!category) return res.status(404).json({ message: 'Category not found' });
 
-        if (urlIndex >= category.urls.length) return res.status(400).json({ message: 'Invalid URL index' });
 
-        category.urls.splice(urlIndex, 1); // Remove the URL at urlIndex
-        await category.save();
-
-        res.status(200).json(category);
+        // If the category is found and deleted, return a success message
+        res.status(200).json({ message: 'Category deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
-
 
 // Delete URL from Category
 router.delete('/:categoryId/url/:urlId', async (req, res) => {
