@@ -1,6 +1,4 @@
-// api.js
 import axios from "axios";
-// /sikinchaa/prompt
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/prompt`;
 
 export const fetchPrompts = async (accessToken) => {
@@ -9,7 +7,6 @@ export const fetchPrompts = async (accessToken) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  // console.log("fetchPrompt issssssssssssss", response.data);
   return response.data;
 };
 

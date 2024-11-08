@@ -87,7 +87,7 @@ const AdminDashboard = () => {
 
 
 
-    <div className=' flex flex-col gap-4 md:flex-row w-fit '>
+    <div className=' flex  gap-4 md:flex-row w-fit '>
       <div className="w-1/5 h-full shadow-lg ">
         <StaffSidebar>
           <SidebarItem
@@ -107,7 +107,7 @@ const AdminDashboard = () => {
             text="Manage Signal"
             handleClick={handleRouteManageSignal}
           />
-           <SidebarItem
+          <SidebarItem
             icon={<IoMdAdd size={30} />}
             text="Add Contact"
             handleClick={handleRouteAddContact}
@@ -156,16 +156,24 @@ const AdminDashboard = () => {
             text="RTMS"
             handleClick={handleRouteRTMS}
           />
-          
+
         </StaffSidebar>
       </div>
       <div className=" w-full flex flex-col gap-6 bg-white p-2 rounded-xl shadow-sm ">
-
         <div className=" flex justify-center ">
-          <h1 className=" font-semibold text-xl pt-4 "> Sector Distribution </h1>
+          <div className=" p-6 pt-4">
+            <section className="bg-gradient-to-r text-white py-20">
+              <div className="container mx-auto px-4 text-center">
+                
+                <p className="text-4xl font-bold " style={{ WebkitTextStroke: '1px green' }}>
+                  Admin Dashboard 👨‍💻
+                </p>
+              </div>
+            </section>
+          </div>
         </div>
         <div className=" flex flex-col lg:flex-row gap-2">
-          <div className=" w-full lg:w-1/3 h-[450px] p-6">
+          <div className=" w-full lg:w-1/3 p-4">
             <PieChart
               series={[
                 {
@@ -186,7 +194,7 @@ const AdminDashboard = () => {
         </div>
 
         <div className=" w-fit h-[500px] p-6">
-        <h1 className=" font-semibold text-xl pt-4 justify-center text-center"> Sector Distribution </h1>
+          <h1 className=" font-semibold text-xl pt-4 justify-center text-center"> Sector Distribution </h1>
 
           <LineChart
             xAxis={[{ data: [1, 2, 3, 5, 8, 10, 12, 15, 16] }]}
@@ -225,7 +233,7 @@ const AdminDashboard = () => {
           </Button>
         </div>
         <div className=" h-full ">
-        <h1 className=" font-semibold text-xl pt-4 "> Sector Distribution </h1>
+          <h1 className=" font-semibold text-xl pt-4 "> Sector Distribution </h1>
 
           <BarChart
             xAxis={[

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, Col, Row, Button, Rate, Modal, Form, Input, Upload, Table } from "antd";
+import { Card, Col, Row, Button, Modal, Form, Input, } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
 import axios from "axios";
 import { useAppSelector } from "../../../../store/store";
 import { TbUpload } from "react-icons/tb";
-import ButtonComponent from './ButtonComponent.jsx'; // Adjust the path as needed
+import ButtonComponent from './ButtonComponent.jsx';
 
 import {
   fetchPrompts,
@@ -19,6 +20,27 @@ import {
 const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/prompt`;
 
 const AdminManagePromptOrg = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingPrompt, setEditingPrompt] = useState(null);
+  const [values, setValues] = useState({});
+  const [searchItem, setSearchItem] = useState("");
+  // const [filterItems , setFilterItems] = useState([]);
+
+  const handleInputChange = (e) => {
+    const searchTerm = e.target.value;
+    setSearchItem(searchTerm);
+    // const filteredItems =  prompts.prompts.filter((x)=>{
+    //   return searchItem.toLocaleLowerCase() === '' ? x :
+    //     x.promptTitle.toLowerCase().includes(searchTerm.toLowerCase())
+    //   }) 
+
+    // setFilterItems(filteredItems);
+  }
+
+
+
+
+
 
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
@@ -36,28 +58,18 @@ const AdminManagePromptOrg = () => {
     enabled: !!accessToken,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/prompts`);
-        console.log("response **************", response);
-      } catch (error) {
-        console.error("Error fetching prompts:", error);
-      }
-    };
 
-    fetchData();
-  }, []);
+
 
   const [expandedPrompts, setExpandedPrompts] = useState({});
+  
   const toggleExpand = (id) => {
     setExpandedPrompts((prevState) => ({
-      ...prevState,
+      ...prevState ,
       [id]: !prevState[id],
     }));
   };
 
-  // Mutation for deleting a prompt
   const mutationDelete = useMutation({
     mutationFn: (id) => deletePrompt(id, accessToken),
     onSuccess: () => {
@@ -65,7 +77,6 @@ const AdminManagePromptOrg = () => {
     },
   });
 
-  // Mutation for updating a prompt
   const mutationEdit = useMutation({
     mutationFn: ({ id, data }) => editPrompt({ id, data, accessToken }),
     onSuccess: () => {
@@ -73,10 +84,8 @@ const AdminManagePromptOrg = () => {
       refetch();
     },
   });
-  // Mutation for updating a prompt
   const mutationApprovePrompt = useMutation({
     mutationFn: ({ id, data }) => {
-      // Set the status to "approved" before calling the editPrompt function
       const updatedData = { ...data, status: "approved" };
       return editPrompt({ id, data: updatedData, accessToken });
     },
@@ -87,24 +96,18 @@ const AdminManagePromptOrg = () => {
       alert("Prompt approved");
     },
   });
-  // Mutation for updating a prompt
   const mutationRejectPrompt = useMutation({
     mutationFn: ({ id, data }) => {
       const updatedData = { ...data, status: "rejected" };
       return editPrompt({ id, data: updatedData, accessToken });
     },
     onSuccess: () => {
-      // invalidateQueries(["prompts"]);
       refetch();
       alert("Prompt rejected");
     },
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingPrompt, setEditingPrompt] = useState(null);
-  const [values, setValues] = useState({});
-  // const [click, setClick] = useState(false);
-  // console.log("editprompt", editingPrompt);
+
 
   const showEditModal = (prompt) => {
     setEditingPrompt(prompt);
@@ -139,20 +142,30 @@ const AdminManagePromptOrg = () => {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
-  // const clickHandle = (id, index) => {
-  //   console.log(prompts.prompts[index]._id, id)
-  //   if (prompts.prompts[index]._id == id) {
-  //     setClick(true)
-  //   }
-  // }
+
 
   return (
     <div className="">
       <div className=" text-center justify-center text-4xl font-bold pt-4 p-2 ">Manage Prompts 🤖 </div>
+      <div className=" p-2">
+        <div className=" w-fit flex items-center gap-2 text-sm rounded-full ring-[1.5px] ring-gray-300 px-2  hover:ring-gray-400 transition duration-300 shadow-lg">
+          <SearchOutlined style={{ fontSize: '16px', color: '#555' }} />
+          <Input
+            type="text"
+            value={searchItem}
+            onChange={handleInputChange}
+            placeholder="Search..."
+            className=" border-none outline-none "
+          />
+        </div>
+      </div>
       <div style={{ width: "100%" }}>
         <Row>
-          {Array.isArray(prompts?.prompts) &&
-            prompts.prompts.map((prompt, index) => (
+          {
+            prompts.prompts.filter((x) => {
+              return searchItem.toLocaleLowerCase() === '' ? x :
+                x.promptTitle.toLowerCase().includes(searchItem.toLowerCase())
+            }).map((prompt) => (
               <Col span={12} key={prompt._id}>
                 <Card className="m-4"
                   title={
@@ -166,19 +179,20 @@ const AdminManagePromptOrg = () => {
                     Created Date: {new Date(prompt.createdDate).toLocaleString()}
                   </h2>
                   <button
-                    className="absolut text-white bg-blue-500 rounded-sm"
+                    className="absolut text-blue-500 bg-gray-100 rounded-sm"
                     onClick={() => toggleExpand(prompt._id)}
                   >
                     {expandedPrompts[prompt._id] ? "See Less" : "See More"}
                   </button>
-                  <p
-                    className={`${expandedPrompts[prompt._id] ? "h-auto" : "h-[100px]"
+               
+                  <p 
+                    className={`${expandedPrompts[prompt._id] ? "h-auto" : "h-[94px]"
                       } overflow-hidden pb-10 relative`}
                   >
                     Prompt Description: {prompt.promptDescription}
 
                   </p>
-                  <p>Status: {prompt.status}</p>
+                  <p className=" text-xl font-semibold">Status: {prompt.status}</p>
                   <div className="flex justify-between mt-4 pr8">
                     <Button
                       style={{
