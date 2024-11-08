@@ -594,7 +594,7 @@ const CreateGenerallAI = () => {
       }
 
       <div className='fixed w-[350px] bottom-0 '>
-        <div className="flex flex-col-reverse h-[47vh] overflow-y-scroll mt-4 flex-grow overflow-auto">
+        <div className="flex flex-col-reverse bottom-0 h-[47vh] overflow-y-scroll mt-4 flex-grow overflow-auto">
           <div ref={messagesEndRef} />
           <div className="flex flex-col space-y-2 mb-2">
             {/* {console.log(messages)} */}
@@ -628,7 +628,7 @@ const CreateGenerallAI = () => {
           </div>
         </div>
         {showSuggestions && (
-          <div className="suggestions-container  bg-green-400 text-white">
+          <div className="suggestions-container z-50 bg-green-400 text-white">
             <ul>
               {filteredMessages.map((msg, index) => (
                 <li
