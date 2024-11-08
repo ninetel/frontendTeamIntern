@@ -51,14 +51,27 @@ const CreateGenerallAI = () => {
   const [hideDiv, setHideDiv] = useState(false);
   const [showDiv, setShowDiv] = useState(false);
   var varr = 0
-  var varr=0
   const [messageDetails, setMessageDetails] = useState({
     type: "text",
     url: "",
     receiver_id: ""
   });
+  const refff = useRef(0);  // Store refff in useRef to persist its value
 
+  // if (refff === 0) {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  //   refff = 1;  // Update variable after action
+  // }
+  useEffect(() => {
+    if (refff.current === 0) {
+      // This runs only once when the component is first mounted
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      refff.current = 1;  // Update to ensure it only runs once
+          // setRefff(1);
 
+  }
+  }, []); 
+ 
   const messagesEndRef = useRef(null);
   useEffect(() => {
     fetchCategories();
@@ -74,85 +87,90 @@ const CreateGenerallAI = () => {
 
   const checkUid = async (staffz) => {
 
-    // Check if uid is already present in localStorage
+    localStorage.setItem('uid', uid.current);
 
-    // let storedUid = localStorage.getItem('uid');
+    // console.log("hari hari")
+
+    // window.location.reload();
 
 
 
-    if (uidValue == 0 && varr == 0) {
+    // console.log(staffz)
 
-      // Generate a new uid if not already stored
+    console.log("ram hari")
 
-      // storedUid = uuidv4();
-} [] }
+    // const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
+
+    // const staffz= response.data
+if (uidValue==0 && varr==0) {
+
+  localStorage.setItem('uid', uid.current);
+
+  console.log("ram hari")
+
+
+    selectRandomStaffAndSend(staffz, uid)
+
+    varr = 1
+
+  }
+
+  console.log("hari hari hari")
+
+
+
+  // Update the uid reference
+
+  // uid.current = storedUid;
+}
+const fetchMessages = async () => {
+ 
+  try {
+    console.log('uid')
+    console.log(uid)
+    console.log('uid')
+
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/guest-messages/${uid.current}`);
+    const allMessages = response.data.allMessages || [];
+
+    // Filter out messages containing '+'
+    const filteredMessages = allMessages.filter(msg => !msg.message.includes('+'));
+
+    // Sort messages by timestamp in descending order
+    const sortedMessages = filteredMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    setMessages(sortedMessages);
+
+    if (sortedMessages.length > 0) {
+      const lastMessage = sortedMessages[sortedMessages.length - 1];
+      setMessageDetails({
+        type: lastMessage.type,
+        url: lastMessage.url,
+        receiver_id: lastMessage.sender_id,
+      });
+    }
+
+    console.log('sortedMessages')
+    console.log(sortedMessages)
+    console.log('sortedMessages')
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+  }
+};  
 
 useEffect(() => {
-  const fetchMessages = async () => {
- 
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/guest-messages/${uid}`);
-      const allMessages = response.data.allMessages || [];
- 
-      // Filter out messages containing '+'
-      const filteredMessages = allMessages.filter(msg => !msg.message.includes('+'));
-
-      // Sort messages by timestamp in descending order
-      const sortedMessages = filteredMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-      setMessages(sortedMessages);
- 
-      if (sortedMessages.length > 0) {
-        const lastMessage = sortedMessages[sortedMessages.length - 1];
-        setMessageDetails({
-          type: lastMessage.type,
-          url: lastMessage.url,
-          receiver_id: lastMessage.sender_id,
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  };
+  
 
   fetchMessages();
 }, []);
 
-      localStorage.setItem('uid', uid.current);
+useEffect(() => {
+  // Fetch messages whenever the messages state changes
+  if (messages.length > 0) {
+    fetchMessages();
+  }
+}, [messages]);
 
-      // console.log("hari hari")
-
-      // window.location.reload();
-
-
-
-      // console.log(staffz)
-
-      console.log("ram hari")
-
-      // const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
-
-      // const staffz= response.data
-  if (uidValue==0 && varr==0) {
-
-    localStorage.setItem('uid', uid.current);
-
-    console.log("ram hari")
-
-
-      selectRandomStaffAndSend(staffz, uid)
-
-      varr = 1
-
-    }
-
-    console.log("hari hari hari")
-
-
-
-    // Update the uid reference
-
-    // uid.current = storedUid;
 
 
   const fetchCategories = async () => {
@@ -545,10 +563,16 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
       {
         hideDiv ? <div className='ml-[90%] -mt-10 text-black cursor-pointer'><BsThreeDots size={40} onClick={() => setHideDiv(!hideDiv)} /></div> :
           <div className={`flex flex-col z-50`}>
-            <div className="bg-green-500 text-white rounded p-3 -mt-10">
-              <h1 className="text-lg font-bold">Welome to Sikkincha</h1>
-              <p>नमस्ते, तपाईलाई स्वागत छ</p>
-            </div>
+            <div className="bg-green-500 text-white rounded p-3 flex justify-between items-center">
+  <div>
+    <h1 className="text-lg font-bold">Welcome to Sikkincha</h1>
+    <p>नमस्ते, तपाईलाई स्वागत छ</p>
+  </div>
+  <button className='ml-4'>
+    <RxCross2 size={40} onClick={() => setHideDiv(!hideDiv)} />
+  </button>
+</div>
+
 
             <div className="flex flex-col p-4 bg-gray-50 rounded-lg shadow-lg">
               <Tabs
@@ -605,14 +629,14 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
       }
 
       <div className='fixed w-[350px] bottom-0 '>
-        <div className="flex flex-col-reverse bottom-0 h-[47vh] overflow-y-scroll mt-4 flex-grow overflow-auto">
-          <div ref={messagesEndRef} />
-          <div className="flex flex-col space-y-2 mb-2">
-            {/* {console.log(messages)} */}
-            {messages.map((msg, index) => (
+        <div className="flex flex-col-reverse bottom-0 h-[60vh] overflow-y-scroll mt-4 flex-grow overflow-auto">
+        <div ref={refff.current === 0 ? messagesEndRef : null} />
+        <div className="flex flex-col space-y-2 mb-2">
+            {console.log(messages)}
+            {/* {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`p-2 rounded-lg shadow-md ${msg.type === 'sent'
+                className={`p-2 rounded-lg shadow-md ${msg.type === 'user'
                   ? 'self-end bg-green-100 text-green-700'
                   : 'self-start bg-white text-green-700'
                   }`}
@@ -623,14 +647,45 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
                     <p>{msg.response}</p>
                   </div>
                 )}
-                {msg.type === 'sent' && (
+                {msg.type === 'user' && (
                   <p>{msg.text}</p>
                 )}
                 {msg.isImage && (
                   <img src={msg.image} alt="Uploaded" className="max-w-xs rounded-lg" />
                 )}
               </div>
-            ))}
+            ))} */}
+            {messages.map((msg, index) => (
+  <div
+    key={index}
+    className={`p-2 rounded-lg shadow-md ${msg.type === 'user'
+      ? 'self-end bg-green-100 text-green-700'
+      : 'self-start bg-white text-green-700'
+      }`}
+  >
+    {(msg.type === 'Chatbot' || msg.type === 'staff') && (
+      <div className="flex items-center space-x-2 mb-1">
+        <FaUser className="text-green-700" />
+        <p className="font-bold">{msg.type}</p>
+      </div>
+    )}
+    {msg.type === 'user' && (
+      <p className="font-bold mb-1">{msg.type}</p>
+    )}
+    <div>
+      {(msg.type === 'Chatbot' || msg.type === 'staff') && (
+        <p>{msg.message}</p>
+      )}
+      {msg.type === 'user' && (
+        <p>{msg.message}</p>
+      )}
+      {msg.image && (
+        <img src={msg.image} alt="Uploaded" className="max-w-xs rounded-lg mt-2" />
+      )}
+    </div>
+  </div>
+))}
+
             {typing && (
               <div className="self-start bg-white text-green-700 p-2 rounded-lg shadow-md">
                 Typing...
