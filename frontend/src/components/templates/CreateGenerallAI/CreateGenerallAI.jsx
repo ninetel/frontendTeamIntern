@@ -14,7 +14,8 @@ import axios from 'axios';
 
 
 const { TabPane } = Tabs;
-const socket = io('http://81.181.198.75:5003'); 
+const socket = io('http://localhost:5003'); 
+
 const predefinedMessages = [
   'Hello, how can I assist you?',
   'Please provide more details.',
@@ -56,16 +57,192 @@ const CreateGenerallAI = () => {
 const uid = useRef(localStorage.getItem('uid') || uuidv4());
   const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
   const [categories, setCategories] = useState([]);
+  var varr=0
+
 
   const messagesEndRef = useRef(null);
   useEffect(() => {
     fetchCategories();
 }, []);
+useEffect(() => {
+
+  if (uid){
+
+    fetchStaffs();
+
+
+
+  }
+
+  
+
+}, []);
+
+const checkUid =async (staffz) => {
+
+  // Check if uid is already present in localStorage
+
+ // let storedUid = localStorage.getItem('uid');
+
+  
+
+  if (uidValue==0 && varr==0) {
+
+    // Generate a new uid if not already stored
+
+    // storedUid = uuidv4();
+
+    localStorage.setItem('uid', uid.current);
+
+   // console.log("hari hari")
+
+    // window.location.reload();
+
+
+
+   // console.log(staffz)
+
+    console.log("ram hari")
+
+    // const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
+
+// const staffz= response.data
+
+    selectRandomStaffAndSend(staffz,uid)
+
+    varr=1
+
+   }
+
+  console.log("hari hari hari")
+
+
+
+  // Update the uid reference
+
+ // uid.current = storedUid;
+
+};
+
 
 const fetchCategories = async () => {
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
     setCategories(response.data);
 };
+const selectRandomStaffAndSend= async (staffs, uid)=> {
+
+  // Generate a random number and select a random staff ID
+
+  {console.log(staffs)}
+
+  const randomIndex = Math.floor(Math.random() * staffs.length);
+
+  {console.log("randomIndex")}
+
+  {console.log(randomIndex)}
+
+  const selectedStaffId = staffs[randomIndex]._id;
+
+
+
+  // Log the selected staff ID
+
+  console.log("Selected Staff ID:", selectedStaffId);
+
+  console.log("Selected UID:", uid.current);
+
+  const data = { uid: uid.current, staffId: selectedStaffId };
+
+  console.log("Selected data:", data);
+
+  try {
+
+    console.log("Selectssed UID:", uid.current);
+
+
+
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/usar/assign`, data
+
+    );
+
+
+
+    console.log("Data sent successfully:", response.data);
+
+  } catch (error) {
+
+    console.error("Error sending data:", error);
+
+  }
+
+};
+
+
+
+  // API call with selected staff ID and uid
+
+  // fetch('https://your-api-url.com/endpoint', {
+
+    //   method: 'POST',
+
+    //   headers: {
+
+    //     'Content-Type': 'application/json',
+
+    //   },
+
+    //   body: JSON.stringify({
+
+    //     staff_id: selectedStaffId,
+
+    //     uid: uid,
+
+    //   }),
+
+    // })
+
+    //   .then(response => response.json())
+
+    //   .then(data => {
+
+    //     console.log("API Response:", data);
+
+    //   })
+
+    //   .catch(error => {
+
+    //     console.error("Error:", error);
+
+    //   });
+
+    
+
+    // Start server
+
+    
+
+  //}
+
+
+
+const fetchStaffs = async () => {
+
+  const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
+
+  checkUid(response.data);
+
+};
+
+// Check if uid was newly generated
+
+// useEffect to handle any additional setup related to uid
+
+// useEffect(() => {
+
+  // Any other logic depending on uid
+
+// }, [uid]);
+
 
   useEffect(() => {
     localStorage.setItem('uid', uid.current);
