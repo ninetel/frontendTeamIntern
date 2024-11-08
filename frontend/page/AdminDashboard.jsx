@@ -83,7 +83,10 @@ const AdminDashboard = () => {
   const handleRouteContentManagementGeneralChat=()=>{
     navigate("/admin/dashboard/manageContent");
   }
-
+  const handleRouteAdminPredefinedQuestions=()=>{
+    navigate("/admin/dashboard/PredefinedQuestions");
+  }
+  
   const isLoggedIn = localStorage.getItem('isLoggedIn');
 
   // const logoutBtn = () => {
@@ -170,7 +173,11 @@ const AdminDashboard = () => {
         icon={<FaUserClock size={30} />}
         text="Content Management General Chat"
         handleClick={handleRouteContentManagementGeneralChat}
-      />
+      /><SidebarItem
+      icon={<FaUserClock size={30} />}
+      text="Manage Predefined Questions"
+      handleClick={handleRouteAdminPredefinedQuestions}
+    />
           
         </StaffSidebar>
       </div>

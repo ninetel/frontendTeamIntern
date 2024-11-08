@@ -159,7 +159,7 @@ const CategoryManagement = () => {
                             {category.subcategories.map(subcategory => (
                                 <li key={subcategory._id} style={{ marginBottom: '15px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        {editSubcategoryId === subcategory._id ? (
+                                        {/* {editSubcategoryId === subcategory._id ? (
                                             <>
                                                 <input
                                                     type="text"
@@ -177,7 +177,7 @@ const CategoryManagement = () => {
                                                     <button onClick={() => deleteSubcategory(category._id, subcategory._id)} style={{ backgroundColor: '#dc3545', color: 'white' }}>Delete</button>
                                                 </div>
                                             </>
-                                        )}
+                                        )} */}
                                     </div>
                                 </li>
                             ))}
