@@ -373,8 +373,9 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
 
   const onFinish = async (values) => {
     if (values.message && values.message.trim()) {
-      console.log('uid===' + uid.current);
-      console.log("localhostt== " + urlValue)
+      // console.log('uid===' + uid.current);
+      // console.log("localhostt== " + urlValue)
+      console.log("image iss::::",imagePreview)
 
       setHideDiv(true);
 
@@ -720,9 +721,12 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
                 className="rounded-lg pl-10 py-3 text-green-700"
               />
               <Upload beforeUpload={handleUpload} showUploadList={false}>
-                <Button className="absolute left-2 bottom-2 p-2 rounded-full bg-gray-200 hover:bg-gray-300">
-                  +
-                </Button>
+                <Button className="absolute left-2 bottom-2 flex p-2 justify-center items-center overflow-hidden rounded-full bg-gray-200 hover:bg-gray-300">
+                  
+                  {
+                    imagePreview ? <img src={imagePreview} alt="Uploaded" className="h-8 w-8 rounded-full object-cover" /> : <div className='text-black'>+</div>
+                  }
+                </Button> 
               </Upload>
               <Button
                 type="primary"
