@@ -1,18 +1,46 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-const UrlForm = ({ urls, onSave }) => {
+const api = axios.create({
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/predefinedQuestions`
+});
+
+
+const UrlForm = ({ onSave }) => {
     const [currentUrl, setCurrentUrl] = useState('');
-
-    const handleUrlSubmit = (e) => {
-        e.preventDefault();
-        const newUrls = [...urls, currentUrl];
-        onSave(newUrls);
-        setCurrentUrl(''); // Clear input
+    const [url, setUrl] = useState<any>([]);
+    
+    const fetchUrl = async () => {
+        try {
+            const response = await api.get('/');
+            console.log(response.data.urls)
+            setUrl(response.data.urls);
+        } catch (error) {
+            console.log(error)
+        }
     };
 
-    const handleDeleteUrl = (index) => {
-        const newSentences = urls.filter((_, i) => i !== index);
-        onSave(newSentences);
+    useEffect(() => {
+        fetchUrl();
+    }, []);
+
+    const handleUrlSubmit = async (e) => {
+        e.preventDefault();
+        // const newUrls = [...urls, currentUrl];
+        // onSave(newUrls);
+        setCurrentUrl(''); // Clear input
+
+        try {
+            await api.post('/', {currentUrl});
+        } catch (error) {
+            console.log(error)
+        }
+    };
+
+    const handleDeleteUrl = async (index) => {
+        // const newSentences = urls.filter((_, i) => i !== index);
+        // onSave(newSentences);
+        await api.delete(`/${index}`);
     };
 
     return (
@@ -31,11 +59,11 @@ const UrlForm = ({ urls, onSave }) => {
             </form>
             <div>
                 <h4>URLs:</h4>
-                {urls.map((url, i) => (
+                {url.map((url, i) => (
                      <div key={i} className="flex justify-between space-y-1 items-center">
                      <p>{url}</p>
                      <button
-                         onClick={() => handleDeleteUrl(i)}
+                         onClick={() => handleDeleteUrl(url._id)}
                          className="bg-red-500 text-white px-2 py-1"
                      >
                          Delete
