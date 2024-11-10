@@ -14,13 +14,13 @@ const predefinedQuestionsSchema = new Schema({
     urls: {
         type: [String], // An array of URLs
         required: true,
-        validate: {
-            validator: function(v) {
-                // Each URL must be valid if provided
-                return v.every(url => /^https?:\/\/\S+\.\S+$/.test(url));
-            },
-            message: props => `One or more URLs are not valid!`
-        },
+        // validate: {
+        //     validator: function(v) {
+        //         // Each URL must be valid if provided
+        //         return v.every(url => /^https?:\/\/\S+\.\S+$/.test(url));
+        //     },
+        //     message: props => `One or more URLs are not valid!`
+        // },
     }
 }, { timestamps: true });
 

@@ -262,6 +262,213 @@
 // };
 
 // export default ManageChat;
+// import React, { useState, useEffect, useRef } from "react";
+// import axios from "axios";
+// import ChatMessages from "./ChatMessages";
+// import moment from 'moment-timezone';
+
+// const ManageChat = ({ selectedUrl }) => {
+//   const [sortedMembers, setSortedMembers] = useState([]);
+//   const [selectedChat, setSelectedChat] = useState(null);
+//   const [newMessage, setNewMessage] = useState("");
+//   const [uploadedImage, setUploadedImage] = useState(null);
+//   const [userType, setUserType] = useState("");
+//   const [userMessages, setUserMessages] = useState([]);
+//   const [staffId, setStaffId] = useState(null);
+//   const messageEndRef = useRef(null);
+//   const [userId, setUserId] = useState('');
+//   const [userIds, setUserIds] = useState([]);
+//   const staffUserId = localStorage.getItem('currentUserId');
+//   const [guestChat, setGuestChat] = useState([]);
+
+//   const fetchLastMessages = async (uidsArray) => { 
+//     try {
+//       const response = await axios.post(
+//         `${import.meta.env.VITE_BACKEND_URL}/api/chat/last-messages/general/selecteduid`, 
+//         { uids: uidsArray },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+//             'Content-Type': 'application/json',
+//           }
+//         }
+//       );
+//       console.log('Last messages:', response.data);
+//     //   setGuestChat(response.data);
+//     //   const filteredSortedMembers = guestChat
+//     //   .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
+//     //   .map(chat => ({
+//     //     ...chat,
+//     //     timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
+//     //   }))
+//     //   .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+//     //   console.log('Sort messages:', filteredSortedMembers);
+//     //   // console.log('Sort messages:', response.data);
+//     //   // console.log('Sort messages:', response.data);
+
+//     // setSortedMembers(filteredSortedMembers);
+//   // Access lastMessages from the response data
+//   const lastMessages = response.data.lastMessages || []; // Ensure this is an array
+        
+//   // Filter, convert timestamps, and sort the messages
+//   // const filteredSortedMembers = lastMessages
+//   //     .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
+//   //     .map(chat => ({
+//   //         ...chat,
+//   //         timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
+//   //     }))
+//   //     .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+  
+//   // console.log('Sorted messages:', filteredSortedMembers);
+//   const filteredSortedMembers = lastMessages
+//   .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
+//   .map(chat => {
+//     // Extract the timestamp part without the timezone
+//     const timestampWithoutTimezone = chat.timestamp.split('+')[0].split('.')[0];
+//     console.log("timestampWithoutTimezone")
+//     console.log(timestampWithoutTimezone)
+//     console.log("timestampWithoutTimezone")
+//     return {
+//       ...chat,
+//       timestamp: new Date(timestampWithoutTimezone) // Convert to Date object without timezone
+//     };
+//   })
+//   .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+
+// console.log(filteredSortedMembers);
+
+
+//   setGuestChat(lastMessages); // Keep the original messages if needed
+//   setSortedMembers(filteredSortedMembers); // Set the sorted messages
+//     } catch (error) {
+//       console.error('Error fetching last messages:', error);
+//     }
+//   };
+// const fetchUserIds = async () => {
+//       if (staffUserId) {
+//         try {
+//           const cleanStaffId = staffUserId.replace(/['"]/g, '');
+//           const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/usar/user/${cleanStaffId}`);
+//           setUserIds(response.data.userIds);
+//           fetchLastMessages(response.data.userIds);
+//         } catch (error) {
+//           console.error('Error fetching user IDs:', error);
+//         }
+//       }
+//     };
+//   useEffect(() => {
+    
+
+//     fetchUserIds();
+//   }, [staffUserId]);
+  
+//   useEffect(() => {
+//     if (userIds.length > 0) {
+//       fetchLastMessages(userIds);
+//     }
+//   }, [userIds]); // This effect will run whenever `userIds` changes
+
+
+//   // useEffect(() => {
+//   //   // Filter out messages without content and sort by timestamp
+//   //   // const 
+//   //   console.log("guestChat")
+//   //   console.log(guestChat)
+//   //   console.log("guestChat")
+//   //   const filteredSortedMembers = guestChat
+//   //     .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
+//   //     .map(chat => ({
+//   //       ...chat,
+//   //       timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
+//   //     }))
+//   //     .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+
+//   //   setSortedMembers(filteredSortedMembers);
+//   // }, [guestChat]); // Run this effect whenever guestChat changes
+
+//   const handleUserSelect = async (userId) => {
+//     try {
+//       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
+//       setSelectedChat({ uid: userId, messages: response.data });
+//     } catch (error) {
+//       console.error('Error fetching user messages:', error);
+//     }
+//   };
+
+//   const handleSendMessage = () => {
+//     if (newMessage.trim() === "" && !uploadedImage) return;
+
+//     const messagesToSend = [];
+
+//     if (newMessage.trim()) {
+//       const userMessage = {
+//         username: "admin", // Set the sender to admin
+//         message: newMessage,
+//         time: moment().tz('Asia/Kathmandu').format(),
+//         url: selectedUrl,
+//       };
+//       messagesToSend.push(userMessage);
+//       setNewMessage("");
+//     }
+
+//     if (uploadedImage) {
+//       const imageMessage = {
+//         username: "admin", // Set the sender to admin
+//         message: uploadedImage,
+//         time: moment().tz('Asia/Kathmandu').format(),
+//         url: selectedUrl,
+//       };
+//       messagesToSend.push(imageMessage);
+//       setUploadedImage(null);
+//     }
+
+//     setSelectedChat((prevChat) => (prevChat ? {
+//       ...prevChat,
+//       messages: [...prevChat.messages, ...messagesToSend],
+//     } : { messages: messagesToSend }));
+//   };
+
+//   const handleKeyPress = (e) => {
+//     if (e.key === "Enter") {
+//       handleSendMessage();
+//     }
+//   };
+
+//   console.log("sortedMembers===>", sortedMembers);
+
+//   return (
+//     <div className="flex h-screen w-full">
+//       <div className="p-4 w-1/3 overflow-y-auto h-full space-y-4">
+//       GUEST CHAT
+//         {sortedMembers.map((chat, index) => (
+//           <div
+//             key={index}
+//             className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
+//             onClick={() => handleUserSelect(chat.uid)}
+//           >
+//             <p className="font-semibold text-gray-900">User ID: {chat.uid}</p>
+//             <p className="text-gray-600 truncate">{chat.message}</p>
+//           </div>
+//         ))}
+//       </div>
+
+//       <div className="w-2/3 bg-gray-50 p-4 flex flex-col">
+//         {selectedChat ? (
+//           <ChatMessages userId={selectedChat.uid} />
+//         ) : (
+//           <div className="flex items-center justify-center h-full">
+//             <p className="text-gray-500">Select a chat to view messages</p>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ManageChat;
+
+
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import ChatMessages from "./ChatMessages";
@@ -281,6 +488,7 @@ const ManageChat = ({ selectedUrl }) => {
   const staffUserId = localStorage.getItem('currentUserId');
   const [guestChat, setGuestChat] = useState([]);
 
+  // Fetch the last messages for the user IDs
   const fetchLastMessages = async (uidsArray) => { 
     try {
       const response = await axios.post(
@@ -294,91 +502,58 @@ const ManageChat = ({ selectedUrl }) => {
         }
       );
       console.log('Last messages:', response.data);
-    //   setGuestChat(response.data);
-    //   const filteredSortedMembers = guestChat
-    //   .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
-    //   .map(chat => ({
-    //     ...chat,
-    //     timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
-    //   }))
-    //   .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
-    //   console.log('Sort messages:', filteredSortedMembers);
-    //   // console.log('Sort messages:', response.data);
-    //   // console.log('Sort messages:', response.data);
+      
+      const lastMessages = response.data.lastMessages || [];
 
-    // setSortedMembers(filteredSortedMembers);
-  // Access lastMessages from the response data
-  const lastMessages = response.data.lastMessages || []; // Ensure this is an array
-        
-  // Filter, convert timestamps, and sort the messages
-  // const filteredSortedMembers = lastMessages
-  //     .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
-  //     .map(chat => ({
-  //         ...chat,
-  //         timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
-  //     }))
-  //     .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
-  
-  // console.log('Sorted messages:', filteredSortedMembers);
-  const filteredSortedMembers = lastMessages
-  .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
-  .map(chat => {
-    // Extract the timestamp part without the timezone
-    const timestampWithoutTimezone = chat.timestamp.split('+')[0].split('.')[0];
-    console.log("timestampWithoutTimezone")
-    console.log(timestampWithoutTimezone)
-    console.log("timestampWithoutTimezone")
-    return {
-      ...chat,
-      timestamp: new Date(timestampWithoutTimezone) // Convert to Date object without timezone
-    };
-  })
-  .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+      // Filter and sort the messages
+      const filteredSortedMembers = lastMessages
+        .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
+        .map(chat => {
+          // Extract the timestamp part without the timezone
+          const timestampWithoutTimezone = chat.timestamp.split('+')[0].split('.')[0];
+          console.log("timestampWithoutTimezone", timestampWithoutTimezone);
+          return {
+            ...chat,
+            timestamp: new Date(timestampWithoutTimezone) // Convert to Date object without timezone
+          };
+        })
+        .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
 
-console.log(filteredSortedMembers);
-
-
-  setGuestChat(lastMessages); // Keep the original messages if needed
-  setSortedMembers(filteredSortedMembers); // Set the sorted messages
+      console.log(filteredSortedMembers);
+      setGuestChat(lastMessages); // Store all messages if needed
+      setSortedMembers(filteredSortedMembers); // Set the sorted messages
     } catch (error) {
       console.error('Error fetching last messages:', error);
     }
   };
 
-  useEffect(() => {
-    const fetchUserIds = async () => {
-      if (staffUserId) {
-        try {
-          const cleanStaffId = staffUserId.replace(/['"]/g, '');
-          const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/usar/user/${cleanStaffId}`);
-          setUserIds(response.data.userIds);
-          fetchLastMessages(response.data.userIds);
-        } catch (error) {
-          console.error('Error fetching user IDs:', error);
-        }
+  // Fetch user IDs and then fetch last messages for those users
+  const fetchUserIds = async () => {
+    if (staffUserId) {
+      try {
+        const cleanStaffId = staffUserId.replace(/['"]/g, '');
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/usar/user/${cleanStaffId}`);
+        const userIds = response.data.userIds || [];
+        setUserIds(userIds);
+      } catch (error) {
+        console.error('Error fetching user IDs:', error);
       }
-    };
+    }
+  };
 
+  // useEffect to fetch user IDs when the component mounts or when `staffUserId` changes
+  useEffect(() => {
     fetchUserIds();
   }, [staffUserId]);
 
-  // useEffect(() => {
-  //   // Filter out messages without content and sort by timestamp
-  //   // const 
-  //   console.log("guestChat")
-  //   console.log(guestChat)
-  //   console.log("guestChat")
-  //   const filteredSortedMembers = guestChat
-  //     .filter(chat => chat.message !== 'No message found' && chat.message) // Filter out empty messages
-  //     .map(chat => ({
-  //       ...chat,
-  //       timestamp: new Date(chat.timestamp) // Convert timestamp to Date object
-  //     }))
-  //     .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
+  // useEffect to fetch last messages whenever the `userIds` state changes
+  useEffect(() => {
+    if (userIds.length > 0) {
+      fetchLastMessages(userIds);
+    }
+  }, [userIds]); // This effect will run whenever `userIds` changes
 
-  //   setSortedMembers(filteredSortedMembers);
-  // }, [guestChat]); // Run this effect whenever guestChat changes
-
+  // Handle user message selection and fetching messages
   const handleUserSelect = async (userId) => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
@@ -427,12 +602,10 @@ console.log(filteredSortedMembers);
     }
   };
 
-  console.log("sortedMembers===>", sortedMembers);
-
   return (
     <div className="flex h-screen w-full">
       <div className="p-4 w-1/3 overflow-y-auto h-full space-y-4">
-      GUEST CHAT
+        GUEST CHAT
         {sortedMembers.map((chat, index) => (
           <div
             key={index}
