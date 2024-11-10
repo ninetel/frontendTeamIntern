@@ -224,7 +224,7 @@ router.post('/last-messages/general/selecteduid', async (req, res) => {
   try {
     const lastMessages = await Promise.all(
       uids.map(async (uid) => {
-        const lastMessage = await GeneralChat.findOne({ uid })
+        const lastMessage = await GeneralChat.findOne({ uid,type: 'user' })
           .sort({ timestamp: -1 }) // Sort by timestamp in descending order
           .limit(1); // Take the last (most recent) message
           console.log("lastMessage")
