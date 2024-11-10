@@ -9,6 +9,7 @@ router.post('/', async (req, res) => {
         const newPredefinedQuestion = new PredefinedQuestions({ name, sentences, urls });
         await newPredefinedQuestion.save();
         res.status(201).json(newPredefinedQuestion);
+    console.log("hello",newPredefinedQuestion)
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

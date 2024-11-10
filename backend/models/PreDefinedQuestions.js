@@ -5,14 +5,15 @@ const { Schema } = mongoose;
 const predefinedQuestionsSchema = new Schema({
     name: {
         type: String,
-        required: true, // The name of the topic is required
+        required: true,
     },
     sentences: {
         type: [String], // An array of strings to store the sentences
-        required: true, // The list of sentences is required
+        required: true,
     },
     urls: {
         type: [String], // An array of URLs
+        required: true,
         validate: {
             validator: function(v) {
                 // Each URL must be valid if provided

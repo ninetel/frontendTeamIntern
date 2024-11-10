@@ -1,49 +1,44 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import QuestionManagerForm from '../../questionManagerForm';
 
 const api = axios.create({
-    baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/predefinedQuestions` // Adjust this URL to match your API endpoint
+    baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/predefinedQuestions`
 });
- 
+
 const PredefinedQuestionsForm = ({ onSave }) => {
     const [name, setName] = useState('');
-    const [isNameSaved, setIsNameSaved] = useState(false);
-    const [sentences, setSentences] = useState([]);
-    const [urls, setUrls] = useState([]);
-    const [currentSentence, setCurrentSentence] = useState('');
-    const [currentUrl, setCurrentUrl] = useState('');
+    const [savedName, setSavedName] = useState([]);
+    // const [isNameSaved, setIsNameSaved] = useState(false);
 
-    const handleNameSubmit = (e) => {
+    const changeValue = (e) => {
+        setName(e.target.value);
+    };
+
+    const handleNameSubmit = async (e) => {
+        // console.log(name)
         e.preventDefault();
-        onSave({ name, sentences, urls });
-        setIsNameSaved(true);
+        const newEntry = { name, sentences: [], urls: [] };
+        setSavedName([...savedName, newEntry]);
+        setName(''); // Clear name input after saving
+        try {
+            await api.post('/', {name}); 
+        } catch (error) {
+            console.error('Error saving predefined question:', error);
+        }
     };
 
-    const handleSentenceSubmit = (e) => {
-        e.preventDefault();
-        const newSentences = [...sentences, currentSentence];
-        onSave({ name, sentences: newSentences, urls });
-        setSentences(newSentences);
-        setCurrentSentence('');
+    const handleSentenceChange = (index, newSentences) => {
+        setSavedName((prev) =>
+            prev.map((entry, i) => (i === index ? { ...entry, sentences: newSentences } : entry))
+        );
     };
 
-    const handleUrlSubmit = (e) => {
-        e.preventDefault();
-        const newUrls = [...urls, currentUrl];
-        onSave({ name, sentences, urls: newUrls });
-        setUrls(newUrls);
-        setCurrentUrl('');
-    };
-
-    const handleDeleteSentence = (index) => {
-        const newSentences = sentences.filter((_, i) => i !== index);
-        setSentences(newSentences);
-    };
-
-    const handleDeleteUrl = (index) => {
-        const newUrls = urls.filter((_, i) => i !== index);
-        setUrls(newUrls);
+    const handleUrlChange = (index, newUrls) => {
+        setSavedName((prev) =>
+            prev.map((entry, i) => (i === index ? { ...entry, urls: newUrls } : entry))
+        );
     };
 
     return (
@@ -54,80 +49,37 @@ const PredefinedQuestionsForm = ({ onSave }) => {
                     <input
                         type="text"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={changeValue}
                         className="border px-2 py-1 w-full"
                         required
                     />
                 </div>
-                {!isNameSaved && (
-                    <button type="submit" className="bg-green-500 text-white px-4 py-2 mt-4">
-                        Save Name
-                    </button>
-                )}
+                <button type="submit" className="bg-green-500 text-white px-4 py-2 mt-4">
+                    Save Name
+                </button>
             </form>
-            {isNameSaved && (
-                <>
-                    <form onSubmit={handleSentenceSubmit} className="mb-4">
-                        <div className="mb-2">
-                            <label className="block mb-1">Add Sentence:</label>
-                            <input
-                                type="text"
-                                value={currentSentence}
-                                onChange={(e) => setCurrentSentence(e.target.value)}
-                                className="border px-2 py-1 w-full"
-                            />
-                        </div>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 mt-2">
-                            Add Sentence
-                        </button>
-                    </form>
-                    <form onSubmit={handleUrlSubmit} className="mb-4">
-                        <div className="mb-2">
-                            <label className="block mb-1">Add URL:</label>
-                            <input
-                                type="text"
-                                value={currentUrl}
-                                onChange={(e) => setCurrentUrl(e.target.value)}
-                                className="border px-2 py-1 w-full"
-                            />
-                        </div>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 mt-2">
-                            Add URL
-                        </button>
-                    </form>
-                </>
-            )}
-            <div>
-                <h4 className="text-md font-semibold">Sentences:</h4>
-                {sentences.map((sentence, index) => (
-                    <div key={index} className="flex justify-between items-center mb-2">
-                        <p>{sentence}</p>
-                        <button
-                            onClick={() => handleDeleteSentence(index)}
-                            className="bg-red-500 text-white px-2 py-1"
-                        >
-                            Delete
-                        </button>
-                    </div>
-                ))}
-            </div>
-            <div>
-                <h4 className="text-md font-semibold">URLs:</h4>
-                {urls.map((url, index) => (
-                    <div key={index} className="flex justify-between items-center mb-2">
-                        <p>{url}</p>
-                        <button
-                            onClick={() => handleDeleteUrl(index)}
-                            className="bg-red-500 text-white px-2 py-1"
-                        >
-                            Delete
-                        </button>
-                    </div>
+
+            <div className="flex flex-col space-y-2">
+                {savedName.map((entry, index) => (
+                    <QuestionManagerForm
+                        key={index}
+                        index={index}
+                        entry={entry}
+                        onSave={onSave}
+                        // isNameSaved={isNameSaved}
+                        savedName={savedName}
+                        setSavedName={setSavedName}
+                        handleSentenceChange={handleSentenceChange}
+                        handleUrlChange={handleUrlChange}
+                    />
                 ))}
             </div>
         </div>
     );
 };
+
+// export default PredefinedQuestionsForm;
+
 
 const PredefinedQuestionsList = ({ questions, onDelete }) => {
     return (
