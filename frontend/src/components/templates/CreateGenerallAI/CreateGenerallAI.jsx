@@ -32,6 +32,8 @@ const CreateGenerallAI = () => {
   const userInfo = useSelector((state) => state.currentLoggedInUser?.userInfo || {});
   const [form] = Form.useForm();
   const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreviewBinary, setImagePreviewBinary] = useState(null);
+  const [imagePreviewBinaryBuffer, setImagePreviewBinaryBuffer] = useState(null);
   const [typing, setTyping] = useState(false);
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [typingEnded, setTypingEnded] = useState(false);
@@ -48,9 +50,11 @@ const CreateGenerallAI = () => {
   const uid = useRef(localStorage.getItem('uid') || uuidv4());
   const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
   const [categories, setCategories] = useState([]);
+  const [predefinedQuestions, setPredefinedQuestions] = useState([]);
   const [hideDiv, setHideDiv] = useState(false);
   const [showDiv, setShowDiv] = useState(false);
-  var varr = 0
+  const [file, setFile] = useState(null);
+   var varr = 0
   const [messageDetails, setMessageDetails] = useState({
     type: "text",
     url: "",
@@ -75,6 +79,7 @@ const CreateGenerallAI = () => {
   const messagesEndRef = useRef(null);
   useEffect(() => {
     fetchCategories();
+    fetchPredefinedQuestions();
   }, []);
   useEffect(() => {
 
@@ -89,19 +94,7 @@ const CreateGenerallAI = () => {
 
     localStorage.setItem('uid', uid.current);
 
-    // console.log("hari hari")
-
-    // window.location.reload();
-
-
-
-    // console.log(staffz)
-
     console.log("ram hari")
-
-    // const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/staff/staff`);
-
-    // const staffz= response.data
 if (uidValue==0 && varr==0) {
 
   localStorage.setItem('uid', uid.current);
@@ -116,12 +109,6 @@ if (uidValue==0 && varr==0) {
   }
 
   console.log("hari hari hari")
-
-
-
-  // Update the uid reference
-
-  // uid.current = storedUid;
 }
 const fetchMessages = async () => {
  
@@ -173,30 +160,13 @@ useEffect(() => {
 
 
 
-  const fetchCategories = async () => {
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
-    setCategories(response.data);
-  };
-//   const selectRandomStaffAndSend = async (staffs, uid) => {
-
-//     // Generate a random number and select a random staff ID
-
-//     { console.log(staffs) }
-
-//     const randomIndex = Math.floor(Math.random() * staffs.length);
-
-//     { console.log("randomIndex") }
-
-//     { console.log(randomIndex) }
-
-//     const selectedStaffId = staffs[randomIndex]._id;
-
-
-
-//     // Log the selected staff ID
-
-//     console.log("Selected Staff ID:", selectedStaffId);
-// };
+const fetchCategories = async () => {
+  const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
+  setCategories(response.data);
+};  const fetchPredefinedQuestions = async () => {
+  const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/predefinedQuestions`);
+  setPredefinedQuestions(response.data);
+};
 const selectRandomStaffAndSend= async (staffs, uid)=> {
   {console.log(staffs)}
 
@@ -239,52 +209,6 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
 
 
 
-  // API call with selected staff ID and uid
-
-  // fetch('https://your-api-url.com/endpoint', {
-
-  //   method: 'POST',
-
-  //   headers: {
-
-  //     'Content-Type': 'application/json',
-
-  //   },
-
-  //   body: JSON.stringify({
-
-  //     staff_id: selectedStaffId,
-
-  //     uid: uid,
-
-  //   }),
-
-  // })
-
-  //   .then(response => response.json())
-
-  //   .then(data => {
-
-  //     console.log("API Response:", data);
-
-  //   })
-
-  //   .catch(error => {
-
-  //     console.error("Error:", error);
-
-  //   });
-
-
-
-  // Start server
-
-
-
-  //}
-
- 
-
 
   const fetchStaffs = async () => {
 
@@ -294,20 +218,9 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
 
   };
 
-  // Check if uid was newly generated
-
-  // useEffect to handle any additional setup related to uid
-
-  // useEffect(() => {
-
-  // Any other logic depending on uid
-
-  // }, [uid]);
-
-
-// };
- 
-  useEffect(() => {
+// function isBinary(data) { for (let i = 0; i < data.length; i++) { if (data.charCodeAt(i) > 127) { return true; } } return false; }
+// function isBase64(str) { if (typeof str !== 'string') { return false; } const notBase64 = /[^A-Z0-9+\/=]/i; const len = str.length; if (!len || len % 4 !== 0 || notBase64.test(str)) { return false; } const firstPaddingChar = str.indexOf('='); return firstPaddingChar === -1 || firstPaddingChar === len - 1 || (firstPaddingChar === len - 2 && str[len - 1] === '='); } 
+useEffect(() => {
     localStorage.setItem('uid', uid.current);
     socket.on('new_message', (data) => {
       if (data.uid === uid.current) {
@@ -371,11 +284,129 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
     }
   }, [messages]);
 
+  // const handleFileChange = (e) => { const file = e.target.files[0];  setImagePreviewBinary(file);}
+    // This is the raw binary data of the image setUploadedImagebinary(arrayBuffer); // Optionally store this data in state }; };
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setFile(file);
+
+        console.log(file)
+
+        // You can also process the file here (e.g., send it to the server)
+        console.log("File selected:", file);
+  
+        setImagePreview(URL.createObjectURL(file));
+        const reader = new FileReader();
+        reader.onload = () => {
+          const arrayBuffer = reader.result;
+          setImagePreviewBinary(arrayBuffer);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    };
+  // Helper function to map MIME type to file extension
+function getFileExtension(mimeType) {
+  const mimeTypes = {
+    'image/jpeg': '.jpg',
+    'image/png': '.png',
+    'image/gif': '.gif',
+    'image/webp': '.webp',
+    'application/pdf': '.pdf',
+    'text/plain': '.txt',
+    'application/msword': '.doc',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+    'application/zip': '.zip',
+    'audio/mpeg': '.mp3',
+    'audio/wav': '.wav',
+    'video/mp4': '.mp4',
+    // Add more mappings as needed
+  };
+  return mimeTypes[mimeType] || ''; // Returns an empty string if the MIME type is not found
+}
+// Helper function to convert ArrayBuffer to base64
+function arrayBufferToBase64(buffer) {
+  let binary = '';
+  let bytes = new Uint8Array(buffer);
+  let length = bytes.byteLength;
+  for (let i = 0; i < length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+}
   const onFinish = async (values) => {
-    if (values.message && values.message.trim()) {
+    // if (values.message && values.message.trim()) {
       // console.log('uid===' + uid.current);
       // console.log("localhostt== " + urlValue)
-      console.log("image iss::::",imagePreview)
+      // console.log("image iss::::",imagePreviewBinary)
+      // let imageUrl = "";
+
+      // if (imagePreviewBinary) {
+      //   // const formData = new FormData();
+      //   // formData.append("image", imagePreviewBinary); // append the image to FormData
+    
+      //   try {
+      //     const formData = new FormData();
+      //     // formData.append('message', values.message);
+      //     console.log("formDta")
+      //     console.log(formData)
+      //     if (imagePreviewBinary) {
+      //       const fileBlob = new Blob([imagePreviewBinary]);
+      //       const fileType = fileBlob.type;  // e.g., 'image/jpeg', 'image/png', etc.
+      //       const fileExtension = getFileExtension(fileType);  // Get the correct file extension based on MIME type
+      //       const fileName = `file-${Date.now()}${fileExtension}`;
+      //       console.log("fileExtension")
+      //       console.log(fileExtension)
+      //       formData.append('file',fileBlob, fileName );
+      //     }
+      //     console.log("formData")
+      //     console.log(formData)
+      let imageUrl = "";
+      if (values.message && values.message.trim()) {
+        // console.log('uid===' + uid.current);
+        // console.log("localhostt== " + urlValue)
+        console.log("image iss::::",imagePreviewBinary)
+        
+  
+        if (imagePreviewBinary) {
+          // const formData = new FormData();
+          // formData.append("image", imagePreviewBinary); // append the image to FormData
+      
+          try {
+            const formData = new FormData();
+            // formData.append('message', values.message);
+            console.log("formDta")
+            console.log(formData)
+            // const extension = getFileExtension(fileName)
+            //             console.log("extension"+ extension)
+            // console.log(fileName.name)
+
+            // if (imagePreviewBinary) {
+              // formData.append('file',  [imagePreviewBinary], { type: 'image/*' });
+              // formData.append('filename', extension);
+
+            // }
+            const base64Image = arrayBufferToBase64(imagePreviewBinary);
+
+            // Prepare the payload
+            const payload = {
+              imageData: base64Image,
+            };
+      
+            console.log("file")
+            console.log(file)
+          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/upload`, {
+            
+                'file': file, 
+            },{  
+              headers: { 'Content-Type': 'multipart/form-data' } 
+            });
+          imageUrl = response.data.imageUrl; // Get the image URL from the backend response
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          alert("Failed to upload image. Please try again.");
+        }
+      }
 
       setHideDiv(true);
 
@@ -384,19 +415,23 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
         text: values.message.trim(),
         type: 'sent',
         isImage: !!imagePreview,
-        image: imagePreview,
+        image: imageUrl,
         url: urlValue
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       form.resetFields();
       setImagePreview(null);
+      setImagePreviewBinary(null);
       setInputValue('');
-
+      // console.log("isBinary(imagePreview)")
+      // console.log(isBase64(imagePreview))
+      // console.log(isBinary(imagePreview))
+      // console.log("isBinary(imagePreview)")
       const payload = imagePreview
         ? {
           uid: uid.current,
           img_message: values.message.trim(),
-          image: imagePreview,
+          image: imageUrl,
           message: '',
           image_sent: 1,
           url: urlValue
@@ -424,7 +459,9 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
 
   const handleUpload = (file) => {
     const reader = new FileReader();
+    
     reader.onload = () => {
+      console.log(reader)
       setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
@@ -436,14 +473,23 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
       setShowOptions(false);
       event.preventDefault();
       form.submit();
+      setShowSuggestions(false);
+
     }
   };
-
+  const getSentencesByName = (name) => { const found = predefinedQuestions.find(item => item.name.trim() === name); return found ? found.sentences : []; };
   const handleInputChange = (event) => {
     const value = event.target.value;
+    console.log("predefinedQuestions")
+    console.log(predefinedQuestions)
+    console.log("predefinedQuestions")
+    const sentences = getSentencesByName('nepsetrends');
+    console.log("sentences")
+    console.log(sentences)
+    console.log("sentences")
     setInputValue(value);
     if (value) {
-      const filtered = predefinedMessages.filter((msg) =>
+      const filtered = sentences.filter((msg) =>
         msg.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredMessages(filtered);
@@ -460,83 +506,6 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
   };
 
 
-  // const handleIconClick = (iconText) => {
-  //   setOpenedIcon(iconText);
-  //   setTextSnippets(textLists[iconText] || []);
-  //   setShowTextList(true);
-  //   setShowSuggestions(false);
-  // };
-
-  // const handleBack = () => {
-  //   setOpenedIcon(null);
-  //   setShowTextList(false);
-  // };
-
-  // const handleTextClick = (text) => {
-  //   setInputValue(text);
-  //   setShowTextList(false);
-  //   form.setFieldsValue({ message: text });
-  // };
-
-  // const [activeCategory, setActiveCategory] = useState(null);
-  // const [activeCategory, setActiveCategory] = useState(null);
-  // const [selectedContent, setSelectedContent] = useState('');
-  // const getServiceContent = (service) => {
-  //   switch (service) {
-  //     case 'Learn and Earn':
-  //       return LearnAndEarn;
-  //     case 'Trade Support':
-  //       return TradeSupport;
-
-  //     default:
-  //       return [];
-  //   }
-  // };
-  // const tabContent = {
-  //   '1': {
-  //     icon: <RiChat1Line />,
-  //     title: 'Chat',
-  //     icons: [
-  //       { icon: <RiChat1Line size={32} />, text: 'Chat' },
-  //       { icon: <RiImageLine size={32} />, text: 'Images' },
-  //       { icon: <RiFileTextLine size={32} />, text: 'Files' },
-  //       { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
-  //     ]
-  //   },
-  //   '2': {
-  //     icon: <RiImageLine />,
-  //     title: 'Images',
-  //     icons: [
-  //       { icon: <RiImageLine size={32} />, text: 'Images' },
-  //       { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
-  //       { icon: <RiFileTextLine size={32} />, text: 'Documents' },
-  //       { icon: <RiChat1Line size={32} />, text: 'Chat' },
-  //     ]
-  //   },
-  //   '3': {
-  //     icon: <RiFileTextLine />,
-  //     title: 'Documents',
-  //     icons: [
-  //       { icon: <RiFileTextLine size={32} />, text: 'Documents' },
-  //       { icon: <RiImageLine size={32} />, text: 'Images' },
-  //       { icon: <RiChat1Line size={32} />, text: 'Chat' },
-  //       { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
-  //     ]
-  //   },
-  //   '4': {
-  //     icon: <RiFileTextLine />,
-  //     title: 'Files',
-  //     icons: [
-  //       { icon: <RiFileTextLine size={32} />, text: 'Documents' },
-  //       { icon: <RiImageLine size={32} />, text: 'Images' },
-  //       { icon: <RiChat1Line size={32} />, text: 'Chat' },
-  //       { icon: <RiFolderUploadLine size={32} />, text: 'Upload' },
-  //     ]
-  //   }
-  // };
-
-
- 
   const [activeCategory, setActiveCategory] = useState(null);
   const [selectedContent, setSelectedContent] = useState('');
  
@@ -545,7 +514,11 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
   return (
 
     <div className="flex flex-col absolute w-[400px] h-[500px] p-6 py-6 from-green-50 to-white shadow-lg rounded-lg">
-      {console.log(categories)}
+      {console.log("imagePreview")}
+      {console.log(imagePreview)}
+      {console.log("imagePreview")}
+      
+      
       {/* Options Icon */}
       <div className="flex justify-between items-center mb-4">
         <div>
@@ -680,9 +653,11 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
       {msg.type === 'user' && (
         <p>{msg.message}</p>
       )}
-      {msg.image && (
+      {/* {msg.image && (
         <img src={msg.image} alt="Uploaded" className="max-w-xs rounded-lg mt-2" />
-      )}
+      )} */}
+                      {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} /> ) : ( <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download> {msg.image} </a> )} </> )}
+
     </div>
   </div>
 ))}
@@ -709,7 +684,8 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
             </ul>
           </div>
         )}
-        <Form form={form} onFinish={onFinish} className="flex flex-col mt-4 relative bottom-6">
+        
+        {/* <Form form={form} onFinish={onFinish} className="flex flex-col mt-4 relative bottom-6">
           <Form.Item name="message" className="w-full">
             <div className="relative flex">
               <Input.TextArea
@@ -719,16 +695,37 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
                 autoSize={{ minRows: 1, maxRows: 4 }}
                 placeholder="Type your message here..."
                 className="rounded-lg pl-10 py-3 text-green-700"
-              />
-              <Upload beforeUpload={handleUpload} showUploadList={false}>
-                <Button className="absolute left-2 bottom-2 flex p-2 justify-center items-center overflow-hidden rounded-full bg-gray-200 hover:bg-gray-300">
-                  
+              /> */}
+              {/* <Upload beforeUpload={handleUpload} showUploadList={false} > */}
+                {/* <div className="absolute left-2 bottom-2 flex p-2 justify-center items-center overflow-hidden rounded-full bg-gray-200 hover:bg-gray-300"> */}
+                {/* <input type="file" 
+// onChange={(e) =>    {setImagePreview(URL.createObjectURL(e.target.files[0]))
+//   setImagePreviewBinary(e.target.files[0])
+//   const file = e.target.files[0];
+//   const reader = new FileReader();
+  
+//   reader.onload = () => {
+//     // `reader.result` contains the raw binary data as an ArrayBuffer
+//     const arrayBuffer = reader.result;
+//     console.log(arrayBuffer);  // This is the raw binary data of the image
+//     setImagePreviewBinaryBuffer(arrayBuffer);  // Optionally store this data in state
+//   };
+// // Read the file as an ArrayBuffer (raw binary form)
+// reader.readAsArrayBuffer(file);
+// }}                
+
+style={{ display: 'none' }}/>  */}
+
+
+
+                          {/* <input type="file" accept="file/*" onChange={handleFileChange} />
+
                   {
                     imagePreview ? <img src={imagePreview} alt="Uploaded" className="h-8 w-8 rounded-full object-cover" /> : <div className='text-black'>+</div>
                   }
-                </Button> 
-              </Upload>
-              <Button
+                </div> 
+              {/* </Upload> */}
+              {/* <Button
                 type="primary"
                 htmlType="submit"
                 className="absolute right-2 bottom-2 p-2 rounded-full bg-green-500 hover:bg-green-600"
@@ -738,7 +735,42 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
               </Button>
             </div>
           </Form.Item>
-        </Form>
+        </Form>  */}
+        <Form form={form} onFinish={onFinish} className="flex flex-col mt-4 relative bottom-6">
+      <Form.Item name="message" className="w-full">
+        <div className="relative flex">
+          <Input.TextArea
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+            autoSize={{ minRows: 1, maxRows: 4 }}
+            placeholder="Type your message here..."
+            className="rounded-lg pl-10 py-3 text-green-700"
+          />
+          <div className="absolute left-2 bottom-2 flex p-2 justify-center items-center overflow-hidden rounded-full bg-gray-200 hover:bg-gray-300">
+            <input
+              type="file"
+              accept="image/*"
+
+              // ref={ref}
+              onChange={handleFileChange}
+              className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+            />
+            {imagePreview ? (
+              <img src={imagePreview} alt="Uploaded" className="h-8 w-8 rounded-full object-cover" />
+            ) : (
+              <div className="text-black">+</div>
+            )}
+          </div>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="absolute right-2 bottom-2 p-2 rounded-full bg-green-500 hover:bg-green-600"
+            icon={<LuSendHorizonal />}
+          />
+        </div>
+      </Form.Item>
+    </Form>
       </div>
 
 

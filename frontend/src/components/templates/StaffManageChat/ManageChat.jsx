@@ -487,7 +487,7 @@ const ManageChat = ({ selectedUrl }) => {
   const [userIds, setUserIds] = useState([]);
   const staffUserId = localStorage.getItem('currentUserId');
   const [guestChat, setGuestChat] = useState([]);
-
+  const [selectId, setSelectId] = useState(null);
   // Fetch the last messages for the user IDs
   const fetchLastMessages = async (uidsArray) => { 
     try {
@@ -555,7 +555,9 @@ const ManageChat = ({ selectedUrl }) => {
 
   // Handle user message selection and fetching messages
   const handleUserSelect = async (userId) => {
+    setSelectId(userId === selectedChat ? null :userId);
     try {
+
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/messages/${userId}`);
       setSelectedChat({ uid: userId, messages: response.data });
     } catch (error) {
@@ -609,14 +611,15 @@ const ManageChat = ({ selectedUrl }) => {
         {sortedMembers.map((chat, index) => (
           <div
             key={index}
-            className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer"
+            className={`${selectId === chat.uid ? 'bg-gray-200' : 'bg-gray-50'
+              } border border-gray-200 rounded-lg p-4 shadow-sm cursor-pointer`}
             onClick={() => handleUserSelect(chat.uid)}
           >
             <p className="font-semibold text-gray-900">User ID: {chat.uid}</p>
             <p className="text-gray-600 truncate">{chat.message}</p>
           </div>
         ))}
-      </div>
+</div>
 
       <div className="w-2/3 bg-gray-50 p-4 flex flex-col">
         {selectedChat ? (
