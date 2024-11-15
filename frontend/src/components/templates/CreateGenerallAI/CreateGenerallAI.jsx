@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { RxCross2 } from "react-icons/rx";
 import { BsThreeDots } from "react-icons/bs";
 import axios from 'axios';
+import { MdOutlineAttachFile, MdFileDownload } from "react-icons/md";
 
 
 
@@ -296,8 +297,13 @@ useEffect(() => {
         // You can also process the file here (e.g., send it to the server)
         console.log("File selected:", file);
   
-        setImagePreview(URL.createObjectURL(file));
-        const reader = new FileReader();
+        if (file.type.startsWith('image/')) {
+          setImagePreview(URL.createObjectURL(file));
+        } else {
+          // Handle other file types, for example, show a generic preview or icon
+          setImagePreview(null);  // Clear the image preview for non-image files
+        }
+            const reader = new FileReader();
         reader.onload = () => {
           const arrayBuffer = reader.result;
           setImagePreviewBinary(arrayBuffer);
@@ -467,7 +473,20 @@ function arrayBufferToBase64(buffer) {
     reader.readAsDataURL(file);
     return false;
   };
-
+  const getFileIcon = (fileType) => {
+    if (fileType.startsWith('image/')) {
+      return <RiImageLine />;  // Use an image icon for image files
+    } else if (fileType === 'application/pdf') {
+      return <RiFileTextLine />;  // Use a PDF icon for PDF files
+    } else if (fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+      return <RiFileTextLine />;  // Word file icon
+    } else if (fileType === 'application/zip') {
+      return <RiFolderUploadLine />;  // ZIP file icon
+    } else {
+      return <RiFileTextLine />;  // Default generic file icon
+    }
+  };
+  
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       setShowOptions(false);
@@ -656,7 +675,24 @@ function arrayBufferToBase64(buffer) {
       {/* {msg.image && (
         <img src={msg.image} alt="Uploaded" className="max-w-xs rounded-lg mt-2" />
       )} */}
-                      {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} /> ) : ( <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download> {msg.image} </a> )} </> )}
+                      {/* {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} /> ) : ( <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download> {msg.image} </a> )} </> )} */}
+                      {msg.image && (
+  <>
+    {msg.image.endsWith('.jpg') || msg.image.endsWith('.jpeg') || msg.image.endsWith('.png') ? (
+      <img
+        src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`}
+        alt="Message"
+        className="mt-2 max-w-xs rounded"
+        style={{ width: '200px' }}
+      />
+    ) : (
+      <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download className="flex items-center space-x-2">
+        <MdFileDownload size={24} />
+        <span>{`.${msg.image.split('.').pop()}`}</span>
+      </a>
+    )}
+  </>
+)}
 
     </div>
   </div>
@@ -750,7 +786,7 @@ style={{ display: 'none' }}/>  */}
           <div className="absolute left-2 bottom-2 flex p-2 justify-center items-center overflow-hidden rounded-full bg-gray-200 hover:bg-gray-300">
             <input
               type="file"
-              accept="image/*"
+              accept="image/*,application/pdf,.doc,.docx,.zip,.mp3,.wav"  // Specify allowed file types
 
               // ref={ref}
               onChange={handleFileChange}

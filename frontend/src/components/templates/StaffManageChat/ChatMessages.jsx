@@ -256,7 +256,7 @@
 // export default ChatMessages;
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { MdOutlineAttachFile } from "react-icons/md";
+import { MdOutlineAttachFile, MdFileDownload } from "react-icons/md";
 import moment from 'moment-timezone';
 
 const ChatMessages = ({ userId }) => {
@@ -284,7 +284,16 @@ const ChatMessages = ({ userId }) => {
   });
 
   const ref = useRef(null);
+  const handleFileUpload = (e) => {
+    const uploadedFile = e.target.files[0];
+    setFile(uploadedFile); // Set the uploaded file in state
 
+    // For previewing the file (if it's an image)
+    if (uploadedFile && uploadedFile.type.startsWith('image/')) {
+      const imageURL = URL.createObjectURL(uploadedFile);
+      setUploadedImage(imageURL);
+    }
+  };
   // Fetch messages for the current user only when userId changes
   const fetchMessages = async () => {
     if (!userId) return;
@@ -517,7 +526,25 @@ const ChatMessages = ({ userId }) => {
                 <p className="text-gray-600">{msg.message}</p>
                 {console.log(msg)}
                 {/* {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={msg.image} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} />  ) : ( <a href={msg.image} download> {msg.image} </a> )} </> )} */}
-                {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} /> ) : ( <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download> {msg.image} </a> )} </> )}
+                {/* {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} /> ) : ( <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download> {msg.image} </a> )} </> )} */}
+                {msg.image && (
+  <>
+    {msg.image.endsWith('.jpg') || msg.image.endsWith('.jpeg') || msg.image.endsWith('.png') ? (
+      <img
+        src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`}
+        alt="Message"
+        className="mt-2 max-w-xs rounded"
+        style={{ width: '200px' }}
+      />
+    ) : (
+      <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download className="flex items-center space-x-2">
+        <MdFileDownload size={24} />
+        <span>{`.${msg.image.split('.').pop()}`}</span>
+      </a>
+    )}
+  </>
+)}
+
               </div>
               <div ref={messagesEndRef} />
             </>)}
@@ -540,22 +567,24 @@ const ChatMessages = ({ userId }) => {
         <input
           type="file"
           ref={ref}
-          accept="image/*"
-          onChange={(e) =>    {setUploadedImage(URL.createObjectURL(e.target.files[0]))
-            setUploadedImagebinaryFile(e.target.files[0])
-            const file = e.target.files[0];
-            setFile(file)
-            const reader = new FileReader();
+          accept="*/*"  // Accept all file types
+  //         onChange={(e) =>    {setUploadedImage(URL.createObjectURL(e.target.files[0]))
+  //           setUploadedImagebinaryFile(e.target.files[0])
+  //           const file = e.target.files[0];
+  //           setFile(file)
+  //           const reader = new FileReader();
             
-            reader.onload = () => {
-              // `reader.result` contains the raw binary data as an ArrayBuffer
-              const arrayBuffer = reader.result;
-              console.log(arrayBuffer);  // This is the raw binary data of the image
-              setUploadedImagebinary(arrayBuffer);  // Optionally store this data in state
-            };
-        // Read the file as an ArrayBuffer (raw binary form)
-    reader.readAsArrayBuffer(file);
-  }}
+  //           reader.onload = () => {
+  //             // `reader.result` contains the raw binary data as an ArrayBuffer
+  //             const arrayBuffer = reader.result;
+  //             console.log(arrayBuffer);  // This is the raw binary data of the image
+  //             setUploadedImagebinary(arrayBuffer);  // Optionally store this data in state
+  //           };
+  //       // Read the file as an ArrayBuffer (raw binary form)
+  //   reader.readAsArrayBuffer(file);
+  // }}          onChange={handleFileUpload}
+  onChange={handleFileUpload}
+
   className="ml-2 hidden"
 />
         <div className="flex space-x-3">
