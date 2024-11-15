@@ -1,163 +1,167 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useSelector } from "react-redux";
+import { Box } from "@mui/material";
+import StaffSidebar, { SidebarItem } from "../sidebar/Sidebar";
+import { FaHome } from "react-icons/fa";
+import { IoMdAdd } from "react-icons/io";
+import { TfiWrite } from "react-icons/tfi";
+import {
+  IoChatbubbleEllipsesOutline,
+  IoSettingsOutline,
+} from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
+import ManageSignal from "../ManageSignal/ManageSignal";
+import { MdOutlineMarkChatRead } from "react-icons/md";
+import { PiChatsTeardropLight } from "react-icons/pi";
+import AdminContentManagement2 from "./AdminContentManagement2";
+import { LiaMailBulkSolid } from "react-icons/lia";
 
-const ContentManager = () => {
-    const [contents, setContents] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [selectedCategoryId, setSelectedCategoryId] = useState('');
-    const [selectedSubcategoryId, setSelectedSubcategoryId] = useState('');
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [editContentId, setEditContentId] = useState(null);
+import { FaUserClock } from "react-icons/fa";
 
-    useEffect(() => {
-        fetchCategories();
-    }, []);
+const AdminContentManagement = () => {
+  const navigate = useNavigate();
+  const handleRouteHome = () => {
+    navigate("/admin/dashboard");
+  };
+  const handleRouteAddSignal = () => {
+    navigate("/admin/dashboard/addsignal");
+  };
+  const handleRouteManageSignal = () => {
+    navigate("/admin/dashboard/managesignal");
+  };
+  const handleRouteAddContact = () => {
+    navigate("/admin/dashboard/addcontact");
+  };
+  const handleRouteManageContact = () => {
+    navigate("/admin/dashboard/managecontact");
+  };
+  const handleRouteManagePrompt = () => {
+    navigate("/admin/dashboard/manageprompt");
+  };
+  const handleRouteManageChat = () => {
+    navigate("/admin/dashboard/managechat");
+  };
+  const handleRouteCreatePrompt = () => {
+    navigate("/admin/dashboard/createprompt");
+  };
+  const handleRouteChat = () => {
+    navigate("/admin/dashboard/Chat");
+  };
+  const handleRouteBulkMessage = () => {
+    navigate("/admin/dashboard/BulkMessage");
+  };
+  const handleRouteRTMS = () => {
+    navigate("/admin/dashboard/RTMS");
+  };
+  const handleRouteChatIframe=()=>{
+    navigate("/admin/dashboard/manageChatIframe");
+  }
+  const handleRouteCategoryManagementGeneralChat = () => {
+    navigate("/admin/dashboard/manageCategory");
+  
+  }
+  const handleRouteContentManagementGeneralChat = () => {
+    navigate("/admin/dashboard/manageContent");
+  }
+  const handleRouteAdminPredefinedQuestions = () => {
+    navigate("/admin/dashboard/PredefinedQuestions");
+  }
+  //check
+  return (
+    <Box sx={{ display: "flex" }}>
+      <Box sx={{ width: "250px" }}>
+        <StaffSidebar>
+          <SidebarItem
+            icon={<FaHome size={30} />}
+            text="Home"
+            handleClick={handleRouteHome}
+          />
+          <SidebarItem
+            icon={<IoMdAdd size={30} />}
+            text="Add Signal"
+            handleClick={handleRouteAddSignal}
+          />
+          <SidebarItem
+            icon={<TfiWrite size={30} />}
+            text="Manage Signal"
+            handleClick={handleRouteManageSignal}
+          />
+          <SidebarItem
+            icon={<IoMdAdd size={30} />}
+            text="Add Contact"
+            handleClick={handleRouteAddContact}
+          />
 
-    const fetchCategories = async () => {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories`);
-        setCategories(response.data);
-    };
+          <SidebarItem
+            icon={<TfiWrite size={30} />}
+            text="Manage Contact"
+            handleClick={handleRouteManageContact}
+          />
+          <SidebarItem
+            icon={<MdOutlineMarkChatRead size={30} />}
+            text="Add Prompt"
+            handleClick={handleRouteCreatePrompt}
+          />
+          <SidebarItem
+            icon={<PiChatsTeardropLight size={30} />}
+            active
+            alert
+            text="Manage Prompt"
+            handleClick={handleRouteManagePrompt}
+          />
+          {/* <SidebarItem
+            icon={<IoSettingsOutline size={30} />}
+            text="Change Password"
+          /> 
+          <SidebarItem
+            icon={<IoChatbubbleEllipsesOutline size={30} />}
+            text="Chat"
+            handleClick={handleRouteChat}
+          />*/}
+          <SidebarItem
+            icon={<PiChatsTeardropLight size={30} />}
+            text="Manage Chat"
+            handleClick={handleRouteManageChat}
+          />
+          <SidebarItem
+          icon={<PiChatsTeardropLight size={30} />}
+          text="Manage Chat Iframe"
+          handleClick={handleRouteChatIframe}
 
-    const fetchContents = async (categoryId, subcategoryId) => {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/categories/${categoryId}/subcategories/${subcategoryId}/items`);
-        setContents(response.data);
-    };
-
-    const handleCategoryChange = (e) => {
-        setSelectedCategoryId(e.target.value);
-        setSelectedSubcategoryId('');
-        setContents([]);
-    };
-
-    const handleSubcategoryChange = (e) => {
-        const selectedId = e.target.value;
-        setSelectedSubcategoryId(selectedId);
-        if (selectedId) {
-            fetchContents(selectedCategoryId, selectedId);
-        } else {
-            setContents([]);
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (editContentId) {
-            await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/contents/${selectedCategoryId}/subcategories/${selectedSubcategoryId}/items/${editContentId}`, { title, content });
-        } else {
-            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/contents/${selectedCategoryId}/subcategories/${selectedSubcategoryId}/items`, { title, content });
-        }
-        resetForm();
-        fetchContents(selectedCategoryId, selectedSubcategoryId);
-    };
-
-    const handleEdit = (content) => {
-        setEditContentId(content._id);
-        setTitle(content.title);
-        setContent(content.content);
-    };
-
-    const handleDelete = async (contentId) => {
-        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/contents/${selectedCategoryId}/subcategories/${selectedSubcategoryId}/items/${contentId}`);
-        fetchContents(selectedCategoryId, selectedSubcategoryId);
-    };
-
-    const resetForm = () => {
-        setTitle('');
-        setContent('');
-        setEditContentId(null);
-    };
-
-    return (
-        <div className="max-w-3xl mx-auto p-4 bg-white shadow-lg rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">Manage Contents</h2>
-
-            <div className="space-y-4">
-                <select
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={selectedCategoryId}
-                    onChange={handleCategoryChange}
-                    required
-                >
-                    <option value="">Select Category</option>
-                    {categories.map((category) => (
-                        <option key={category._id} value={category._id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
-
-                {selectedCategoryId && (
-                    <select
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={selectedSubcategoryId}
-                        onChange={handleSubcategoryChange}
-                        required
-                    >
-                        <option value="">Select Subcategory</option>
-                        {categories.find((category) => category._id === selectedCategoryId)?.subcategories.map((subcategory) => (
-                            <option key={subcategory._id} value={subcategory._id}>
-                                {subcategory.name}
-                            </option>
-                        ))}
-                    </select>
-                )}
-
-                {selectedSubcategoryId && (
-                    <div>
-                        <h3 className="text-xl font-semibold mb-2 text-gray-700">Add New Content</h3>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Title"
-                                required
-                                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                            <textarea
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                placeholder="Content"
-                                required
-                                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                            <button
-                                type="submit"
-                                className="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300"
-                            >
-                                {editContentId ? 'Update Content' : 'Add Content'}
-                            </button>
-                        </form>
-                        
-                        <h3 className="text-xl font-semibold mt-6 mb-2 text-gray-700">Contents</h3>
-                        <ul className="space-y-4">
-                            {contents.map((content) => (
-                                <li key={content._id} className="p-4 bg-gray-100 rounded-lg shadow-sm">
-                                    <h4 className="text-lg font-semibold text-gray-800">{content.title}</h4>
-                                    <p className="text-gray-600 mt-2">{content.content}</p>
-                                    <div className="flex space-x-4 mt-3">
-                                        <button
-                                            onClick={() => handleEdit(content)}
-                                            className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors duration-300"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(content._id)}
-                                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+        />
+          <SidebarItem
+            icon={<LiaMailBulkSolid size={40} />}
+            text="Bulk Message"
+            handleClick={handleRouteBulkMessage}
+          />
+          <SidebarItem
+            icon={<FaUserClock size={40} />}
+            text="RTMS"
+            handleClick={handleRouteRTMS}
+          />
+          <SidebarItem
+            icon={<FaUserClock size={30} />}
+            text="Category Management General Chat"
+            handleClick={handleRouteCategoryManagementGeneralChat}
+          />
+          <SidebarItem
+            icon={<FaUserClock size={30} />}
+            text="Content Management General Chat"
+            handleClick={handleRouteContentManagementGeneralChat}
+          />
+          <SidebarItem
+            icon={<FaUserClock size={30} />}
+            text="Manage Predefined Questions"
+            handleClick={handleRouteAdminPredefinedQuestions}
+          />
+        </StaffSidebar>
+      </Box>
+      <Box
+        sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
+      >
+        <AdminContentManagement2 />
+      </Box>
+    </Box>
+  );
 };
 
-export default ContentManager;
+export default AdminContentManagement;

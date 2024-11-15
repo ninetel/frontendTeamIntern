@@ -89,6 +89,16 @@ const AdminManageChat = () => {
   const handleRouteChatIframe = () => {
     navigate("/admin/dashboard/manageChatIframe");
   }
+  const handleRouteCategoryManagementGeneralChat = () => {
+    navigate("/admin/dashboard/manageCategory");
+  
+  }
+  const handleRouteContentManagementGeneralChat = () => {
+    navigate("/admin/dashboard/manageContent");
+  }
+  const handleRouteAdminPredefinedQuestions = () => {
+    navigate("/admin/dashboard/PredefinedQuestions");
+  }
   //check
 
   return (
@@ -159,6 +169,21 @@ const AdminManageChat = () => {
             icon={<FaUserClock size={40} />}
             text="RTMS"
             handleClick={handleRouteRTMS}
+          />
+          <SidebarItem
+            icon={<FaUserClock size={30} />}
+            text="Category Management General Chat"
+            handleClick={handleRouteCategoryManagementGeneralChat}
+          />
+          <SidebarItem
+            icon={<FaUserClock size={30} />}
+            text="Content Management General Chat"
+            handleClick={handleRouteContentManagementGeneralChat}
+          />
+          <SidebarItem
+            icon={<FaUserClock size={30} />}
+            text="Manage Predefined Questions"
+            handleClick={handleRouteAdminPredefinedQuestions}
           />
         </StaffSidebar>
       </Box>
