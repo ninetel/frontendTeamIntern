@@ -414,17 +414,17 @@ const ChatMessages = ({ userId }) => {
   // };
   const handleSendMessage = async () => {
     if (newMessage.trim() === "" && !uploadedImage) return;
-  
     const urlValue = getCurrentUrl();
     const timestamp = moment().tz('Asia/Kathmandu').format();
     let imageUrl = "";
   
     // If there's an uploaded image, send it to the backend
-    if (uploadedImagebinaryFile) {
-      const formData = new FormData();
-      formData.append("image", uploadedImagebinaryFile); // append the image to FormData
-      console.log(formData)
+    if (file) {
+      // const formData = new FormData();
+      // formData.append("image", uploadedImagebinaryFile); // append the image to FormData
+      // console.log(formData)
       try {
+        {console.log("file")}
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/upload`, {
           "file":file
         }, {
@@ -549,7 +549,7 @@ const ChatMessages = ({ userId }) => {
               <div key={index} className={`p-4 rounded-lg shadow-sm ${msg.type === "user" ? "bg-gray-200 self-start mt-2 ml-[50%]" : "bg-blue-200 mt-2 w-[55%] self-end"}`}>
                 <p className="font-semibold text-gray-900">{msg.type === "user" ? "Client" : "Admin"}</p>
                 <p className="text-gray-600">{msg.message}</p>
-                {console.log(msg)}
+                {/* {console.log(msg)} */}
                 {/* {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={msg.image} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} />  ) : ( <a href={msg.image} download> {msg.image} </a> )} </> )} */}
                 {/* {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} /> ) : ( <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download> {msg.image} </a> )} </> )} */}
                 {msg.image && (
@@ -583,6 +583,7 @@ const ChatMessages = ({ userId }) => {
       <div className="flex items-center p-1 justify-between pr-8 mx-3 mr-10 border rounded">
         <input
           type="text"
+          required
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={handleKeyPress}
@@ -616,7 +617,7 @@ const ChatMessages = ({ userId }) => {
           <button onClick={handleButtonClick}>
             <MdOutlineAttachFile size={30} />
           </button>
-          <button onClick={handleSendMessage} className="ml-2 bg-blue-500 text-white p-2 rounded-full">
+          <button onClick={handleSendMessage} disabled={!newMessage.trim()} className="ml-2 bg-blue-500 text-white p-2 rounded-full">
             Send
           </button>
         </div>

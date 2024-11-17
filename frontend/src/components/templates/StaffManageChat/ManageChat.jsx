@@ -503,7 +503,7 @@ const ManageChat = ({ selectedUrl }) => {
           }
         }
       );
-      console.log('Last messages:', response.data);
+      // console.log('Last messages:', response.data);
       
       const lastMessages = response.data.lastMessages || [];
 
@@ -513,7 +513,7 @@ const ManageChat = ({ selectedUrl }) => {
         .map(chat => {
           // Extract the timestamp part without the timezone
           const timestampWithoutTimezone = chat.timestamp.split('+')[0].split('.')[0];
-          console.log("timestampWithoutTimezone", timestampWithoutTimezone);
+          // console.log("timestampWithoutTimezone", timestampWithoutTimezone);
           return {
             ...chat,
             timestamp: new Date(timestampWithoutTimezone) // Convert to Date object without timezone
@@ -521,7 +521,7 @@ const ManageChat = ({ selectedUrl }) => {
         })
         .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp, newest first
 
-      console.log(filteredSortedMembers);
+      // console.log(filteredSortedMembers);
       setGuestChat(lastMessages); // Store all messages if needed
       setSortedMembers(filteredSortedMembers); // Set the sorted messages
     } catch (error) {
