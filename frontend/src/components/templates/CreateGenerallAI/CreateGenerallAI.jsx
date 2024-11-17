@@ -47,6 +47,8 @@ const CreateGenerallAI = () => {
   const [showTextList, setShowTextList] = useState(false);
   const [showOptions, setShowOptions] = useState(true); // State to track options visibility
   const [lastMessages, setLastMessages] = useState('');
+  const [showTypingIndicator, setShowTypingIndicator] = useState(false);
+
   const uidValue = localStorage.getItem('uid') ? 1 : 0;
   const uid = useRef(localStorage.getItem('uid') || uuidv4());
   const [urlValue, setUrlValue] = useState(''); // State to hold the URL value
@@ -55,6 +57,8 @@ const CreateGenerallAI = () => {
   const [hideDiv, setHideDiv] = useState(false);
   const [showDiv, setShowDiv] = useState(false);
   const [file, setFile] = useState(null);
+  const delayInProgress = useRef(false);  // Track if the delay is in progress
+
    var varr = 0
   const [messageDetails, setMessageDetails] = useState({
     type: "text",
@@ -76,7 +80,7 @@ const CreateGenerallAI = () => {
 
   }
   }, []); 
- 
+  
   const messagesEndRef = useRef(null);
   useEffect(() => {
     fetchCategories();
@@ -95,12 +99,14 @@ const CreateGenerallAI = () => {
 
     localStorage.setItem('uid', uid.current);
 
-    console.log("ram hari")
+    // console.log("ram hari")
+
+
 if (uidValue==0 && varr==0) {
 
   localStorage.setItem('uid', uid.current);
 
-  console.log("ram hari")
+  // console.log("ram hari")
 
 
     selectRandomStaffAndSend(staffz, uid)
@@ -109,14 +115,26 @@ if (uidValue==0 && varr==0) {
 
   }
 
-  console.log("hari hari hari")
+  // console.log("hari hari hari")
 }
+const shouldShowTypingIndicator = () => {
+  if (messages.length === 0) {
+    return false;
+  }
+  const lastMessage = messages[messages.length - 1];
+  return lastMessage.type === 'user';
+};
+
+useEffect(() => {
+  setShowTypingIndicator(shouldShowTypingIndicator());
+}, [messages]);
+
 const fetchMessages = async () => {
  
   try {
-    console.log('uid')
-    console.log(uid)
-    console.log('uid')
+    // console.log('uid')
+    // console.log(uid)
+    // console.log('uid')
 
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/guest-messages/${uid.current}`);
     const allMessages = response.data.allMessages || [];
@@ -138,9 +156,9 @@ const fetchMessages = async () => {
       });
     }
 
-    console.log('sortedMessages')
-    console.log(sortedMessages)
-    console.log('sortedMessages')
+    // console.log('sortedMessages')
+    // console.log(sortedMessages)
+    // console.log('sortedMessages')
   } catch (error) {
     console.error('Error fetching messages:', error);
   }
@@ -152,12 +170,38 @@ useEffect(() => {
   fetchMessages();
 }, []);
 
+// useEffect(() => {
+//   // Fetch messages whenever the messages state changes
+//   if (messages.length > 0) {
+//   //  let a=0;
+//     fetchMessages();
+//   }
+// }, [messages]);
 useEffect(() => {
-  // Fetch messages whenever the messages state changes
+  const fetchMessagesWithDelay = async () => {
+    if (delayInProgress.current) {
+      // If delay is in progress, ignore this call
+      return;
+    }
+
+    // Start the delay
+    delayInProgress.current = true;
+
+    // Wait for 1 second before running the fetch function
+    setTimeout(async () => {
+      // Fetch messages after 1 second delay
+      await fetchMessages();
+
+      // After fetching, reset the delay flag
+      delayInProgress.current = false;
+    }, 1000);  // 1 second delay
+  };
+
+  // Run the delayed fetch only if there are messages
   if (messages.length > 0) {
-    fetchMessages();
+    fetchMessagesWithDelay();
   }
-}, [messages]);
+}, [messages]);  // Depend on messages, so whenever they change, the effect runs
 
 
 
@@ -169,26 +213,16 @@ const fetchCategories = async () => {
   setPredefinedQuestions(response.data);
 };
 const selectRandomStaffAndSend= async (staffs, uid)=> {
-  {console.log(staffs)}
-
-  const randomIndex = Math.floor(Math.random() * staffs.length);
-  {console.log("randomIndex")}
-
-  {console.log(randomIndex)}
-  const selectedStaffId = staffs[randomIndex]._id;
-
  
-  console.log("Selected Staff ID:", selectedStaffId);
+  const randomIndex = Math.floor(Math.random() * staffs.length);
+   const selectedStaffId = staffs[randomIndex]._id;
 
-    console.log("Selected UID:", uid.current);
 
     const data = { uid: uid.current, staffId: selectedStaffId };
 
-    console.log("Selected data:", data);
 
     try {
 
-      console.log("Selectssed UID:", uid.current);
 
 
 
@@ -198,7 +232,6 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
 
 
 
-      console.log("Data sent successfully:", response.data);
 
     } catch (error) {
 
@@ -218,9 +251,6 @@ const selectRandomStaffAndSend= async (staffs, uid)=> {
     checkUid(response.data);
 
   };
-
-// function isBinary(data) { for (let i = 0; i < data.length; i++) { if (data.charCodeAt(i) > 127) { return true; } } return false; }
-// function isBase64(str) { if (typeof str !== 'string') { return false; } const notBase64 = /[^A-Z0-9+\/=]/i; const len = str.length; if (!len || len % 4 !== 0 || notBase64.test(str)) { return false; } const firstPaddingChar = str.indexOf('='); return firstPaddingChar === -1 || firstPaddingChar === len - 1 || (firstPaddingChar === len - 2 && str[len - 1] === '='); } 
 useEffect(() => {
     localStorage.setItem('uid', uid.current);
     socket.on('new_message', (data) => {
@@ -291,11 +321,6 @@ useEffect(() => {
       const file = e.target.files[0];
       if (file) {
         setFile(file);
-
-        console.log(file)
-
-        // You can also process the file here (e.g., send it to the server)
-        console.log("File selected:", file);
   
         if (file.type.startsWith('image/')) {
           setImagePreview(URL.createObjectURL(file));
@@ -341,66 +366,20 @@ function arrayBufferToBase64(buffer) {
   return window.btoa(binary);
 }
   const onFinish = async (values) => {
-    // if (values.message && values.message.trim()) {
-      // console.log('uid===' + uid.current);
-      // console.log("localhostt== " + urlValue)
-      // console.log("image iss::::",imagePreviewBinary)
-      // let imageUrl = "";
-
-      // if (imagePreviewBinary) {
-      //   // const formData = new FormData();
-      //   // formData.append("image", imagePreviewBinary); // append the image to FormData
-    
-      //   try {
-      //     const formData = new FormData();
-      //     // formData.append('message', values.message);
-      //     console.log("formDta")
-      //     console.log(formData)
-      //     if (imagePreviewBinary) {
-      //       const fileBlob = new Blob([imagePreviewBinary]);
-      //       const fileType = fileBlob.type;  // e.g., 'image/jpeg', 'image/png', etc.
-      //       const fileExtension = getFileExtension(fileType);  // Get the correct file extension based on MIME type
-      //       const fileName = `file-${Date.now()}${fileExtension}`;
-      //       console.log("fileExtension")
-      //       console.log(fileExtension)
-      //       formData.append('file',fileBlob, fileName );
-      //     }
-      //     console.log("formData")
-      //     console.log(formData)
       let imageUrl = "";
       if (values.message && values.message.trim()) {
-        // console.log('uid===' + uid.current);
-        // console.log("localhostt== " + urlValue)
-        console.log("image iss::::",imagePreviewBinary)
         
   
         if (imagePreviewBinary) {
-          // const formData = new FormData();
-          // formData.append("image", imagePreviewBinary); // append the image to FormData
       
           try {
             const formData = new FormData();
-            // formData.append('message', values.message);
-            console.log("formDta")
-            console.log(formData)
-            // const extension = getFileExtension(fileName)
-            //             console.log("extension"+ extension)
-            // console.log(fileName.name)
-
-            // if (imagePreviewBinary) {
-              // formData.append('file',  [imagePreviewBinary], { type: 'image/*' });
-              // formData.append('filename', extension);
-
-            // }
             const base64Image = arrayBufferToBase64(imagePreviewBinary);
 
-            // Prepare the payload
             const payload = {
               imageData: base64Image,
             };
       
-            console.log("file")
-            console.log(file)
           const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/upload`, {
             
                 'file': file, 
@@ -429,10 +408,6 @@ function arrayBufferToBase64(buffer) {
       setImagePreview(null);
       setImagePreviewBinary(null);
       setInputValue('');
-      // console.log("isBinary(imagePreview)")
-      // console.log(isBase64(imagePreview))
-      // console.log(isBinary(imagePreview))
-      // console.log("isBinary(imagePreview)")
       const payload = imagePreview
         ? {
           uid: uid.current,
@@ -450,10 +425,13 @@ function arrayBufferToBase64(buffer) {
           image_sent: 0,
           url: urlValue
         };
+        setMessages([...messages, payload]);
 
       try {
         socket.emit('send_message', payload);
         socket.emit('user_typing', { uid: uid });
+
+        fetchMessages();
       } catch (error) {
         console.error('Error sending message:', error);
       }
@@ -467,7 +445,7 @@ function arrayBufferToBase64(buffer) {
     const reader = new FileReader();
     
     reader.onload = () => {
-      console.log(reader)
+      // console.log(reader)
       setImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
@@ -499,13 +477,13 @@ function arrayBufferToBase64(buffer) {
   const getSentencesByName = (name) => { const found = predefinedQuestions.find(item => item.name.trim() === name); return found ? found.sentences : []; };
   const handleInputChange = (event) => {
     const value = event.target.value;
-    console.log("predefinedQuestions")
-    console.log(predefinedQuestions)
-    console.log("predefinedQuestions")
+    // console.log("predefinedQuestions")
+    // console.log(predefinedQuestions)
+    // console.log("predefinedQuestions")
     const sentences = getSentencesByName('nepsetrends');
-    console.log("sentences")
-    console.log(sentences)
-    console.log("sentences")
+    // console.log("sentences")
+    // console.log(sentences)
+    // console.log("sentences")
     setInputValue(value);
     if (value) {
       const filtered = sentences.filter((msg) =>
@@ -528,14 +506,25 @@ function arrayBufferToBase64(buffer) {
   const [activeCategory, setActiveCategory] = useState(null);
   const [selectedContent, setSelectedContent] = useState('');
  
+  useEffect(() => {
+    socket.on('new_message', () => {
+      // Handle the incoming data here
+    //  console.log(data); // Log the received data for debugging
+      // Update your state or UI with the new message
+      fetchMessages();
+      // setMessages([...messages, data]);
+    });
+  
+    return () => {
+      socket.off('new_message'); // Clean up the event listener
+    };
+  }, [messages]);
   
 
   return (
 
     <div className="flex flex-col absolute w-[400px] h-[500px] p-6 py-6 from-green-50 to-white shadow-lg rounded-lg">
-      {console.log("imagePreview")}
-      {console.log(imagePreview)}
-      {console.log("imagePreview")}
+     
       
       
       {/* Options Icon */}
@@ -622,32 +611,10 @@ function arrayBufferToBase64(buffer) {
       }
 
       <div className='fixed w-[350px] bottom-0 '>
+        {console.log(messages)}
         <div className="flex flex-col-reverse bottom-0 h-[60vh] overflow-y-scroll mt-4 flex-grow overflow-auto">
         <div ref={refff.current === 0 ? messagesEndRef : null} />
         <div className="flex flex-col space-y-2 mb-2">
-            {console.log(messages)}
-            {/* {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`p-2 rounded-lg shadow-md ${msg.type === 'user'
-                  ? 'self-end bg-green-100 text-green-700'
-                  : 'self-start bg-white text-green-700'
-                  }`}
-              >
-                {msg.type === 'received' && (
-                  <div className="flex items-center space-x-2">
-                    <FaUser className="text-green-700" />
-                    <p>{msg.response}</p>
-                  </div>
-                )}
-                {msg.type === 'user' && (
-                  <p>{msg.text}</p>
-                )}
-                {msg.isImage && (
-                  <img src={msg.image} alt="Uploaded" className="max-w-xs rounded-lg" />
-                )}
-              </div>
-            ))} */}
             {messages.map((msg, index) => (
   <div
     key={index}
@@ -672,11 +639,7 @@ function arrayBufferToBase64(buffer) {
       {msg.type === 'user' && (
         <p>{msg.message}</p>
       )}
-      {/* {msg.image && (
-        <img src={msg.image} alt="Uploaded" className="max-w-xs rounded-lg mt-2" />
-      )} */}
-                      {/* {msg.image && ( <> {msg.image.endsWith('.jpg') || msg.image.endsWith('.png') ? ( <img src={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} alt="Message" className="mt-2 max-w-xs rounded" style={{ width: '200px' }} /> ) : ( <a href={`${import.meta.env.VITE_BACKEND_URL}${msg.image}`} download> {msg.image} </a> )} </> )} */}
-                      {msg.image && (
+      {msg.image && (
   <>
     {msg.image.endsWith('.jpg') || msg.image.endsWith('.jpeg') || msg.image.endsWith('.png') ? (
       <img
@@ -695,14 +658,15 @@ function arrayBufferToBase64(buffer) {
 )}
 
     </div>
+
   </div>
 ))}
 
-            {typing && (
-              <div className="self-start bg-white text-green-700 p-2 rounded-lg shadow-md">
+            {/* {typing && (
+              <div className="-start bg-white text-green-700 p-2 rounded-lg shadow-md">
                 Typing...
               </div>
-            )}
+            )} */}
           </div>
         </div>
         {showSuggestions && (
@@ -721,57 +685,7 @@ function arrayBufferToBase64(buffer) {
           </div>
         )}
         
-        {/* <Form form={form} onFinish={onFinish} className="flex flex-col mt-4 relative bottom-6">
-          <Form.Item name="message" className="w-full">
-            <div className="relative flex">
-              <Input.TextArea
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyPress={handleKeyPress}
-                autoSize={{ minRows: 1, maxRows: 4 }}
-                placeholder="Type your message here..."
-                className="rounded-lg pl-10 py-3 text-green-700"
-              /> */}
-              {/* <Upload beforeUpload={handleUpload} showUploadList={false} > */}
-                {/* <div className="absolute left-2 bottom-2 flex p-2 justify-center items-center overflow-hidden rounded-full bg-gray-200 hover:bg-gray-300"> */}
-                {/* <input type="file" 
-// onChange={(e) =>    {setImagePreview(URL.createObjectURL(e.target.files[0]))
-//   setImagePreviewBinary(e.target.files[0])
-//   const file = e.target.files[0];
-//   const reader = new FileReader();
-  
-//   reader.onload = () => {
-//     // `reader.result` contains the raw binary data as an ArrayBuffer
-//     const arrayBuffer = reader.result;
-//     console.log(arrayBuffer);  // This is the raw binary data of the image
-//     setImagePreviewBinaryBuffer(arrayBuffer);  // Optionally store this data in state
-//   };
-// // Read the file as an ArrayBuffer (raw binary form)
-// reader.readAsArrayBuffer(file);
-// }}                
-
-style={{ display: 'none' }}/>  */}
-
-
-
-                          {/* <input type="file" accept="file/*" onChange={handleFileChange} />
-
-                  {
-                    imagePreview ? <img src={imagePreview} alt="Uploaded" className="h-8 w-8 rounded-full object-cover" /> : <div className='text-black'>+</div>
-                  }
-                </div> 
-              {/* </Upload> */}
-              {/* <Button
-                type="primary"
-                htmlType="submit"
-                className="absolute right-2 bottom-2 p-2 rounded-full bg-green-500 hover:bg-green-600"
-                icon={<LuSendHorizonal />}
-              >
-
-              </Button>
-            </div>
-          </Form.Item>
-        </Form>  */}
+      
         <Form form={form} onFinish={onFinish} className="flex flex-col mt-4 relative bottom-6">
       <Form.Item name="message" className="w-full">
         <div className="relative flex">
@@ -808,6 +722,7 @@ style={{ display: 'none' }}/>  */}
       </Form.Item>
     </Form>
       </div>
+      
 
 
     </div >

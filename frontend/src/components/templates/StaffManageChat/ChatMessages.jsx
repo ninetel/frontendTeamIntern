@@ -274,6 +274,7 @@ const ChatMessages = ({ userId }) => {
   const [staffUpdated, setStaffUpdated] = useState(false);
   const refff = useRef(0); // Store refff in useRef to persist its value across renders
   const [file, setFile] = useState(null);
+  const delayInProgress = useRef(false);  // Track if the delay is in progress
 
   const refreshComponent = () => { window.location.reload(); };
 
@@ -321,7 +322,31 @@ const ChatMessages = ({ userId }) => {
       console.error('Error fetching messages:', error);
     }
   };
-
+  useEffect(() => {
+    const fetchMessagesWithDelay = async () => {
+      if (delayInProgress.current) {
+        // If delay is in progress, ignore this call
+        return;
+      }
+  
+      // Start the delay
+      delayInProgress.current = true;
+  
+      // Wait for 1 second before running the fetch function
+      setTimeout(async () => {
+        // Fetch messages after 1 second delay
+        await fetchMessages();
+  
+        // After fetching, reset the delay flag
+        delayInProgress.current = false;
+      }, 1000);  // 1 second delay
+    };
+  
+    // Run the delayed fetch only if there are messages
+    if (messages.length > 0) {
+      fetchMessagesWithDelay();
+    }
+  }, [messages]);
   useEffect(() => {
     fetchMessages();
     if (refff.current === 0) {

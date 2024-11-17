@@ -488,6 +488,8 @@ const ManageChat = ({ selectedUrl }) => {
   const staffUserId = localStorage.getItem('currentUserId');
   const [guestChat, setGuestChat] = useState([]);
   const [selectId, setSelectId] = useState(null);
+  const delayInProgress = useRef(false);  // Track if the delay is in progress
+
   // Fetch the last messages for the user IDs
   const fetchLastMessages = async (uidsArray) => { 
     try {
@@ -552,7 +554,34 @@ const ManageChat = ({ selectedUrl }) => {
       fetchLastMessages(userIds);
     }
   }, [userIds]); // This effect will run whenever `userIds` changes
-
+  useEffect(() => {
+    const fetchMessagesWithDelay = async () => {
+      if (delayInProgress.current) {
+        // If delay is in progress, ignore this call
+        return;
+      }
+  
+      // Start the delay
+      delayInProgress.current = true;
+  
+      // Wait for 1 second before running the fetch function
+      setTimeout(async () => {
+        fetchUserIds();
+        // Fetch messages after 1 second delay
+        if (userIds.length > 0) {
+          await fetchLastMessages(userIds);
+        }
+  
+        // After fetching, reset the delay flag
+        delayInProgress.current = false;
+      }, 1000);  // 1 second delay
+    };
+  
+    // Run the delayed fetch only if there are messages
+    if (sortedMembers.length > 0) {
+      fetchMessagesWithDelay();
+    }
+  }, [sortedMembers]);
   // Handle user message selection and fetching messages
   const handleUserSelect = async (userId) => {
     setSelectId(userId === selectedChat ? null :userId);
