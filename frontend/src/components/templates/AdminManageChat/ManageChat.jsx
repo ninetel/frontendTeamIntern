@@ -112,7 +112,7 @@ const ManageChat = ({ selectedUrl }) => {
     ? sortedMembers.filter((chat) => chat.type === userType)
     : sortedMembers;
 
-    console.log("filteredMembers===>", sortedMembers);
+    // console.log("filteredMembers===>", sortedMembers);
 
   return (
     <div className="flex h-screen w-full">

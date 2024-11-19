@@ -41,7 +41,7 @@ const currentLoggedInUserSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser: (state, action) => {
-      console.log("action-------->", action.payload);
+      // console.log("action-------->", action.payload);
       state.userInfo.id = action.payload?._id;
       state.userInfo.email = action.payload?.email;
       state.userInfo.name = action.payload?.name;
@@ -77,10 +77,10 @@ const currentLoggedInUserSlice = createSlice({
   },
 });
 
-console.log(
-  "currentLoggedInUserSlice.userInfo -----++++++",
-  currentLoggedInUserSlice.userInfo
-);
+// console.log(
+//   "currentLoggedInUserSlice.userInfo -----++++++",
+//   currentLoggedInUserSlice.userInfo
+// );
 
 export default currentLoggedInUserSlice.reducer;
 export const { setCurrentUser } = currentLoggedInUserSlice.actions;

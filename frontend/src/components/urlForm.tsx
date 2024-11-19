@@ -13,7 +13,7 @@ const UrlForm = ({ onSave }) => {
     const fetchUrl = async () => {
         try {
             const response = await api.get('/');
-            console.log(response.data.urls)
+            // console.log(response.data.urls)
             setUrl(response.data.urls);
         } catch (error) {
             console.log(error)

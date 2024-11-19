@@ -31,7 +31,7 @@ import AdminManageSignal from "./components/templates/AdminManageSignal/AdminMan
 import AddContact from "./components/templates/AddContact/AddContact.jsx";
 import AdminManageContact from "./components/templates/AdminManageContact/AdminManageContact.jsx";
 // import AdminManageChat from "./components/templates/AdminManageChat/AdminManageChat.jsx";
-// import Chat from "./components/templates/Chat/Chat.jsx";
+import Chat from "./components/templates/Chat/Chat.jsx";
 import AdminSendBulkMessage from "./components/templates/AdminSendBulkMessage/AdminSendBulkMessage.jsx";
 import RTMS from "./components/templates/RTMS/RTMS.jsx";
 import StaffManageChat from './components/templates/StaffManageChat/StaffManageChat';
@@ -119,7 +119,7 @@ const App = () => {
     path="/admin/dashboard/PredefinedQuestions"
     element={<AdminPredefinedQuestions />}
   />
-        {/* <Route path="/admin/dashboard/Chat" element={<Chat />} /> */}
+        <Route path="/admin/dashboard/Chat" element={<Chat />} />
         <Route path="/chatAI" element={<ChatAI />} />
         <Route path="/chatGeneral" element={<ChatGeneral />} />
         <Route

@@ -135,7 +135,7 @@ const BulkMessage = () => {
      
       //await axios.post('http://81.181.198.75:5000/send_notifications', payload);
       await axios.post('http://localhost:5000/send_notifications', payload);
-      console.log('Payload sent to API:', payload);
+      // console.log('Payload sent to API:', payload);
 
      
       setSelectedContactType('');

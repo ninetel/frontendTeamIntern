@@ -8,7 +8,7 @@ const FormTopSection = ({ heading, text, link }) => {
     const dispatch = useAppDispatch();
     const handleAuthChange = () => {
         // dispatch(toggleAuthSelection());
-        console.log("handleAuthChange")
+        // console.log("handleAuthChange")
     };
     return (
         <Box>

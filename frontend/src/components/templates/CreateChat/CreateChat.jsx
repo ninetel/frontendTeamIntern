@@ -356,7 +356,8 @@ import ManageChat from '../ManageChat/ManageChat';
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const socket = io('http://81.181.198.75:5002'); // Replace with your Flask server URL
+// const socket = io('http://81.181.198.75:5002'); // Replace with your Flask server URL
+const socket = io('http://localhost:5002'); // Replace with your Flask server URL
 
 const CreateChat = () => {
   const accessToken = useAppSelector((state) => state.authentication.accessToken);
@@ -376,7 +377,7 @@ const CreateChat = () => {
     // Fetch chat history when the component mounts
     const fetchChatHistory = async () => {
       try {
-        const response = await axios.get(`http://localhost:5004/get_chat_history`, {
+        const response = await axios.get(`http://localhost:5002/get_chat_history`, {
           params: {
             sender_id: userInfo.id,
             receiver_id: '66c5977ee15fe197f4ba0ff7' // Replace with the appropriate receiver ID

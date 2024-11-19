@@ -30,7 +30,7 @@ const seedPrompts = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to MongoDB");
+    // console.log("Connected to MongoDB");
 
     // Delete existing prompts to avoid duplicates
     await Prompt.deleteMany({});
@@ -41,7 +41,7 @@ const seedPrompts = async () => {
       await newPrompt.save();
     }
 
-    console.log("Prompts seeded successfully");
+    // console.log("Prompts seeded successfully");
     mongoose.disconnect();
   } catch (error) {
     console.error("Error seeding prompts:", error);

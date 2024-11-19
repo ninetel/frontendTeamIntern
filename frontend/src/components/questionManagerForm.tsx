@@ -37,7 +37,7 @@ const QuestionManagerForm = ({
     }, []);
 
     const handleDeleteName = async (index: any) => {
-        console.log(index)
+        // console.log(index)
         try {
             await api.delete(`/${index}`);
             fetchQuestions();

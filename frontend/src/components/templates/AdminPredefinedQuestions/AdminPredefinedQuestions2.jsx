@@ -761,8 +761,8 @@ const PredefinedQuestionsManager2 = () => {
     const handleAddUrl = async (index) => {
         if (newUrl) {
             const predefinedQuestionId = savedNames[index]._id;  // Get the ID of the predefined question
-            console.log("Sending ID:", predefinedQuestionId);
-            console.log("Sending url:", newUrl);
+            // console.log("Sending ID:", predefinedQuestionId);
+            // console.log("Sending url:", newUrl);
     
             try {
                 // Send a POST request with the ID of the predefined question and the URL in the body

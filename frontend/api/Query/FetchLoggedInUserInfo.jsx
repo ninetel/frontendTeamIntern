@@ -1,7 +1,7 @@
 import axios from "axios";
 export const fetchLoggedInUserInfo = async (accessToken, role) => {
   if (role === "user") {
-    console.log("Inside of fetching user");
+    // console.log("Inside of fetching user");
     try {
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/info`, {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -25,7 +25,7 @@ export const fetchLoggedInUserInfo = async (accessToken, role) => {
   }
   if (role === "admin") {
     try {
-      console.log("access tkn", accessToken);
+      // console.log("access tkn", accessToken);
       // console.log("Inside of fetching admin");
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/admin/admin/info`,

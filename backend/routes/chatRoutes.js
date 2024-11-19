@@ -181,7 +181,7 @@ router.get('/last-messages/chat', async (req, res) => {
         }
       ]);
   
-      console.log('Chat Data:', chatData); // Log the data
+      // console.log('Chat Data:', chatData); // Log the data
       res.json(chatData);
     } catch (err) {
       console.error('Error:', err); // Log errors
@@ -204,8 +204,8 @@ router.get('/last-messages/chat', async (req, res) => {
           }
         }
       ]);
-  
-      console.log('General Chat Data:', generalChatData); // Log the data
+  // 
+      // console.log('General Chat Data:', generalChatData); // Log the data
       res.json(generalChatData);
     } catch (err) {
       console.error('Error:', err); // Log errors
@@ -227,9 +227,9 @@ router.post('/last-messages/general/selecteduid', async (req, res) => {
         const lastMessage = await GeneralChat.findOne({ uid,type: 'user' })
           .sort({ timestamp: -1 }) // Sort by timestamp in descending order
           .limit(1); // Take the last (most recent) message
-          console.log("lastMessage")
-          console.log(lastMessage)
-          console.log("lastMessage")
+          // console.log("lastMessage")
+          // console.log(lastMessage)
+          // console.log("lastMessage")
           return {
           uid,
           message: lastMessage ? lastMessage.message : 'No message found', // Assuming 'content' holds the message text
@@ -356,10 +356,10 @@ router.get('/guest-messages/:userId', async (req, res) => {
 
 
 router.post('/send-message', async (req, res) => {
-  console.log(req.body); // Log the incoming request body
+  // console.log(req.body); // Log the incoming request body
 
   const { sender, sender_id, message, image, type, timestamp, url, uid, receiver_id } = req.body;
-  console.log("Received timestamp:", timestamp);
+  // console.log("Received timestamp:", timestamp);
   
   try {
     // let newTimestamp;
@@ -388,7 +388,7 @@ router.post('/send-message', async (req, res) => {
       await newMessage.save();
       return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
     } else {
-      console.log("zebra");
+      // console.log("zebra");
 
       let newMessage = new GeneralChat({
         sender,
@@ -402,7 +402,7 @@ router.post('/send-message', async (req, res) => {
         receiver_id,
       });
 
-      console.log("Prepared newMessage:", newMessage);
+      // console.log("Prepared newMessage:", newMessage);
       await newMessage.save();
       return res.status(201).json({ message: 'Message sent successfully', data: newMessage });
     }
@@ -414,7 +414,7 @@ router.post('/send-message', async (req, res) => {
 
  
 router.get("/urls", async (req, res) => {
-    console.log("Fetching all unique URLs...");
+    // console.log("Fetching all unique URLs...");
     try {
         const [chatUrls, chatGeneralUrls] = await Promise.all([
             Chat.distinct('url'),

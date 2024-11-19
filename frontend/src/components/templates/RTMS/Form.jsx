@@ -18,7 +18,7 @@ const TradeForm = ({ tradeData = {} }) => {
   } = tradeData;
 
   const handleFinish = (values) => {
-    console.log('Form values:', values);
+    // console.log('Form values:', values);
   };
 
   return (

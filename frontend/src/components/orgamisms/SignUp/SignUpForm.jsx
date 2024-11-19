@@ -37,7 +37,7 @@ const SignUpForm = () => {
       initialValues={{ ...SIGN_UP_INITIAL_FORM_STATE }}
       validationSchema={SIGN_UP_VALIDATION_SCHEMA}
       onSubmit={(values, action) => {
-        console.log("values in formik", values);
+        // console.log("values in formik", values);
         handleFormSubmit(values, action);
         action.resetForm();
       }}

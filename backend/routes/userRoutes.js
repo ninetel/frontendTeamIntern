@@ -57,7 +57,7 @@ router.get(
       }
       res.json(user);
     } catch (error) {
-      console.log("Error in getting user info", error);
+      // console.log("Error in getting user info", error);
       res.status(500).json({ error: "Error fetching user info" });
     }
   }

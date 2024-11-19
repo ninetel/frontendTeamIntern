@@ -7,13 +7,13 @@ const UserDashboard = () => {
   );
   
 
-  console.log(
-    "name, email, phoneNumber, role  *****",
-    userInfo.name,
-    userInfo.email,
-    userInfo.phoneNumber,
-    userInfo.role
-  );
+  // console.log(
+  //   "name, email, phoneNumber, role  *****",
+  //   userInfo.name,
+  //   userInfo.email,
+  //   userInfo.phoneNumber,
+  //   userInfo.role
+  // );
 
   return (
     <Container component="main" maxWidth="xs">

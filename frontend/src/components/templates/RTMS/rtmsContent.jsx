@@ -102,7 +102,7 @@ const CreateBulkContact = () => {
       // Send POST request
       try {
         const response = await axios.post('http://localhost:5000/send_notifications', logObject);
-        console.log('Response from server:', response.data);
+        // console.log('Response from server:', response.data);
       } catch (error) {
         console.error('Error sending data to server:', error);
       }

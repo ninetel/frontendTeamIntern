@@ -78,7 +78,7 @@ router.post(
         promptDescription,
         status,
       });
-        console.log("posted data isss*******", newprompt);
+        // console.log("posted data isss*******", newprompt);
       await newprompt.save();
       res.status(201).json({ message: "prompt created successfully" });
     } catch (error) {
@@ -95,7 +95,7 @@ router.get(
   async (req, res) => {
     try {
       const prompts = await Prompt.find(); // Fetch all prompts
-      console.log("backend Prompts.find()*************", prompts) 
+      // console.log("backend Prompts.find()*************", prompts) 
       res.status(200).json({message: 'prompt fetched successfully', prompts});
     } catch (error) {
       // console.log("backend error Prompts.find()", error)

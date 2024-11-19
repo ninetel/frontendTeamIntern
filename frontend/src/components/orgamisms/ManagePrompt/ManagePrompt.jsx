@@ -14,7 +14,7 @@ import {
   getPrompt,
 } from "../../../../api/Query/promptQueries";
 const AdminManagePromptOrg = () => {
-  console.log("Inside of Adminii Manage prompt");
+  // console.log("Inside of Adminii Manage prompt");
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
   );
@@ -30,7 +30,7 @@ const AdminManagePromptOrg = () => {
     queryFn: () => fetchPrompts(accessToken),
     enabled: !!accessToken,
   });
-  console.log("data", prompts);
+  // console.log("data", prompts);
   // Mutation for deleting a prompt
   const mutationDelete = useMutation({
     mutationFn: (id) => deletePrompt(id, accessToken),

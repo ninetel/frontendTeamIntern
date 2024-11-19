@@ -48,7 +48,7 @@ const AddPrompt = () => {
               },
             }
           );
-          console.log("create prompt response", response);
+          // console.log("create prompt response", response);
           alert("signal creation success");
           resetForm();
         } catch (error) {

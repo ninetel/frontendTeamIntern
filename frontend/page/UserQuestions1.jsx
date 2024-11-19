@@ -33,7 +33,7 @@ const UserQuestions = () => {
   const accessToken = useAppSelector(
     (state) => state.authentication.accessToken
   );
-  console.log("currentUserId in app", currentUserId);
+  // console.log("currentUserId in app", currentUserId);
 
   const [loading, setLoading] = useState(true);
   const [hasAnsweredQuestions, setHasAnsweredQuestions] = useState(false);
@@ -47,7 +47,7 @@ const UserQuestions = () => {
   }, [currentUserId, navigate, hasAnsweredQuestions]);
 
   const handleSubmit = async (values) => {
-    console.log("values of form -->", values);
+    // console.log("values of form -->", values);
     try {
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/responses/${currentUserId}`,
@@ -62,7 +62,7 @@ const UserQuestions = () => {
       );
       navigate("/user/dashboard");
     } catch (error) {
-      console.log("Error when putting the user Response :::((");
+      // console.log("Error when putting the user Response :::((");
       console.error("Error updating responses", error);
     }
   };

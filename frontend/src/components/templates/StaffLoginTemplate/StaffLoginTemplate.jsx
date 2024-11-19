@@ -42,10 +42,10 @@ const StaffLoginTemplate = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      console.log("data inside of useEffect", data);
+      // console.log("data inside of useEffect", data);
       const { _id, email, name, phoneNumber, role } = data.data; // Extract only needed data
       setTimeout(() => {
-        console.log("Dispatching setCurrentUser action");
+        // console.log("Dispatching setCurrentUser action");
         dispatch(
           setCurrentUser({
             _id,
@@ -61,7 +61,7 @@ const StaffLoginTemplate = () => {
   }, [navigate, dispatch, data, isSuccess]);
 
   const handleFormSubmit = async (values, setFieldError) => {
-    console.log("values", values);
+    // console.log("values", values);
     mutate(
       { ...values },
       {

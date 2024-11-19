@@ -424,7 +424,7 @@ const ChatMessages = ({ userId }) => {
       // formData.append("image", uploadedImagebinaryFile); // append the image to FormData
       // console.log(formData)
       try {
-        {console.log("file")}
+        // {console.log("file")}
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/upload`, {
           "file":file
         }, {
@@ -498,7 +498,7 @@ const ChatMessages = ({ userId }) => {
         });
         refreshComponent();
 
-        console.log('Staff assignment updated successfully');
+        // console.log('Staff assignment updated successfully');
         setStaffUpdated(prev => !prev);
       } catch (error) {
         console.error('Error updating staff assignment:', error);
@@ -513,7 +513,7 @@ const ChatMessages = ({ userId }) => {
 
   useEffect(() => {
     if (staffUpdated) {
-      console.log("Component re-rendered due to staff update.");
+      // console.log("Component re-rendered due to staff update.");
     }
   }, [staffUpdated]); 
 

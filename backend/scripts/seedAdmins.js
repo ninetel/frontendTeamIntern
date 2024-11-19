@@ -56,7 +56,7 @@ const seedAdmins = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to MongoDB");
+    // console.log("Connected to MongoDB");
 
     // Delete existing admins to avoid duplicates
     await Admin.deleteMany({});
@@ -67,7 +67,7 @@ const seedAdmins = async () => {
       await newAdmin.save();
     }
 
-    console.log("Admins seeded successfully");
+    // console.log("Admins seeded successfully");
     mongoose.disconnect();
   } catch (error) {
     console.error("Error seeding admins:", error);

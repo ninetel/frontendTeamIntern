@@ -138,7 +138,7 @@ const UserQuestions = () => {
   }, [currentUserId, navigate, hasAnsweredQuestions]);
 
   const handleFormSubmit = async (values) => {
-    console.log("values of form -->", values);
+    // console.log("values of form -->", values);
     try {
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/responses/${currentUserId}`,
@@ -153,7 +153,7 @@ const UserQuestions = () => {
       );
       navigate("/user/dashboard");
     } catch (error) {
-      console.log("Error when putting the user Response :::((");
+      // console.log("Error when putting the user Response :::((");
       console.error("Error updating responses", error);
     }
   };
@@ -168,7 +168,7 @@ const UserQuestions = () => {
   //   setCurrent(current + 1);
   // };
 
-  console.log("formData", formData);
+  // console.log("formData", formData);
   const next = async () => {
     try {
       const values = await form.validateFields();
@@ -189,7 +189,7 @@ const UserQuestions = () => {
     setCurrent(current - 1);
   };
   const handleFinish = () => {
-    console.log("Final Form Data: ", formData);
+    // console.log("Final Form Data: ", formData);
     handleFormSubmit(formData);
   };
 

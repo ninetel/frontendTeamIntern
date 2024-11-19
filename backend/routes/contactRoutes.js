@@ -8,19 +8,19 @@ const Contact = require("../models/Contact");
 router.post("/", async (req, res) => {
   const { contactType, username, phoneNumber, email } = req.body;
 
-  console.log("Received request to create or update contact:", { contactType, username, phoneNumber, email });
+  // console.log("Received request to create or update contact:", { contactType, username, phoneNumber, email });
 
   try {
     let contact = await Contact.findOne({ contactType });
-    console.log("Found contact type:", contactType, contact);
+    // console.log("Found contact type:", contactType, contact);
 
     if (contact) {
       // Add new contact to existing contact type
-      console.log("Updating existing contact type:", contactType);
+      // console.log("Updating existing contact type:", contactType);
       contact.contacts.push({ username, phoneNumber, email });
     } else {
       // Create new contact type with the contact
-      console.log("Creating new contact type:", contactType);
+      // console.log("Creating new contact type:", contactType);
       contact = new Contact({
         contactType,
         contacts: [{ username, phoneNumber, email }],
@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
     }
 
     await contact.save();
-    console.log("Contact saved successfully:", contact);
+    // console.log("Contact saved successfully:", contact);
     res.json(contact);
   } catch (err) {
     console.error("Error in POST /api/contacts:", err.message);
@@ -38,10 +38,10 @@ router.post("/", async (req, res) => {
 
 // Endpoint to get unique contact types
 router.get("/types", async (req, res) => {
-  console.log("Fetching unique contact types...");
+  // console.log("Fetching unique contact types...");
   try {
     const types = await Contact.distinct("contactType");
-    console.log("Unique contact types:", types);
+    // console.log("Unique contact types:", types);
     res.json(types);
   } catch (err) {
     console.error("Error fetching contact types:", err.message);
@@ -51,14 +51,14 @@ router.get("/types", async (req, res) => {
 // Endpoint to get contacts by type
 router.get("/content/:type", async (req, res) => {
   const { type } = req.params;
-  console.log("Fetching contacts for type:", type);
+  // console.log("Fetching contacts for type:", type);
 
   try {
     const contact = await Contact.findOne({ contactType: type });
     if (!contact) {
       return res.status(404).json({ error: "Contact type not found" });
     }
-    console.log("Fetched contacts for type:", type, contact);
+    // console.log("Fetched contacts for type:", type, contact);
     res.json(contact.contacts); // Return only the contacts array
   } catch (err) {
     console.error("Error fetching contact content:", err.message);
@@ -67,10 +67,10 @@ router.get("/content/:type", async (req, res) => {
 });
 // Get all contacts
 router.get("/", async (req, res) => {
-  console.log("Fetching all contacts...");
+  // console.log("Fetching all contacts...");
   try {
     const contacts = await Contact.find();
-    console.log("Fetched contacts:", contacts);
+    // console.log("Fetched contacts:", contacts);
     res.json(contacts);
   } catch (err) {
     console.error("Error fetching contacts:", err.message);
@@ -132,24 +132,24 @@ router.delete('/delete_contact/:id', async (req, res) => {
 // Bulk create or update contacts
 router.post("/bulk", async (req, res) => {
   const contacts = req.body;
-  console.log("Received contacts data for bulk operation:", contacts);
+  // console.log("Received contacts data for bulk operation:", contacts);
 
   try {
     for (const contact of contacts) {
-      console.log("Processing contact:", contact);
+      // console.log("Processing contact:", contact);
       let existingContactType = await Contact.findOne({ contactType: contact.contactType });
 
       if (existingContactType) {
-        console.log("Found existing contact type:", contact.contactType);
+        // console.log("Found existing contact type:", contact.contactType);
         existingContactType.contacts.push({
           username: contact.username,
           phoneNumber: contact.phoneNumber,
           email: contact.email,
         });
         await existingContactType.save();
-        console.log("Updated existing contact type:", contact.contactType);
+        // console.log("Updated existing contact type:", contact.contactType);
       } else {
-        console.log("Creating new contact type:", contact.contactType);
+        // console.log("Creating new contact type:", contact.contactType);
         const newContact = new Contact({
           contactType: contact.contactType,
           contacts: [{
@@ -159,7 +159,7 @@ router.post("/bulk", async (req, res) => {
           }],
         });
         await newContact.save();
-        console.log("Created new contact type:", contact.contactType);
+        // console.log("Created new contact type:", contact.contactType);
       }
     }
 

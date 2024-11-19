@@ -46,9 +46,9 @@ export const deleteSignal = async (id, accessToken) => {
   });
 };
 export const editSignal = async ({ id, data, accessToken }) => {
-  console.log("id in edit signal---------", id);
-  console.log("accessToken", accessToken);
-  console.log("data ----->", data);
+  // console.log("id in edit signal---------", id);
+  // console.log("accessToken", accessToken);
+  // console.log("data ----->", data);
   const response = await axios.put(`${API_URL}/edit_signal/${id}`, data, {
     headers: {
       Authorization: `Bearer ${accessToken}`,

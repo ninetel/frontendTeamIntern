@@ -8,7 +8,7 @@ const UserQuestions = () => {
   const currentUserId = useAppSelector(
     (state) => state.currentLoggedInUser.userInfo.id
   );
-  console.log("currentUserId in app", currentUserId);
+  // console.log("currentUserId in app", currentUserId);
 
   const [responses, setResponses] = useState({
     bankBalance: "",

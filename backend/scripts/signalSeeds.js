@@ -57,7 +57,7 @@ const seedSignals = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("Connected to MongoDB");
+    // console.log("Connected to MongoDB");
 
     // Delete existing users to avoid duplicates
     await Signal.deleteMany({});
@@ -68,7 +68,7 @@ const seedSignals = async () => {
       await newSignal.save();
     }
 
-    console.log("Users seeded successfully");
+    // console.log("Users seeded successfully");
     mongoose.disconnect();
   } catch (error) {
     console.error("Error seeding users:", error);

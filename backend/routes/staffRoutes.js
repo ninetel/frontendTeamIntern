@@ -110,7 +110,7 @@ router.get('/id',
   try {
     const staffId = 0;
 
-    console.log('Staff ID:', staffId);
+    // console.log('Staff ID:', staffId);
     if (!staffId) {
       console.error("User ID not found in request.");
       return res.status(401).json({ message: 'Unauthorized: User ID not found' });
@@ -118,7 +118,7 @@ router.get('/id',
 
     const staffInfo = await Staff.findById(staffId);
 
-    console.log('Fetched Staff Info:', staffInfo);
+    // console.log('Fetched Staff Info:', staffInfo);
 
     if (!staffInfo) {
       console.error("Staff not found for ID:", staffId);
@@ -163,7 +163,7 @@ router.get(
     req.user = { id: "someValidStaffId" }; // Replace with a valid staff ID from your database
     
     try {
-      console.log(req.user); // Log the user object
+      // console.log(req.user); // Log the user object
       const staff = await Staff.findById(req.user.id).select("-password");
 
       if (!staff) {
@@ -215,7 +215,7 @@ router.post("/create", async (req, res) => {
   }
 
   try {
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
     const existingStaff = await Staff.findOne({ email });
     if (existingStaff) {
       return res.status(400).json({ error: "Email already exists" });

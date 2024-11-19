@@ -12,6 +12,7 @@ import { RxCross2 } from "react-icons/rx";
 import { BsThreeDots } from "react-icons/bs";
 import axios from 'axios';
 import { MdOutlineAttachFile, MdFileDownload } from "react-icons/md";
+import { IoMdHelpCircleOutline } from "react-icons/io";
 
 
 
@@ -58,6 +59,7 @@ const CreateGenerallAI = () => {
   const [showDiv, setShowDiv] = useState(false);
   const [file, setFile] = useState(null);
   const delayInProgress = useRef(false);  // Track if the delay is in progress
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null); // New state for selected subcategory
 
    var varr = 0
   const [messageDetails, setMessageDetails] = useState({
@@ -543,7 +545,7 @@ function arrayBufferToBase64(buffer) {
       
 
       {
-        hideDiv ? <div className='ml-[90%] -mt-10 text-black cursor-pointer'><BsThreeDots size={40} onClick={() => setHideDiv(!hideDiv)} /></div> :
+        hideDiv ? <div className='ml-[90%] -mt-10 text-black cursor-pointer'><IoMdHelpCircleOutline size={40} onClick={() => setHideDiv(!hideDiv)} /></div> :
           <div className={`flex flex-col z-50`}>
             <div className="bg-green-500 text-white rounded p-3 flex justify-between items-center">
   <div>
@@ -573,6 +575,7 @@ function arrayBufferToBase64(buffer) {
                               onClick={() => {
                                 setActiveCategory(category._id === activeCategory ? null : category._id);
                                 setSelectedContent(subcat.items[0].content);
+                                setSelectedSubcategory(subcat.name); 
                               }}
                               style={{ transition: 'border 0.3s', border: '1px solid #f0f0f0', width: "200px" }}
                               bodyStyle={{ cursor: 'pointer' }}
@@ -589,7 +592,8 @@ function arrayBufferToBase64(buffer) {
                       {selectedContent && (
                         <div className=" absolute w-full h-[150px] px-2 bg-white rounded-lg shadow">
                           <div className='flex justify-between'>
-                            <h2 className="text-lg font-bold">Content</h2>
+                            {/* {console.log(category.subcategories)} */}
+                            <h2 className="text-lg font-bold">{selectedSubcategory}</h2>
                             <button
                               onClick={() => setSelectedContent('')}
                               className=" text-red-500 hover:text-red-700"

@@ -175,7 +175,7 @@ const CreateGenerallAI = () => {
 
   useEffect(() => {
     socket.on('new_message', (data) => {
-      console.log('New message received:', data); // Debugging line
+      // console.log('New message received:', data); // Debugging line
 
       setTyping(false);
       setTypingEnded(true);
@@ -183,7 +183,7 @@ const CreateGenerallAI = () => {
 
       setTimeout(() => {
         if (typingEnded) {
-          console.log('New message received:', data); // Debugging line
+          // console.log('New message received:', data); // Debugging line
 
           setMessages((prevMessages) => [...prevMessages, { ...data, type: 'received' }]);
           setTypingEnded(false);

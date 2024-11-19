@@ -19,7 +19,7 @@ const ManageContact = () => {
 
   const accessToken = useAppSelector((state) => state.authentication.accessToken);
 
-  console.log("contact type data are_____________",contactTypes)
+  // console.log("contact type data are_____________",contactTypes)
 
   useEffect(() => {
     const fetchContactTypes = async () => {
@@ -41,7 +41,7 @@ const ManageContact = () => {
           (contact) => contact.contactType === selectedType
         );
         setContacts(filteredContacts ? filteredContacts.contacts : []);
-        console.log("Fetched contacts:", filteredContacts);
+        // console.log("Fetched contacts:", filteredContacts);
       } catch (error) {
         console.error("Error fetching contacts:", error);
       }
@@ -54,7 +54,7 @@ const ManageContact = () => {
 
   const handleEdit = async () => {
     if (editingContact) {
-      console.log("Submitting updated values:", values);
+      // console.log("Submitting updated values:", values);
       try {
         const response = await axios.put(
           `${import.meta.env.VITE_BACKEND_URL}/api/contacts/edit_contact/${editingContact._id}`,
@@ -63,7 +63,7 @@ const ManageContact = () => {
             headers: { Authorization: `Bearer ${accessToken}` },
           }
         );
-        console.log("Update response:", response.data);
+        // console.log("Update response:", response.data);
         message.success('Contact updated successfully');
         setIsModalOpen(false);
         fetchContacts(); // Refetch contacts after edit

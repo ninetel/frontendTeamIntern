@@ -36,7 +36,7 @@ const AdminManageChat = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/chat/urls`);
         setUrlOptions(response.data);
-        console.log(urlOptions)
+        // console.log(urlOptions)
       } catch (error) {
         console.error("Error fetching URLs:", error);
       } finally {

@@ -19,13 +19,13 @@ const StaffDashboard = () => {
     (state) => state.currentLoggedInUser?.userInfo || {}
   );
 
-  console.log(
-    "firstName, email, phoneNumber, role  *****",
-    userInfo.firstName,
-    userInfo.email,
-    userInfo.phoneNumber,
-    userInfo.role
-  );
+  // console.log(
+  //   "firstName, email, phoneNumber, role  *****",
+  //   userInfo.firstName,
+  //   userInfo.email,
+  //   userInfo.phoneNumber,
+  //   userInfo.role
+  // );
 
   const handleAddSignal = () => {
     const currentPath = location.pathname;

@@ -13,9 +13,9 @@ const SentenseForm = ({ sentences, onSave }) => {
         try {
             const response = await api.get('/');
             setSentence(response.data.sentences);
-            console.log(response.data.sentences)
+            // console.log(response.data.sentences)
         } catch (error) {
-            console.log(error)
+            // console.log(error)
         }
     };
 

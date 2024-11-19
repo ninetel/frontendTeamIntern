@@ -50,7 +50,7 @@ export default function AdminCreateStaff() {
   };
 
   const handleSubmit = async (values) => {
-    console.log("values from the form", values);
+    // console.log("values from the form", values);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/staff/create`,
@@ -64,7 +64,7 @@ export default function AdminCreateStaff() {
       // handleOpen(response.data);
       alert("Staff created succesfully");
     } catch (e) {
-      console.log("error in frontend", e);
+      // console.log("error in frontend", e);
       // Handle the error case
       alert("Error while creating staff -- frontend axios");
     }

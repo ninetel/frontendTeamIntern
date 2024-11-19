@@ -25,7 +25,7 @@ const AdminDashboard = () => {
 
   const navigate = useNavigate();
   const buttonClick = () => {
-    console.log("hhgfdfgi");
+    // console.log("hhgfdfgi");
     navigate("/admin/login");
     window.location.reload();
     localStorage.clear();
@@ -139,11 +139,11 @@ const handleRouteAdminPredefinedQuestions = () => {
             icon={<IoSettingsOutline size={30} />}
             text="Change Password"
           /> */}
-          {/* <SidebarItem
+          <SidebarItem
             icon={<IoChatbubbleEllipsesOutline size={30} />}
             text="Chat"
             handleClick={handleRouteChat}
-          /> */}
+          />
           <SidebarItem
             icon={<PiChatsTeardropLight size={25} />}
             text="Manage Chat"

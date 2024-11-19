@@ -7,7 +7,7 @@ const CheckBoxWrapper = ({ name, label, ...otherProps }) => {
     const { setFieldValue } = useFormikContext();
     const handleChange = (e) => {
         const { checked } = e.target;
-        console.log(checked);
+        // console.log(checked);
         setFieldValue(name, checked);
     };
     const configCheckBox = {

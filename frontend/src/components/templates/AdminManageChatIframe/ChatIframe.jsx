@@ -23,8 +23,8 @@ const AllowIframe = () => {
     }
   };
 
-  console.log("hellow world");
-  console.log(import.meta.env.VITE_FRONTEND_URL);
+  // console.log("hellow world");
+  // console.log(import.meta.env.VITE_FRONTEND_URL);
 
   const handleCopyMessage = () => {
     const copyText = `

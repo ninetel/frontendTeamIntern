@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
         const newPredefinedQuestion = new PredefinedQuestions({ name, sentences, urls });
         await newPredefinedQuestion.save();
         res.status(201).json(newPredefinedQuestion);
-    console.log("hello",newPredefinedQuestion)
+    // console.log("hello",newPredefinedQuestion)
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -135,8 +135,8 @@ router.post('/addurl', async (req, res) => {
         const { id } = req.body; // Get the predefined question ID from the URL
         const { url } = req.body;  // Get the new URL from the request body
 
-        console.log("Received ID:", id);
-        console.log("Adding URL:", url);
+        // console.log("Received ID:", id);
+        // console.log("Adding URL:", url);
 
         // Find the predefined question by its ID in the database
         const predefinedQuestion = await PredefinedQuestions.findById(id);
